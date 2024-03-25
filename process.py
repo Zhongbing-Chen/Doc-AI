@@ -1,12 +1,11 @@
 import io
 
+import fitz
 from PIL import Image
 from ultralytics import YOLO
 
-from item import Page
-import fitz
-import cv2
-import numpy as np
+from entity.page import Page
+from util.visualizer import Visualizer
 
 
 class PDFProcessor:
@@ -40,7 +39,7 @@ class PDFProcessor:
             # Use PIL to open the image
             img = Image.open(img_stream)
 
-            page = Page(page_num=page_num, image=img, pdf_page=page)
+            page = Page(page_num=page_num, image=img, pdf_page=page, zoom_factor=zoom_factor)
             # append the image to the list
             images.append(page)
 
@@ -82,17 +81,14 @@ class PDFProcessor:
             # layout part
             layout = self.detect_layout(page.image)
             # layouts.append(layout)
-            page.build_items(layout, self.zoom_factor)
+            page.build_items(layout)
 
             # table part
             page.recognize_table()
 
             # text part
-            page.extract_text(doc.load_page(i))
+            page.extract_text()
             pages.append(page)
-
-            # text part
-            # text = self.extract_text()
 
         doc.close()
         return pages
@@ -101,4 +97,5 @@ class PDFProcessor:
 if __name__ == '__main__':
     pdf_processor = PDFProcessor("./pdf/test.pdf")
     layouts = pdf_processor.process()
+    Visualizer.depict_bbox(layouts)
     print(layouts)

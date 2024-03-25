@@ -163,7 +163,7 @@ def align_headers(headers, rows):
     aligned_headers = []
 
     for row in rows:
-        row['column header'] = False
+        row['column_header'] = False
 
     header_row_nums = []
     for header in headers:
@@ -186,7 +186,7 @@ def align_headers(headers, rows):
     for row_num in header_row_nums:
         if row_num == last_row_num + 1:
             row = rows[row_num]
-            row['column header'] = True
+            row['column_header'] = True
             header_rect = header_rect.include_rect(row['bbox'])
             last_row_num = row_num
         else:
@@ -216,8 +216,8 @@ def refine_table_structure(table_structure, class_thresholds):
     column_headers = align_headers(column_headers, rows)
 
     # Process spanning cells
-    spanning_cells = [elem for elem in table_structure['spanning cells'] if not elem['projected row header']]
-    projected_row_headers = [elem for elem in table_structure['spanning cells'] if elem['projected row header']]
+    spanning_cells = [elem for elem in table_structure['spanning cells'] if not elem['projected_row_header']]
+    projected_row_headers = [elem for elem in table_structure['spanning cells'] if elem['projected_row_header']]
     spanning_cells = postprocess.apply_threshold(spanning_cells, class_thresholds["table spanning cell"])
     projected_row_headers = postprocess.apply_threshold(projected_row_headers,
                                                         class_thresholds["table projected row header"])
@@ -328,16 +328,16 @@ def objects_to_structures(objects, tokens, class_thresholds):
         column_headers = [obj for obj in table_objects if obj['label'] == 'table column header']
         spanning_cells = [obj for obj in table_objects if obj['label'] == 'table spanning cell']
         for obj in spanning_cells:
-            obj['projected row header'] = False
+            obj['projected_row_header'] = False
         projected_row_headers = [obj for obj in table_objects if obj['label'] == 'table projected row header']
         for obj in projected_row_headers:
-            obj['projected row header'] = True
+            obj['projected_row_header'] = True
         spanning_cells += projected_row_headers
         for obj in rows:
-            obj['column header'] = False
+            obj['column_header'] = False
             for header_obj in column_headers:
                 if iob(obj['bbox'], header_obj['bbox']) >= 0.5:
-                    obj['column header'] = True
+                    obj['column_header'] = True
 
         # Refine table structures
         rows = postprocess.refine_rows(rows, table_tokens, class_thresholds['table row'])
@@ -392,9 +392,9 @@ def structure_to_cells(table_structure, tokens):
             column_rect = Rect(list(column['bbox']))
             row_rect = Rect(list(row['bbox']))
             cell_rect = row_rect.intersect(column_rect)
-            header = 'column header' in row and row['column header']
+            header = 'column_header' in row and row['column_header']
             cell = {'bbox': list(cell_rect), 'column_nums': [column_num], 'row_nums': [row_num],
-                    'column header': header}
+                    'column_header': header}
 
             cell['subcell'] = False
             for spanning_cell in spanning_cells:
@@ -407,9 +407,9 @@ def structure_to_cells(table_structure, tokens):
             if cell['subcell']:
                 subcells.append(cell)
             else:
-                # cell text = extract_text_inside_bbox(table_spans, cell['bbox'])
-                # cell['cell text'] = cell text
-                cell['projected row header'] = False
+                # cell_text = extract_text_inside_bbox(table_spans, cell['bbox'])
+                # cell['cell_text'] = cell_text
+                cell['projected_row_header'] = False
                 cells.append(cell)
 
     for spanning_cell in spanning_cells:
@@ -432,10 +432,10 @@ def structure_to_cells(table_structure, tokens):
                 # By convention here, all subcells must be classified
                 # as header cells for a spanning cell to be classified as a header cell;
                 # otherwise, this could lead to a non-rectangular header region
-                header = header and 'column header' in subcell and subcell['column header']
+                header = header and 'column_header' in subcell and subcell['column_header']
         if len(cell_rows) > 0 and len(cell_columns) > 0:
             cell = {'bbox': list(cell_rect), 'column_nums': list(cell_columns), 'row_nums': list(cell_rows),
-                    'column header': header, 'projected row header': spanning_cell['projected row header']}
+                    'column_header': header, 'projected row header': spanning_cell['projected row header']}
             cells.append(cell)
 
     # Compute a confidence score based on how well the page tokens
@@ -470,7 +470,7 @@ def structure_to_cells(table_structure, tokens):
         cell_spans = [tokens[num] for num in cell_span_nums]
         # TODO: Refine how text is extracted; should be character-based, not span-based;
         # but need to associate 
-        cell['cell text'] = postprocess.extract_text_from_spans(cell_spans, remove_integer_superscripts=False)
+        cell['cell_text'] = postprocess.extract_text_from_spans(cell_spans, remove_integer_superscripts=False)
         cell['spans'] = cell_spans
 
     # Adjust the row, column, and cell bounding boxes to reflect the extracted text
@@ -532,7 +532,7 @@ def cells_to_csv(cells):
     else:
         return
 
-    header_cells = [cell for cell in cells if cell['column header']]
+    header_cells = [cell for cell in cells if cell['column_header']]
     if len(header_cells) > 0:
         max_header_row = max([max(cell['row_nums']) for cell in header_cells])
     else:
@@ -543,7 +543,7 @@ def cells_to_csv(cells):
         for cell in cells:
             for row_num in cell['row_nums']:
                 for column_num in cell['column_nums']:
-                    table_array[row_num, column_num] = cell["cell text"]
+                    table_array[row_num, column_num] = cell["cell_text"]
 
     header = table_array[:max_header_row + 1, :]
     flattened_header = []
@@ -573,14 +573,14 @@ def cells_to_html(cells):
             attrib['rowspan'] = str(rowspan)
         if this_row > current_row:
             current_row = this_row
-            if cell['column header']:
+            if cell['column_header']:
                 cell_tag = "th"
                 row = ET.SubElement(table, "thead")
             else:
                 cell_tag = "td"
                 row = ET.SubElement(table, "tr")
         tcell = ET.SubElement(row, cell_tag, attrib=attrib)
-        tcell.text = cell['cell text']
+        tcell.text = cell['cell_text']
 
     return str(ET.tostring(table, encoding="unicode", short_empty_elements=False))
 
@@ -643,13 +643,13 @@ def visualize_cells(img, cells, out_path):
     for cell in cells:
         bbox = cell['bbox']
 
-        if cell['column header']:
+        if cell['column_header']:
             facecolor = (1, 0, 0.45)
             edgecolor = (1, 0, 0.45)
             alpha = 0.3
             linewidth = 2
             hatch = '//////'
-        elif cell['projected row header']:
+        elif cell['projected_row_header']:
             facecolor = (0.95, 0.6, 0.1)
             edgecolor = (0.95, 0.6, 0.1)
             alpha = 0.3
@@ -982,7 +982,7 @@ def infer_by_image(img, pipe):
                                      out_html=False, out_csv=False)
     print("Table(s) recognized.")
     # parser.output_objects(img_file, extracted_table['objects'])
-    return extracted_table['cells']
+    return extracted_table['cells'][0]
 
 
 def inference_for_table_recognition(image_dir):

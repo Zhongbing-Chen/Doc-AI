@@ -399,7 +399,7 @@ def grits_loc(true_bbox_grid, pred_bbox_grid):
 
 def grits_con(true_text_grid, pred_text_grid):
     """
-    Compute GriTS_Con given two matrices of cell text strings.
+    Compute GriTS_Con given two matrices of cell_text strings.
     """
     return factored_2dmss(true_text_grid,
                           pred_text_grid,

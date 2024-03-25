@@ -225,7 +225,7 @@ def cells_to_adjacency_pair_list_with_blanks(cells, key='cell_text'):
 def dar_con(true_adjacencies, pred_adjacencies):
     """
     Directed adjacency relations (DAR) metric, which uses exact match
-    between adjacent cell text content.
+    between adjacent cell_text content.
     """
 
     true_c = Counter()
