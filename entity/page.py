@@ -59,7 +59,7 @@ class Page:
             # Draw the bounding box on the image
             cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
-            item.depict_table(image)
+            image = item.depict_table(image)
 
         # Return the image with bounding boxes
         return image

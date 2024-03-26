@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from typing import Union
 
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt, patches
 from torch import Tensor
 
 from util.table_parser import TableParser
@@ -63,5 +66,48 @@ class Item:
     def adjusted_bbox(self, zoom_factor):
         return [coord / zoom_factor for coord in self.bbox]
 
-    def depict_table(self):
-        pass
+    def depict_table(self, img):
+        if self.label != "Table":
+            return img
+
+        # Convert the image to RGB if it is in BGR format (as OpenCV uses BGR by default)
+        if img.shape[2] == 3:  # If the image has 3 channels
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        # Create a figure and axis for drawing
+        fig, ax = plt.subplots(1)
+        ax.imshow(img)
+
+        cells = self.table_structure
+
+        # Assume img is already in the correct color format (RGB or BGR as per your working environment)
+
+        for cell in cells:
+            bbox = cell.bbox
+
+            if cell.column_header:
+                color = (255, 0, 114)  # Example color
+                alpha = 0.3  # Transparency factor
+            elif cell.projected_row_header:
+                color = (242, 153, 25)  # Example color
+                alpha = 0.3  # Transparency factor
+            else:
+                color = (76, 189, 204)  # Example color
+                alpha = 0.3  # Transparency factor
+
+            # Convert color to BGR if using OpenCV for image processing
+            color = color[::-1]  # Flip to BGR if needed
+
+            # Extract the region of interest (ROI) where the rectangle will be drawn
+            roi = img[int(bbox[1]):int(bbox[3]), int(bbox[0]):int(bbox[2])]
+
+            # Create a rectangle to overlay
+            overlay = np.full(roi.shape, color, dtype=np.uint8)
+
+            # Blend the overlay with the ROI
+            cv2.addWeighted(overlay, alpha, roi, 1 - alpha, 0, roi)
+
+            # Draw the edge of the rectangle
+            cv2.rectangle(img, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), color, 2)
+
+        return img
