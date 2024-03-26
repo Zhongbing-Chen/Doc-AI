@@ -1,6 +1,7 @@
 ultralytics==8.1.33
 PyMuPDF==1.24.0
 pycocotools==2.0.7
-
+rapidocr_onnxruntime
+rapid-orientation
 
 

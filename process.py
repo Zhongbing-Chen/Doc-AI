@@ -17,7 +17,8 @@ class PDFProcessor:
         self.zoom_factor = zoom_factor
 
     # process the pdf into images
-    def convert_to_images(self, doc, zoom_factor):
+    @classmethod
+    def convert_to_images(cls, doc, zoom_factor):
         # import the necessary libraries
 
         # open the pdf file
@@ -50,27 +51,9 @@ class PDFProcessor:
     def detect_layout(self, image):
         # import the necessary libraries
         # load the model
-        results = self.model.predict(image, conf=0.1, iou=0.45)
+        results = self.model.predict(image, conf=0.5, iou=0.45)
         # return the model
         return results[0]
-
-    def extract_text(self):
-        # import the necessary libraries
-        # open the pdf file
-        doc = fitz.open(self.pdf_path)
-        # create a list to store the text
-        texts = []
-        # loop through the pages
-        for page_num in range(len(doc)):
-            # get the page
-            page = doc.load_page(page_num)
-            # get the text
-            text = page.get_text()
-            # append the text to the list
-            texts.append(text)
-        # close the pdf file
-        # return the text
-        return texts
 
     def process(self):
         doc = fitz.open(self.pdf_path)
@@ -82,6 +65,9 @@ class PDFProcessor:
             layout = self.detect_layout(page.image)
             # layouts.append(layout)
             page.build_items(layout)
+
+            # sort the items
+            page.sort()
 
             # table part
             page.recognize_table()

@@ -17,4 +17,4 @@ class TableStructure:
     def recognize_content(self, pdf, zoom_factor):
         # recognize the content of the table using fitz api
         # print(TextParser.parse(pdf, [coord / zoom_factor for coord in self.bbox]))
-        self.cell_text = TextParser.parse(pdf, [coord / zoom_factor for coord in self.bbox])
+        self.cell_text = TextParser.parse_by_fitz(pdf, [coord / zoom_factor for coord in self.bbox])
