@@ -11,10 +11,11 @@ from rapid_orientation import RapidOrientation
 
 class PDFProcessor:
     model = YOLO(
-        "/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
+        "/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/layout_analysis/8mpt/v2/best.pt")
     orientation_engine = RapidOrientation()
 
     def __init__(self, pdf_path, zoom_factor=3):
+        self.pages = None
         self.pdf_path = pdf_path
         self.zoom_factor = zoom_factor
 
@@ -53,8 +54,6 @@ class PDFProcessor:
                         rotated_angle=rotated_angle)
             # append the image to the list
             images.append(page)
-        output_pdf_path = 'rotated_output.pdf'
-        doc.save(output_pdf_path)
         # close the pdf file
         # return the images
         return images
@@ -88,11 +87,23 @@ class PDFProcessor:
             pages.append(page)
 
         doc.close()
+        self.pages = pages
         return pages
+
+    def convert_to_markdown(self):
+        markdown_content = []
+        for page in self.pages:
+            # convert the pages to markdown, extract the content from items in page
+            markdown_content.append(page.texts)
+        # convert it to markdown format
+        return markdown_content
+
+
 
 
 if __name__ == '__main__':
     pdf_processor = PDFProcessor("./pdf/test.pdf")
     layouts = pdf_processor.process()
+    markdown_content = pdf_processor.convert_to_markdown()
     Visualizer.depict_bbox(layouts)
     print(layouts)

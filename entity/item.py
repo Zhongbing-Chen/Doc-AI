@@ -3,6 +3,7 @@ from typing import Union
 
 import cv2
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt, patches
 from torch import Tensor
 
@@ -10,11 +11,6 @@ from util.table_parser import TableParser
 
 type_dict = {0: 'Header', 1: 'Text', 2: 'Reference', 3: 'Figure caption', 4: 'Figure', 5: 'Table caption', 6: 'Table',
              7: 'Title', 8: 'Footer', 9: 'Equation'}
-
-
-@dataclass
-class TableStructure:
-    pass
 
 
 @dataclass
@@ -65,6 +61,29 @@ class Item:
 
     def adjusted_bbox(self, zoom_factor):
         return [coord / zoom_factor for coord in self.bbox]
+
+    @property
+    def markdown_content(self):
+        if self.label == "Table":
+            return self.markdown_table_content
+        return self.content
+
+    @property
+    def markdown_table_content(self):
+        max_row_num = max(max(cell.row_nums) for cell in self.table_structure) + 1
+        max_column_num = max(max(cell.column_nums) for cell in self.table_structure) + 1
+        df = pd.DataFrame("", index=range(max_row_num), columns=range(max_column_num))
+
+        for cell in self.table_structure:
+            for row in cell.row_nums:
+                for column in cell.column_nums:
+                    df.iloc[row, column] = cell.cell_text.strip().replace("\n", " ")
+
+        if not df.empty:
+            headers = df.iloc[0].values
+            df.columns = headers
+            df.drop(index=0, axis=0, inplace=True)
+        return df.to_markdown(index=False)
 
     def depict_table(self, img):
         if self.label != "Table":

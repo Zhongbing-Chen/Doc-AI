@@ -51,8 +51,9 @@ class Page:
         for item in self.items:
             item.recognize_table_structure(self.image)
 
+    @property
     def texts(self):
-        return [item.text for item in self.items]
+        return [item.markdown_content for item in self.items]
 
     def draw_bbox(self):
         image = np.array(self.image)
