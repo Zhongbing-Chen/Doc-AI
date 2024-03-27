@@ -6,11 +6,13 @@ from ultralytics import YOLO
 
 from entity.page import Page
 from util.visualizer import Visualizer
+from rapid_orientation import RapidOrientation
 
 
 class PDFProcessor:
     model = YOLO(
-        "/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/layout_analysis/8mpt/v2/best.pt")
+        "/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
+    orientation_engine = RapidOrientation()
 
     def __init__(self, pdf_path, zoom_factor=3):
         self.pdf_path = pdf_path
@@ -39,11 +41,20 @@ class PDFProcessor:
 
             # Use PIL to open the image
             img = Image.open(img_stream)
-
-            page = Page(page_num=page_num, image=img, pdf_page=page, zoom_factor=zoom_factor)
+            orientation_res, elapse = cls.orientation_engine(img_bytes)
+            rotated_angle = int(orientation_res)
+            img_rotated = img
+            # rotate
+            if rotated_angle in [90, 270]:
+                img_rotated = img.rotate(rotated_angle, expand=True)
+                new_rotation = (360 - (page.rotation - rotated_angle)) % 360
+                page.set_rotation(new_rotation)
+            page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=zoom_factor,
+                        rotated_angle=rotated_angle)
             # append the image to the list
             images.append(page)
-
+        output_pdf_path = 'rotated_output.pdf'
+        doc.save(output_pdf_path)
         # close the pdf file
         # return the images
         return images
