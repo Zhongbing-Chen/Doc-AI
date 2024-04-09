@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from util.text_parser import TextParser
 
@@ -12,7 +13,7 @@ class TableStructure:
     projected_row_header: bool
     row_nums: list
     spans: list
-    subcell: bool
+    subcell: Optional[bool] = False
 
     def recognize_content(self, pdf, zoom_factor):
         # recognize the content of the table using fitz api

@@ -70,6 +70,8 @@ class Item:
 
     @property
     def markdown_table_content(self):
+        if not self.table_structure:
+            return ""
         max_row_num = max(max(cell.row_nums) for cell in self.table_structure) + 1
         max_column_num = max(max(cell.column_nums) for cell in self.table_structure) + 1
         df = pd.DataFrame("", index=range(max_row_num), columns=range(max_column_num))

@@ -85,3 +85,13 @@ class Page:
 
         # assign the sorted items to the page
         self.items = sorted_text_blocks
+
+    def filter_items_by_label(self, filters=None):
+        if filters is None:
+            return
+
+        items = []
+        for item in self.items:
+            if item.label not in filters:
+                items.append(item)
+        self.items = items

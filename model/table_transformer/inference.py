@@ -435,7 +435,7 @@ def structure_to_cells(table_structure, tokens):
                 header = header and 'column_header' in subcell and subcell['column_header']
         if len(cell_rows) > 0 and len(cell_columns) > 0:
             cell = {'bbox': list(cell_rect), 'column_nums': list(cell_columns), 'row_nums': list(cell_rows),
-                    'column_header': header, 'projected row header': spanning_cell['projected row header']}
+                    'column_header': header, 'projected_row_header': spanning_cell['projected_row_header']}
             cells.append(cell)
 
     # Compute a confidence score based on how well the page tokens

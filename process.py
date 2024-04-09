@@ -11,7 +11,7 @@ from rapid_orientation import RapidOrientation
 
 class PDFProcessor:
     model = YOLO(
-        "/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/layout_analysis/8mpt/v2/best.pt")
+        "/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
     orientation_engine = RapidOrientation()
 
     def __init__(self, pdf_path, zoom_factor=3):
@@ -76,6 +76,9 @@ class PDFProcessor:
             # layouts.append(layout)
             page.build_items(layout)
 
+            # filter item by label
+            page.filter_items_by_label(filters=["Header", "Footer"])
+
             # sort the items
             page.sort()
 
@@ -94,16 +97,31 @@ class PDFProcessor:
         markdown_content = []
         for page in self.pages:
             # convert the pages to markdown, extract the content from items in page
-            markdown_content.append(page.texts)
+            markdown_content.extend(page.texts)
         # convert it to markdown format
+
+        # 将列表转换为Markdown格式的无序列表
+        markdown_list = "\n".join(markdown_content)
+
+        # 指定Markdown文件路径
+        markdown_file_path = "list_output.md"
+
+        # 将Markdown列表写入文件
+        with open(markdown_file_path, "w", encoding="utf-8") as file:
+            file.write(markdown_list)
+
+        print(f"Markdown列表已保存到文件：{markdown_file_path}")
+
         return markdown_content
 
-
+    def filter_items(self, filters=None):
+        for page in self.pages:
+            page.filter_items_by_label()
 
 
 if __name__ == '__main__':
-    pdf_processor = PDFProcessor("./pdf/test.pdf")
+    pdf_processor = PDFProcessor("./pdf/test2.pdf")
     layouts = pdf_processor.process()
     markdown_content = pdf_processor.convert_to_markdown()
     Visualizer.depict_bbox(layouts)
-    print(layouts)
+    # print(layouts)
