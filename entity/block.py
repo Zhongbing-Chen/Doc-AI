@@ -4,17 +4,17 @@ from typing import Union
 import cv2
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt, patches
+from matplotlib import pyplot as plt
 from torch import Tensor
 
-from util.table_parser import TableParser
+from module.table.table_parser import TableExtractor
 
 type_dict = {0: 'Header', 1: 'Text', 2: 'Reference', 3: 'Figure caption', 4: 'Figure', 5: 'Table caption', 6: 'Table',
              7: 'Title', 8: 'Footer', 9: 'Equation'}
 
 
 @dataclass
-class Item:
+class Block:
     id: str
     x_1: float
     y_1: float
@@ -26,6 +26,7 @@ class Item:
     layout_score: float
     content: str = Union[str, None]
     table_structure = Union[None, list]
+    related_blocks = []
 
     @classmethod
     def from_bbox(cls, id, page, bbox: Tensor):
@@ -46,7 +47,7 @@ class Item:
         if self.label == "Table":
             # recognize table
             print("Recognize Table")
-            self.table_structure = TableParser.parse(img, self.bbox)
+            self.table_structure = TableExtractor.parse(img, self.bbox)
 
     def recognize_table_content(self, pdf_page, zoom_factor):
         if self.label == "Table":
@@ -132,3 +133,28 @@ class Item:
             cv2.rectangle(img, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), color, 2)
 
         return img
+
+    def union(self, next_block):
+        self.x_1 = min(self.x_1, next_block.x_1)
+        self.y_1 = min(self.y_1, next_block.y_1)
+        self.x_2 = max(self.x_2, next_block.x_2)
+        self.y_2 = max(self.y_2, next_block.y_2)
+        if self.layout_score < next_block.layout_score:
+            self.layout_score = next_block.layout_score
+            self.label = next_block.label
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "x_1": self.x_1,
+            "y_1": self.y_1,
+            "x_2": self.x_2,
+            "y_2": self.y_2,
+            "label": self.label,
+            "label_id": self.label_id,
+            "page_num": self.page_num,
+            "layout_score": self.layout_score,
+            "content": self.content,
+            "table_structure": self.table_structure,
+            "related_blocks": self.related_blocks
+        }

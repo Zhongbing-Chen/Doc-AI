@@ -4,13 +4,13 @@ from model.table_transformer.inference import TableExtractionPipeline, infer_by_
 from entity.table_structure import TableStructure
 
 
-class TableParser:
+class TableExtractor:
     pipe = TableExtractionPipeline(
         str_device="cpu",
         det_config_path=None,
         det_model_path=None,
-        str_config_path='/home/zhongbing/Projects/MLE/table-transformer/detr/config/structure_config.json',
-        str_model_path='/home/zhongbing/Projects/MLE/table-transformer/detr/models/model_20.pth')
+        str_config_path='/Users/zhongbing/Projects/MLE/Doc-AI/model/table_transformer/config/structure_config.json',
+        str_model_path='/Users/zhongbing/Projects/MLE/Doc-AI/model/table_transformer/model_20 (1).pth')
 
     @classmethod
     def adjust_bbox_positions(cls, sub_bboxes, original_bbox):
@@ -49,7 +49,7 @@ class TableParser:
 
 
 if __name__ == '__main__':
-    table_parser = TableParser()
+    table_parser = TableExtractor()
     img = Image.open('/home/zhongbing/Projects/MLE/table-transformer/detr/img/complex.jpg').convert("RGB")
-    result = TableParser.parse(img)
+    result = TableExtractor.parse(img)
     print(result)

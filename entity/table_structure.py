@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from util.text_parser import TextParser
+from module.text.text_parser import TextExtractor
 
 
 @dataclass
@@ -18,4 +18,4 @@ class TableStructure:
     def recognize_content(self, pdf, zoom_factor):
         # recognize the content of the table using fitz api
         # print(TextParser.parse(pdf, [coord / zoom_factor for coord in self.bbox]))
-        self.cell_text = TextParser.parse_by_fitz(pdf, [coord / zoom_factor for coord in self.bbox])
+        self.cell_text = TextExtractor.parse_by_fitz(pdf, [coord / zoom_factor for coord in self.bbox])

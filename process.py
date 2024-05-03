@@ -1,21 +1,24 @@
 import io
+import time
 
 import fitz
+import numpy as np
 from PIL import Image
-from ultralytics import YOLO
+from jdeskew.estimator import get_angle
+from jdeskew.utility import rotate
+from rapid_orientation import RapidOrientation
 
 from entity.page import Page
+from module.layout.layout_detector import LayoutDetector
+from module.rotation.orientation_corrector import OrientationCorrector
 from util.visualizer import Visualizer
-from rapid_orientation import RapidOrientation
 
 
 class PDFProcessor:
-    model = YOLO(
-        "/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
-    orientation_engine = RapidOrientation()
+    layout_detector = LayoutDetector("/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
 
     def __init__(self, pdf_path, zoom_factor=3):
-        self.pages = None
+        self.pages: list[Page] = []
         self.pdf_path = pdf_path
         self.zoom_factor = zoom_factor
 
@@ -42,28 +45,68 @@ class PDFProcessor:
 
             # Use PIL to open the image
             img = Image.open(img_stream)
-            orientation_res, elapse = cls.orientation_engine(img_bytes)
-            rotated_angle = int(orientation_res)
-            img_rotated = img
-            # rotate
-            if rotated_angle in [90, 270]:
-                img_rotated = img.rotate(rotated_angle, expand=True)
-                new_rotation = (360 - (page.rotation - rotated_angle)) % 360
-                page.set_rotation(new_rotation)
+
+            img_rotated, rotated_angle = OrientationCorrector.adjust_rotation_angle(img, img_bytes, page)
+            print(rotated_angle)
+
+            img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
+            # print(angle)
+            # print(time.time() - start)
             page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=zoom_factor,
-                        rotated_angle=rotated_angle)
+                        rotated_angle=rotated_angle, skewed_angle=deskew_angle)
             # append the image to the list
             images.append(page)
         # close the pdf file
         # return the images
         return images
 
-    def detect_layout(self, image):
-        # import the necessary libraries
-        # load the model
-        results = self.model.predict(image, conf=0.5, iou=0.45)
-        # return the model
-        return results[0]
+    def convert_page_to_image(self, page):
+        # convert the page to image
+        pix = page.get_pixmap(matrix=fitz.Matrix(self.zoom_factor, self.zoom_factor))
+        # convert the image to numpy array
+        # Convert the PyMuPDF pixmap into a bytes object
+        img_bytes = pix.tobytes("ppm")
+        # Use io.BytesIO to convert bytes into a file-like object for PIL
+        img_stream = io.BytesIO(img_bytes)
+
+        # Use PIL to open the image
+        img = Image.open(img_stream)
+        return img, img_bytes
+
+    def process_updated(self):
+        doc = fitz.open(self.pdf_path)
+        for page_num in range(len(doc)):
+            page = doc.load_page(page_num)
+            img, img_bytes = self.convert_page_to_image(page)
+            img_rotated, rotated_angle = OrientationCorrector.adjust_rotation_angle(img, img_bytes, page)
+            print(rotated_angle)
+
+            img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
+            # print(angle)
+            # print(time.time() - start)
+            page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=self.zoom_factor,
+                        rotated_angle=rotated_angle, skewed_angle=deskew_angle)
+            layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
+            # layouts.append(layout)
+            page.build_items(layout)
+
+            # filter item by label
+            page.filter_items_by_label(filters=["Header", "Footer"])
+
+            # merge the overlap block
+            page.merge_overlap_block(threshold=0.8)
+
+            # sort the items
+            page.sort()
+
+            # table part
+            page.recognize_table()
+
+            # text part
+            page.extract_text()
+
+            # append the image to the list
+            self.pages.append(page)
 
     def process(self):
         doc = fitz.open(self.pdf_path)
@@ -72,12 +115,15 @@ class PDFProcessor:
         for i in range(len(pages)):
             page = pages[i]
             # layout part
-            layout = self.detect_layout(page.image)
+            layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
             # layouts.append(layout)
             page.build_items(layout)
 
             # filter item by label
             page.filter_items_by_label(filters=["Header", "Footer"])
+
+            # merge the overlap block
+            page.merge_overlap_block(threshold=0.8)
 
             # sort the items
             page.sort()
@@ -118,10 +164,17 @@ class PDFProcessor:
         for page in self.pages:
             page.filter_items_by_label()
 
+    def merge(self):
+        content = []
+        for i in self.pages:
+            content.extend(i.to_map())
+        print(content)
+
 
 if __name__ == '__main__':
-    pdf_processor = PDFProcessor("./pdf/test2.pdf")
-    layouts = pdf_processor.process()
-    markdown_content = pdf_processor.convert_to_markdown()
-    Visualizer.depict_bbox(layouts)
+    pdf_processor = PDFProcessor("./pdf/test1.pdf")
+    pdf_processor.process_updated()
+    # markdown_content = pdf_processor.convert_to_markdown()
+    Visualizer.depict_bbox(pdf_processor.pages)
+    pdf_processor.merge()
     # print(layouts)

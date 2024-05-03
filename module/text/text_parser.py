@@ -3,7 +3,7 @@ from PIL import Image
 from rapidocr_onnxruntime import RapidOCR
 
 
-class TextParser:
+class TextExtractor:
     engine = RapidOCR()
 
     @classmethod
