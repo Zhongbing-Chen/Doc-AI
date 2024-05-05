@@ -2,11 +2,8 @@ import io
 import time
 
 import fitz
-import numpy as np
+import ocrmypdf
 from PIL import Image
-from jdeskew.estimator import get_angle
-from jdeskew.utility import rotate
-from rapid_orientation import RapidOrientation
 
 from entity.page import Page
 from module.layout.layout_detector import LayoutDetector
@@ -15,50 +12,26 @@ from util.visualizer import Visualizer
 
 
 class PDFProcessor:
-    layout_detector = LayoutDetector("/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
+    layout_detector = LayoutDetector(
+        "/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/layout_analysis/8mpt/v2/best.pt")
 
     def __init__(self, pdf_path, zoom_factor=3):
         self.pages: list[Page] = []
         self.pdf_path = pdf_path
         self.zoom_factor = zoom_factor
 
-    # process the pdf into images
-    @classmethod
-    def convert_to_images(cls, doc, zoom_factor):
-        # import the necessary libraries
-
-        # open the pdf file
-        # create a list to store the images
-        images = []
-        # loop through the pages
-        for page_num in range(len(doc)):
-            # get the page
-            page = doc.load_page(page_num)
-            # convert the page to image
-            pix = page.get_pixmap(matrix=fitz.Matrix(zoom_factor, zoom_factor))
-            # convert the image to numpy array
-            # Convert the PyMuPDF pixmap into a bytes object
-            img_bytes = pix.tobytes("ppm")  # Save as PPM format
-
-            # Use io.BytesIO to convert bytes into a file-like object for PIL
-            img_stream = io.BytesIO(img_bytes)
-
-            # Use PIL to open the image
-            img = Image.open(img_stream)
-
-            img_rotated, rotated_angle = OrientationCorrector.adjust_rotation_angle(img, img_bytes, page)
-            print(rotated_angle)
-
-            img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
-            # print(angle)
-            # print(time.time() - start)
-            page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=zoom_factor,
-                        rotated_angle=rotated_angle, skewed_angle=deskew_angle)
-            # append the image to the list
-            images.append(page)
-        # close the pdf file
-        # return the images
-        return images
+    def pre_ocr(self, output_file=None, language="eng", rotate_pages_threshold=3.0):
+        if output_file is None:
+            output_file = self.pdf_path.replace(".pdf", "_ocr.pdf")
+        ocrmypdf.ocr(self.pdf_path, output_file, rotate_pages=True,
+                     rotate_pages_threshold=rotate_pages_threshold, language=language,
+                     deskew=True,
+                     skip_text=True,
+                     clean=True,
+                     oversample=200
+                     # force_ocr=True
+                     )
+        self.pdf_path = output_file
 
     def convert_page_to_image(self, page):
         # convert the page to image
@@ -73,15 +46,16 @@ class PDFProcessor:
         img = Image.open(img_stream)
         return img, img_bytes
 
-    def process_updated(self):
+    def process(self):
+        self.pre_ocr(language="chi_sim+eng")
         doc = fitz.open(self.pdf_path)
         for page_num in range(len(doc)):
             page = doc.load_page(page_num)
             img, img_bytes = self.convert_page_to_image(page)
-            img_rotated, rotated_angle = OrientationCorrector.adjust_rotation_angle(img, img_bytes, page)
-            print(rotated_angle)
-
-            img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
+            img_rotated = img
+            deskew_angle = 0
+            rotated_angle = 0
+            # deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page)
             # print(angle)
             # print(time.time() - start)
             page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=self.zoom_factor,
@@ -108,36 +82,11 @@ class PDFProcessor:
             # append the image to the list
             self.pages.append(page)
 
-    def process(self):
-        doc = fitz.open(self.pdf_path)
-        pages = self.convert_to_images(doc, self.zoom_factor)
-
-        for i in range(len(pages)):
-            page = pages[i]
-            # layout part
-            layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
-            # layouts.append(layout)
-            page.build_items(layout)
-
-            # filter item by label
-            page.filter_items_by_label(filters=["Header", "Footer"])
-
-            # merge the overlap block
-            page.merge_overlap_block(threshold=0.8)
-
-            # sort the items
-            page.sort()
-
-            # table part
-            page.recognize_table()
-
-            # text part
-            page.extract_text()
-            pages.append(page)
-
-        doc.close()
-        self.pages = pages
-        return pages
+    def pre_process(self, img, page):
+        img_rotated, rotated_angle = OrientationCorrector.rotate_through_tesseract(img, page)
+        print(rotated_angle)
+        img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
+        return deskew_angle, img_rotated, rotated_angle
 
     def convert_to_markdown(self):
         markdown_content = []
@@ -172,9 +121,11 @@ class PDFProcessor:
 
 
 if __name__ == '__main__':
-    pdf_processor = PDFProcessor("./pdf/test1.pdf")
-    pdf_processor.process_updated()
-    # markdown_content = pdf_processor.convert_to_markdown()
+    start = time.time()
+    pdf_processor = PDFProcessor("./pdf/test2.pdf")
+    pdf_processor.process()
+    markdown_content = pdf_processor.convert_to_markdown()
     Visualizer.depict_bbox(pdf_processor.pages)
     pdf_processor.merge()
+    print("Time taken: ", time.time() - start)
     # print(layouts)

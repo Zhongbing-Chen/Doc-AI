@@ -21,6 +21,8 @@ class TextExtractor:
         img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
 
         result, elapse = cls.engine(img, use_det=True, use_cls=True, use_rec=True)
+        if result is None:
+            return ""
         return " ".join(item[1] for item in result)
 
     @classmethod

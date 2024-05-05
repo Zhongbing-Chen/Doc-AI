@@ -9,8 +9,9 @@ class TableExtractor:
         str_device="cpu",
         det_config_path=None,
         det_model_path=None,
-        str_config_path='/Users/zhongbing/Projects/MLE/Doc-AI/model/table_transformer/config/structure_config.json',
-        str_model_path='/Users/zhongbing/Projects/MLE/Doc-AI/model/table_transformer/model_20 (1).pth')
+        str_config_path='/home/zhongbing/Projects/MLE/table-transformer/detr/config/structure_config.json',
+        str_model_path='/home/zhongbing/Projects/MLE/table-transformer/detr/models/model_20.pth')
+
 
     @classmethod
     def adjust_bbox_positions(cls, sub_bboxes, original_bbox):
