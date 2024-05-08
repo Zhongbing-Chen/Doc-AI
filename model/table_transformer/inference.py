@@ -693,7 +693,6 @@ def visualize_cells(img, cells, out_path):
 
 class TableExtractionPipeline(object):
     def __init__(self, det_device=None, str_device=None,
-                 det_model=None, str_model=None,
                  det_model_path=None, str_model_path=None,
                  det_config_path=None, str_config_path=None):
 

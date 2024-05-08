@@ -5,13 +5,14 @@ from entity.table_structure import TableStructure
 
 
 class TableExtractor:
-    pipe = TableExtractionPipeline(
-        str_device="cpu",
-        det_config_path=None,
-        det_model_path=None,
-        str_config_path='/home/zhongbing/Projects/MLE/table-transformer/detr/config/structure_config.json',
-        str_model_path='/home/zhongbing/Projects/MLE/table-transformer/detr/models/model_20.pth')
 
+    def __init__(self, device="cpu"):
+        self.pipe = TableExtractionPipeline(
+            str_device=device,
+            det_config_path=None,
+            det_model_path=None,
+            str_config_path='/home/zhongbing/Projects/MLE/table-transformer/detr/config/structure_config.json',
+            str_model_path='/home/zhongbing/Projects/MLE/table-transformer/detr/models/model_20.pth')
 
     @classmethod
     def adjust_bbox_positions(cls, sub_bboxes, original_bbox):
@@ -37,14 +38,14 @@ class TableExtractor:
 
         return adjusted_bboxes
 
-    @classmethod
-    def parse(cls, img, bbox=None):
+    def parse(self, img, bbox=None):
+
         # crop the table from the image according to the bbox
         if bbox:
             img = img.crop(bbox)
 
-            data = infer_by_image(img, cls.pipe)
-            data = cls.adjust_bbox_positions(data, bbox)
+            data = infer_by_image(img, self.pipe)
+            data = self.adjust_bbox_positions(data, bbox)
             table_structure = [TableStructure(**table) for table in data]
             return table_structure
 
@@ -52,5 +53,5 @@ class TableExtractor:
 if __name__ == '__main__':
     table_parser = TableExtractor()
     img = Image.open('/home/zhongbing/Projects/MLE/table-transformer/detr/img/complex.jpg').convert("RGB")
-    result = TableExtractor.parse(img)
+    result = table_parser.parse(img)
     print(result)

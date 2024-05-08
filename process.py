@@ -12,13 +12,15 @@ from util.visualizer import Visualizer
 
 
 class PDFProcessor:
-    layout_detector = LayoutDetector(
-        "/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/layout_analysis/8mpt/v2/best.pt")
 
-    def __init__(self, pdf_path, zoom_factor=3):
+    def __init__(self, pdf_path, zoom_factor=3, device="cpu"):
         self.pages: list[Page] = []
         self.pdf_path = pdf_path
         self.zoom_factor = zoom_factor
+        self.device = device
+        self.layout_detector = LayoutDetector(
+            "/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/layout_analysis/8mpt/v2/best.pt",
+            device=device)
 
     def pre_ocr(self, output_file=None, language="eng", rotate_pages_threshold=3.0):
         if output_file is None:
@@ -46,7 +48,7 @@ class PDFProcessor:
         img = Image.open(img_stream)
         return img, img_bytes
 
-    def process(self):
+    def process(self, device="cpu"):
         self.pre_ocr(language="chi_sim+eng")
         doc = fitz.open(self.pdf_path)
         for page_num in range(len(doc)):
@@ -60,7 +62,7 @@ class PDFProcessor:
             # print(time.time() - start)
             page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=self.zoom_factor,
                         rotated_angle=rotated_angle, skewed_angle=deskew_angle)
-            layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
+            layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45, device=device)
             # layouts.append(layout)
             page.build_items(layout)
 
@@ -121,11 +123,12 @@ class PDFProcessor:
 
 
 if __name__ == '__main__':
-    start = time.time()
-    pdf_processor = PDFProcessor("./pdf/test2.pdf")
-    pdf_processor.process()
-    markdown_content = pdf_processor.convert_to_markdown()
-    Visualizer.depict_bbox(pdf_processor.pages)
-    pdf_processor.merge()
-    print("Time taken: ", time.time() - start)
+    # start = time.time()
+    # pdf_processor = PDFProcessor("./pdf/test2.pdf")
+    # pdf_processor.process()
+    # markdown_content = pdf_processor.convert_to_markdown()
+    # Visualizer.depict_bbox(pdf_processor.pages)
+    # pdf_processor.merge()
+    # print("Time taken: ", time.time() - start)
     # print(layouts)
+    print("hell")
