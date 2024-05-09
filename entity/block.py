@@ -43,11 +43,11 @@ class Block:
             layout_score=layout_score.item(),
         )
 
-    def recognize_table_structure(self, img):
+    def recognize_table_structure(self, img, table_parser):
         if self.label == "Table":
             # recognize table
             print("Recognize Table")
-            self.table_structure = TableExtractor.parse(img, self.bbox)
+            self.table_structure = table_parser.parse(img, self.bbox)
 
     def recognize_table_content(self, pdf_page, zoom_factor):
         if self.label == "Table":

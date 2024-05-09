@@ -50,9 +50,9 @@ class Page:
             # recognize the table content based on the table structure
             item.recognize_table_content(self.pdf_page, self.zoom_factor)
 
-    def recognize_table(self):
+    def recognize_table(self, table_parser):
         for item in self.items:
-            item.recognize_table_structure(self.image)
+            item.recognize_table_structure(self.image, table_parser)
 
     @property
     def texts(self):
