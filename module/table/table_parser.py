@@ -5,14 +5,23 @@ from entity.table_structure import TableStructure
 
 
 class TableExtractor:
+    """
+    The table extractor class
 
+    Attributes:
+        pipe: the table extraction pipeline
+
+    Methods:
+        adjust_bbox_positions: adjust the bbox positions
+        parse: parse the table from the image
+    """
     def __init__(self, device="cpu"):
         self.pipe = TableExtractionPipeline(
             str_device=device,
             det_config_path=None,
             det_model_path=None,
-            str_config_path='/home/zhongbing/Projects/MLE/table-transformer/detr/config/structure_config.json',
-            str_model_path='/home/zhongbing/Projects/MLE/table-transformer/detr/models/model_20.pth')
+            str_config_path='/Users/zhongbing/Projects/MLE/Doc-AI/model/table_transformer/config/structure_config.json',
+            str_model_path='/Users/zhongbing/Projects/MLE/Doc-AI/model/table_transformer/model_20 (1).pth')
 
     @classmethod
     def adjust_bbox_positions(cls, sub_bboxes, original_bbox):
@@ -24,8 +33,9 @@ class TableExtractor:
         :return: List of adjusted sub-bboxes.
         """
         adjusted_bboxes = []
-        for sub_bbox_dict in sub_bboxes:  # Assuming sub_bboxes is a nested list containing one list of dicts
+        for sub_bbox_dict in sub_bboxes:  # Iterate over each sub-bbox
             sub_bbox = sub_bbox_dict['bbox']
+            # Adjust the sub-bbox positions based on the original bbox
             adjusted_bbox = [
                 sub_bbox[0] + original_bbox[0],
                 sub_bbox[1] + original_bbox[1],
@@ -39,11 +49,17 @@ class TableExtractor:
         return adjusted_bboxes
 
     def parse(self, img, bbox=None):
-
+        """
+        Parse the table from the image
+        :param img: the image
+        :param bbox: the bounding box
+        :return: the table structure
+        """
         # crop the table from the image according to the bbox
         if bbox:
             img = img.crop(bbox)
 
+            # infer the table structure
             data = infer_by_image(img, self.pipe)
             data = self.adjust_bbox_positions(data, bbox)
             table_structure = [TableStructure(**table) for table in data]

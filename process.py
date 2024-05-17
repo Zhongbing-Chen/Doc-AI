@@ -13,31 +13,52 @@ from util.visualizer import Visualizer
 
 
 class PDFProcessor:
-
-    def __init__(self, pdf_path, zoom_factor=3, device="cpu"):
-        self.pages: list[Page] = []
-        self.pdf_path = pdf_path
+    """
+    The pdf processor class
+    zoom_factor: the zoom factor of the pdf
+    device: the device to run the model
+    layout_detector: the layout detector
+    table_parser: the table parser
+    """
+    def __init__(self, zoom_factor=3, device="cpu"):
+        #
         self.zoom_factor = zoom_factor
         self.device = device
-        self.layout_detector = LayoutDetector(
-            "/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/layout_analysis/8mpt/v2/best.pt",
-            device=device)
+        self.layout_detector = LayoutDetector("/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt",
+                                              device="cpu")
         self.table_parser = TableExtractor(device=device)
 
-    def pre_ocr(self, output_file=None, language="eng", rotate_pages_threshold=3.0):
+    @staticmethod
+    def pre_ocr(file_path, output_file=None, language="eng", rotate_pages_threshold=3.0):
+        # recognize the text in the pdf
+        """
+        using ocrmypdf to recognize the text in the pdf, and output the pdf file with the text layer
+        :param file_path: the path of the pdf file
+        :param output_file: the path of the output pdf file
+        :param language: the language of the text in the pdf, default is "eng", could be "chi_sim+eng"
+        :param rotate_pages_threshold: the threshold of the rotation, higher threshold means more strict standard to rotate the pages
+        :return: the path of the output pdf file
+        """
         if output_file is None:
-            output_file = self.pdf_path.replace(".pdf", "_ocr.pdf")
-        ocrmypdf.ocr(self.pdf_path, output_file, rotate_pages=True,
+            output_file = file_path.replace(".pdf", "_ocr.pdf")
+
+        ocrmypdf.ocr(file_path, output_file, rotate_pages=True,
                      rotate_pages_threshold=rotate_pages_threshold, language=language,
                      deskew=True,
                      skip_text=True,
                      clean=True,
+                     invalidate_digital_signatures=True,
                      oversample=200
                      # force_ocr=True
                      )
-        self.pdf_path = output_file
+        return output_file
 
     def convert_page_to_image(self, page):
+        """
+        convert the page to image
+        :param page: the page object
+        :return: the image object and the bytes of the image
+        """
         # convert the page to image
         pix = page.get_pixmap(matrix=fitz.Matrix(self.zoom_factor, self.zoom_factor))
         # convert the image to numpy array
@@ -50,15 +71,29 @@ class PDFProcessor:
         img = Image.open(img_stream)
         return img, img_bytes
 
-    def process(self, device="cpu"):
-        self.pre_ocr(language="chi_sim+eng")
-        doc = fitz.open(self.pdf_path)
+    def process(self, file_path, language="chi_sim+eng"):
+        """
+        process the pdf file
+        :param file_path: the path of the original pdf file
+        :param language: the language of the text in the pdf, default is "chi_sim+eng"
+        """
+        # recognize the text in the pdf, and output the pdf file with the text layer
+        file_path = self.pre_ocr(file_path, language=language)
+        pages = []
+
+        # open the updated pdf file
+        doc = fitz.open(file_path)
         for page_num in range(len(doc)):
+
+            # convert the page to image
             page = doc.load_page(page_num)
+
             img, img_bytes = self.convert_page_to_image(page)
             img_rotated = img
             deskew_angle = 0
             rotated_angle = 0
+
+            # deprecated the pre_process function
             # deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page)
             # print(angle)
             # print(time.time() - start)
@@ -66,7 +101,7 @@ class PDFProcessor:
                         rotated_angle=rotated_angle, skewed_angle=deskew_angle)
             layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
             # layouts.append(layout)
-            page.build_items(layout)
+            page.build_blocks(layout)
 
             # filter item by label
             page.filter_items_by_label(filters=["Header", "Footer"])
@@ -84,17 +119,31 @@ class PDFProcessor:
             page.extract_text()
 
             # append the image to the list
-            self.pages.append(page)
+            pages.append(page)
+        return pages
 
-    def pre_process(self, img, page):
+    @staticmethod
+    def pre_process(img, page):
+        """
+        pre-process the image
+        :param img: the image object
+        :param page: the page object
+        :return: the deskew angle, the rotated image, the rotated angle
+        """
         img_rotated, rotated_angle = OrientationCorrector.rotate_through_tesseract(img, page)
         print(rotated_angle)
         img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
         return deskew_angle, img_rotated, rotated_angle
 
-    def convert_to_markdown(self):
+    @staticmethod
+    def convert_to_markdown(pages: list[Page]):
+        """
+        convert the pages to markdown format
+        :param pages: the list of pages
+        :return: the markdown content
+        """
         markdown_content = []
-        for page in self.pages:
+        for page in pages:
             # convert the pages to markdown, extract the content from items in page
             markdown_content.extend(page.texts)
         # convert it to markdown format
@@ -113,20 +162,26 @@ class PDFProcessor:
 
         return markdown_content
 
-    def merge(self):
+    @staticmethod
+    def merge(pages: list[Page]):
+        """
+        merge the pages into one json file with the attributes of the page and blocks
+        :param pages: the list of pages
+        :return: the dict of the pages
+        """
         content = []
-        for i in self.pages:
+        for i in pages:
             content.extend(i.to_map())
         print(content)
 
 
 if __name__ == '__main__':
     start = time.time()
-    pdf_processor = PDFProcessor("./pdf/test2.pdf", device="cuda")
-    pdf_processor.process()
-    markdown_content = pdf_processor.convert_to_markdown()
-    Visualizer.depict_bbox(pdf_processor.pages)
-    pdf_processor.merge()
+    pdf_processor = PDFProcessor(device="cpu")
+    output_pages = pdf_processor.process("./pdf/test2.pdf")
+    markdown_content = pdf_processor.convert_to_markdown(output_pages)
+    Visualizer.depict_bbox(output_pages)
+    pdf_processor.merge(output_pages)
     print("Time taken: ", time.time() - start)
     # print(layouts)
     print("hell")
