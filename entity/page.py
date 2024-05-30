@@ -127,6 +127,10 @@ class Page:
         Sort the items based on the bounding box
         :return: None
         """
+        # avoid blank page
+        if len(self.blocks) == 0:
+            return
+
         # sort the items based on the bounding box
         gtree = GapTree(lambda item: item.bbox)
 
