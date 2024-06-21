@@ -1,4 +1,9 @@
+import os.path
+
 from PIL import Image
+from huggingface_hub import hf_hub_download
+from huggingface_hub import snapshot_download as hf_download
+from modelscope import snapshot_download
 
 from model.table_transformer.inference import TableExtractionPipeline, infer_by_image
 from entity.table_structure import TableStructure
@@ -15,13 +20,20 @@ class TableExtractor:
         adjust_bbox_positions: adjust the bbox positions
         parse: parse the table from the image
     """
-    def __init__(self, device="cpu"):
+
+    def __init__(self, model_source="huggingface", device="cpu"):
+
+        if model_source == "huggingface":
+            model_dir = hf_download("zhongbing/table-transformer-finetuned")
+        else:
+            model_dir = snapshot_download("zhongbing/table-transformer-finetuned")
+
         self.pipe = TableExtractionPipeline(
             str_device=device,
             det_config_path=None,
             det_model_path=None,
-            str_config_path='/Users/zhongbing/Projects/MLE/Doc-AI/model/table_transformer/config/structure_config.json',
-            str_model_path='/Users/zhongbing/Projects/MLE/Doc-AI/model/table_transformer/model_20 (1).pth')
+            str_config_path=os.path.join(model_dir, "structure_config.json"),
+            str_model_path=os.path.join(model_dir, 'model_20.pth'))
 
     @classmethod
     def adjust_bbox_positions(cls, sub_bboxes, original_bbox):

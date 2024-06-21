@@ -1,5 +1,7 @@
 import io
+import os
 import time
+
 
 import fitz
 import ocrmypdf
@@ -20,13 +22,18 @@ class PDFProcessor:
     layout_detector: the layout detector
     table_parser: the table parser
     """
-    def __init__(self, zoom_factor=3, device="cpu"):
+
+    def __init__(self, zoom_factor=3, device="cpu", model_source="huggingface"):
         #
         self.zoom_factor = zoom_factor
         self.device = device
-        self.layout_detector = LayoutDetector("/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt",
-                                              device="cpu")
-        self.table_parser = TableExtractor(device=device)
+
+        self.layout_detector = LayoutDetector(model_source, device=device)
+
+        self.table_parser = TableExtractor(model_source=model_source, device=device)
+
+    def set_layout_detector(self, model):
+        self.layout_detector = model
 
     @staticmethod
     def pre_ocr(file_path, output_file=None, language="eng", rotate_pages_threshold=3.0):
@@ -84,7 +91,6 @@ class PDFProcessor:
         # open the updated pdf file
         doc = fitz.open(file_path)
         for page_num in range(len(doc)):
-
             # convert the page to image
             page = doc.load_page(page_num)
 
@@ -177,8 +183,8 @@ class PDFProcessor:
 
 if __name__ == '__main__':
     start = time.time()
-    pdf_processor = PDFProcessor(device="cpu")
-    output_pages = pdf_processor.process("./pdf/test2.pdf")
+    pdf_processor = PDFProcessor(device="cpu", zoom_factor=1, model_source="huggingface")
+    output_pages = pdf_processor.process("./pdf/test3.pdf")
     markdown_content = pdf_processor.convert_to_markdown(output_pages)
     Visualizer.depict_bbox(output_pages)
     pdf_processor.merge(output_pages)

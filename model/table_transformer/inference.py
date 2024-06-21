@@ -981,6 +981,8 @@ def infer_by_image(img, pipe):
                                      out_html=False, out_csv=False)
     print("Table(s) recognized.")
     # parser.output_objects(img_file, extracted_table['objects'])
+    if len(extracted_table['cells']) == 0:
+        return []
     return extracted_table['cells'][0]
 
 

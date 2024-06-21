@@ -8,3 +8,4 @@ pytesseract
 ocrmypdf
 mmcv>=2.0.0rc4
 mmengine>=0.7.0
+modelscope
