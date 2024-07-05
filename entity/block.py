@@ -8,9 +8,7 @@ from matplotlib import pyplot as plt
 from torch import Tensor
 
 from module.table.table_parser import TableExtractor
-
-type_dict = {0: 'Header', 1: 'Text', 2: 'Reference', 3: 'Figure caption', 4: 'Figure', 5: 'Table caption', 6: 'Table',
-             7: 'Title', 8: 'Footer', 9: 'Equation'}
+from module.layout.layout_detector import LayoutDetector
 
 
 @dataclass
@@ -71,7 +69,7 @@ class Block:
             y_1=y_1.item(),
             x_2=x_2.item(),
             y_2=y_2.item(),
-            label=type_dict[label_id.item()],
+            label=LayoutDetector.type_dict[label_id.item()],
             label_id=label_id.item(),
             page_num=page,
             layout_score=layout_score.item(),
@@ -87,6 +85,10 @@ class Block:
         if self.label == "Table":
             # recognize table
             print("Recognize Table")
+
+            # save the cropped image of the table, the file name is the page number + the block id
+            # todo remove the saving of the image
+            img.crop(self.bbox).save(f"table_{self.page_num}_{self.id}.png")
             self.table_structure = table_parser.parse(img, self.bbox)
 
     def recognize_table_content(self, pdf_page, zoom_factor) -> None:

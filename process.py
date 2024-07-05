@@ -1,7 +1,5 @@
 import io
-import os
 import time
-
 
 import fitz
 import ocrmypdf
@@ -78,14 +76,15 @@ class PDFProcessor:
         img = Image.open(img_stream)
         return img, img_bytes
 
-    def process(self, file_path, language="chi_sim+eng"):
+    def process(self, file_path, language="chi_sim+eng", use_ocr=False):
         """
         process the pdf file
         :param file_path: the path of the original pdf file
         :param language: the language of the text in the pdf, default is "chi_sim+eng"
         """
         # recognize the text in the pdf, and output the pdf file with the text layer
-        file_path = self.pre_ocr(file_path, language=language)
+        if use_ocr:
+            file_path = self.pre_ocr(file_path, language=language)
         pages = []
 
         # open the updated pdf file
@@ -183,7 +182,7 @@ class PDFProcessor:
 
 if __name__ == '__main__':
     start = time.time()
-    pdf_processor = PDFProcessor(device="cpu", zoom_factor=1, model_source="huggingface")
+    pdf_processor = PDFProcessor(device="cpu", zoom_factor=3, model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
     output_pages = pdf_processor.process("./pdf/test3.pdf")
     markdown_content = pdf_processor.convert_to_markdown(output_pages)
     Visualizer.depict_bbox(output_pages)
