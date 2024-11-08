@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
+from typing import Union, List
 
 import cv2
 import fitz
@@ -8,7 +8,7 @@ import numpy as np
 import torch
 from ultralytics.engine.results import Results
 
-from entity.block import Block
+from entity.block import Block, OcrBlock
 from util.coordinate_util import CoordinateUtil
 from util.gap_tree import GapTree
 from module.text.text_parser import TextExtractor
@@ -47,6 +47,7 @@ class Page:
     image: Union[str, Path, int, list, tuple, np.ndarray, torch.Tensor]
     zoom_factor: float
     is_scanned: bool
+    ocr_blocks: List[OcrBlock]
 
     def __init__(self, pdf_page, page_num, image, zoom_factor, items=None, rotated_angle=None, skewed_angle=None):
         self.pdf_page = pdf_page
@@ -73,7 +74,7 @@ class Page:
         Extract text from the items
         :return: None
         """
-
+        self.ocr_blocks = OcrBlock.from_rapid_ocr(TextExtractor.ocr_all_image_result(self.image))
         for block in self.blocks:
             # extract the text from the block based on the type of the page, scanned or not
 
@@ -81,8 +82,11 @@ class Page:
                 # extract the text using the fitz api
                 block.content = TextExtractor.parse_by_fitz(self.pdf_page, block.adjusted_bbox(self.zoom_factor))
             else:
+
                 # extract the text using the ocr, driven by the paddleocr and rapidocr
-                block.content = TextExtractor.parse_by_ocr(self.pdf_page, block.adjusted_bbox(self.zoom_factor))
+
+
+                TextExtractor.match_layout_to_ocr(self.blocks, self.ocr_blocks)
 
             # recognize the table content based on the table structure
             block.recognize_table_content(self.pdf_page, self.zoom_factor)
@@ -115,7 +119,8 @@ class Page:
             cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
             # Draw the item id on the image
-            cv2.putText(image, str(item.id), (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(image, str(item.id) + " " + item.label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0),
+                        2)
 
             image = item.depict_table(image)
 

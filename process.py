@@ -1,15 +1,43 @@
+import gc
 import io
+import sys
 import time
 
 import fitz
 import ocrmypdf
+import psutil
 from PIL import Image
 
 from entity.page import Page
 from module.layout.layout_detector import LayoutDetector
 from module.rotation.orientation_corrector import OrientationCorrector
 from module.table.table_parser import TableExtractor
+from module.text.text_parser import TextExtractor
 from util.visualizer import Visualizer
+
+
+def get_variable_memory(variable):
+    """
+    获取Python变量的内存使用量(单位为bytes)。
+
+    参数:
+    variable -- 需要检查内存使用量的变量
+
+    返回:
+    变量的内存使用量(单位为bytes)
+    """
+    # 获取变量的引用计数
+    ref_count = sys.getrefcount(variable)
+
+    # 遍历所有Python对象,找到与变量匹配的对象
+    total_size = 0
+    for obj in gc.get_objects():
+        if id(obj) == id(variable):
+            total_size = sys.getsizeof(obj)
+            break
+
+    # 根据引用计数调整内存使用量
+    return total_size * (ref_count - 1)
 
 
 class PDFProcessor:
@@ -91,6 +119,8 @@ class PDFProcessor:
         doc = fitz.open(file_path)
         for page_num in range(len(doc)):
             # convert the page to image
+
+            print(f"The memory taked by ocr engine:{get_variable_memory(TextExtractor.engine)}")
             page = doc.load_page(page_num)
 
             img, img_bytes = self.convert_page_to_image(page)
@@ -109,10 +139,10 @@ class PDFProcessor:
             page.build_blocks(layout)
 
             # filter item by label
-            page.filter_items_by_label(filters=["Header", "Footer"])
+            page.filter_items_by_label(filters=["Header", "Footer", "Figure"])
 
             # merge the overlap block
-            page.merge_overlap_block(threshold=0.8)
+            page.merge_overlap_block(threshold=0.7)
 
             # sort the items
             page.sort()
@@ -150,6 +180,8 @@ class PDFProcessor:
         markdown_content = []
         for page in pages:
             # convert the pages to markdown, extract the content from items in page
+            if page.texts is None:
+                continue
             markdown_content.extend(page.texts)
         # convert it to markdown format
 
@@ -182,11 +214,23 @@ class PDFProcessor:
 
 if __name__ == '__main__':
     start = time.time()
-    pdf_processor = PDFProcessor(device="cpu", zoom_factor=3, model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
-    output_pages = pdf_processor.process("./pdf/test3.pdf")
+    pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
+                                 model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
+    output_pages = pdf_processor.process("./pdf/test4.pdf", use_ocr=False)
+    print("Time taken: ", time.time() - start)
+    blocks = []
+    for page in output_pages:
+        blocks.extend(page.blocks)
+
+    empty_block = []
+    for block in blocks:
+        if block.content is None:
+            empty_block.append(block)
+
     markdown_content = pdf_processor.convert_to_markdown(output_pages)
+
     Visualizer.depict_bbox(output_pages)
     pdf_processor.merge(output_pages)
-    print("Time taken: ", time.time() - start)
+
     # print(layouts)
     print("hell")

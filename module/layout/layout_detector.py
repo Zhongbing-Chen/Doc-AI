@@ -16,6 +16,8 @@ class LayoutDetector:
     type_dict = {0: 'Text', 1: 'Title', 2: 'Header', 3: 'Footer', 4: 'Figure', 5: 'Table', 6: 'Toc',
                  7: 'Figure caption', 8: 'Table caption'}
 
+    # type_dict = {0: 'title', 1: 'plain text', 2: 'abandon', 3: 'figure', 4: 'figure_caption', 5: 'table', 6: 'table_caption', 7: 'table_footnote', 8: 'isolate_formula', 9: 'formula_caption'}
+
     def __init__(self, model_source, device):
         """
         Initialize the layout detector
