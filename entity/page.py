@@ -74,24 +74,26 @@ class Page:
         Extract text from the items
         :return: None
         """
-        for block in self.blocks:
-            # extract the text from the block based on the type of the page, scanned or not
 
-            if not self.is_scanned:
+        if not self.is_scanned:
+            for block in self.blocks:
+                # extract the text from the block based on the type of the page, scanned or not
+
                 # extract the text using the fitz api
                 block.content = TextExtractor.parse_by_fitz(self.pdf_page, block.adjusted_bbox(self.zoom_factor))
 
                 # recognize the table content based on the table structure
                 block.recognize_table_content(self.pdf_page, self.zoom_factor, self.is_scanned)
-            else:
-                self.ocr_blocks = OcrBlock.from_rapid_ocr(TextExtractor.ocr_all_image_result(self.image))
+        else:
 
-                # extract the text using the ocr, driven by the paddleocr and rapidocr
+            self.ocr_blocks = OcrBlock.from_rapid_ocr(TextExtractor.ocr_all_image_result(self.image))
+            TextExtractor.match_layout_to_ocr(self.blocks, self.ocr_blocks)
 
-                TextExtractor.match_layout_to_ocr(self.blocks, self.ocr_blocks)
-
+            for block in self.blocks:
                 # recognize the table content based on the table structure
                 block.recognize_table_content(self.pdf_page, self.zoom_factor, self.is_scanned, self.ocr_blocks)
+
+
 
     def recognize_table(self, table_parser, save_path: str):
         """
@@ -121,7 +123,8 @@ class Page:
             cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
             # Draw the item id on the image
-            cv2.putText(image, str(item.block_id) + " " + item.label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0),
+            cv2.putText(image, str(item.block_id) + " " + item.label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (0, 255, 0),
                         2)
 
             image = item.depict_table(image)
