@@ -1,7 +1,9 @@
 import gc
 import io
+import os
 import sys
 import time
+from datetime import datetime
 
 import fitz
 import ocrmypdf
@@ -115,6 +117,14 @@ class PDFProcessor:
             file_path = self.pre_ocr(file_path, language=language)
         pages = []
 
+        current_time_string = datetime.now().strftime("%Y%m%d%H%M%S")
+        dir_path_detail = f"./results/{current_time_string}/detail"
+        dir_path_table = f"./results/{current_time_string}/table"
+        if not os.path.exists(dir_path_detail) or not os.path.exists(dir_path_table):
+            # 如果文件夹不存在，则创建
+            os.makedirs(dir_path_detail, exist_ok=True)
+            os.makedirs(dir_path_table, exist_ok=True)
+
         # open the updated pdf file
         doc = fitz.open(file_path)
         for page_num in range(len(doc)):
@@ -148,13 +158,15 @@ class PDFProcessor:
             page.sort()
 
             # table part
-            page.recognize_table(self.table_parser)
+            page.recognize_table(self.table_parser, dir_path_table)
 
             # text part
             page.extract_text()
 
             # append the image to the list
             pages.append(page)
+
+        Visualizer.depict_bbox(pages, dir_path_detail)
         return pages
 
     @staticmethod
@@ -180,11 +192,12 @@ class PDFProcessor:
         markdown_content = []
         for page in pages:
             # convert the pages to markdown, extract the content from items in page
-            if page.texts is None:
-                continue
+
             markdown_content.extend(page.texts)
         # convert it to markdown format
 
+        # filter the empty content in the list
+        markdown_content = list(filter(None, markdown_content))
         # 将列表转换为Markdown格式的无序列表
         markdown_list = "\n".join(markdown_content)
 
@@ -215,7 +228,7 @@ class PDFProcessor:
 if __name__ == '__main__':
     start = time.time()
     pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
-                                 model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
+                                 model_source="/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/runs/detect/train63/weights/best.pt")
     output_pages = pdf_processor.process("./pdf/test4.pdf", use_ocr=False)
     print("Time taken: ", time.time() - start)
     blocks = []
@@ -229,7 +242,6 @@ if __name__ == '__main__':
 
     markdown_content = pdf_processor.convert_to_markdown(output_pages)
 
-    Visualizer.depict_bbox(output_pages)
     pdf_processor.merge(output_pages)
 
     # print(layouts)

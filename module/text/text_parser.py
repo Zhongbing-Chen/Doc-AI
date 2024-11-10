@@ -1,18 +1,10 @@
-from dataclasses import dataclass
-from typing import List, Union
+from typing import List
 
 import fitz
 from PIL import Image
 from rapidocr_onnxruntime import RapidOCR
 
-from entity.block import Block, OcrBlock
-
-
-@dataclass
-class OCRBlock:
-    bbox: List[List[float]]  # [[x1,y1], [x2,y1], [x2,y2], [x1,y2]]
-    text: str
-    confidence: float
+from entity.block import OcrBlock, Box
 
 
 class TextExtractor:
@@ -111,7 +103,7 @@ class TextExtractor:
         return len(page_text.strip()) == 0
 
     @classmethod
-    def match_layout_to_ocr(cls, layout_blocks: List[Block], ocr_blocks: List[OcrBlock],
+    def match_layout_to_ocr(cls, layout_blocks: List[Box], ocr_blocks: List[OcrBlock],
                             overlap_threshold: float = 0.7):
         """Match layout blocks to OCR text blocks based on overlap ratio"""
         for layout_block in layout_blocks:
@@ -125,7 +117,7 @@ class TextExtractor:
                 if ocr_area > 0:
                     overlap_ratio = overlap_area / ocr_area
                     if overlap_ratio >= overlap_threshold:
-                        matching_texts.append(ocr_block.text)
+                        matching_texts.append(ocr_block.content)
 
             # Sort matching texts by vertical position for proper reading order
             matching_texts = [(text, ocr_block.y_1)
@@ -139,7 +131,7 @@ class TextExtractor:
         return layout_blocks
 
     @classmethod
-    def calculate_overlap_area(cls, box1: Union[Block, OcrBlock], box2):
+    def calculate_overlap_area(cls, box1: Box, box2: Box):
         """Calculate the overlapping area between two bounding boxes"""
         x_left = max(box1.x_1, box2.x_1)
         y_top = max(box1.y_1, box2.y_1)

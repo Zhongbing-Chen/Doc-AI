@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Union
+from typing import Union, List, Optional
 
 import cv2
 import numpy as np
@@ -7,69 +7,43 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from torch import Tensor
 
+from entity.box import Box, OcrBlock
 from module.layout.layout_detector import LayoutDetector
+from module.text.text_parser import TextExtractor
 
 
-class Box:
-    x_1: float
-    y_1: float
-    x_2: float
-    y_2: float
-
-
-class OcrBlock(Box):
+@dataclass
+class TableStructure(Box):
     """
-    The OcrBlock class represents a block of text recognized by an OCR (Optical Character Recognition) system.
+    The table structure class
 
     Attributes:
-        x_1 (float): The x-coordinate of the top-left corner of the bounding box.
-        y_1 (float): The y-coordinate of the top-left corner of the bounding box.
-        x_2 (float): The x-coordinate of the bottom-right corner of the bounding box.
-        y_2 (float): The y-coordinate of the bottom-right corner of the bounding box.
-        text (str): The recognized text within the bounding box.
-        confidence (float): The confidence score of the recognition result.
+        bbox: the bounding box of the table
+        cell_text: the text of the cell
+        column_header: the flag to indicate whether the cell is a column header
+        column_nums: the column numbers of the cell
+        projected_row_header: the flag to indicate whether the cell is a projected row header
+        row_nums: the row numbers of the cell
+        spans: the spans of the cell
+        subcell: the flag to indicate whether the cell is a subcell
+
+    Methods:
+        recognize_content: recognize the content of the table
     """
+    bbox: list
+    cell_text: str
+    column_header: bool
+    column_nums: list
+    projected_row_header: bool
+    row_nums: list
+    spans: list
+    subcell: Optional[bool] = False
 
-    def __init__(self, x1, y1, x2, y2, text, confidence):
-        """
-        Initializes an OcrBlock instance.
-
-        Args:
-            x1 (float): The x-coordinate of the top-left corner of the bounding box.
-            y1 (float): The y-coordinate of the top-left corner of the bounding box.
-            x2 (float): The x-coordinate of the bottom-right corner of the bounding box.
-            y2 (float): The y-coordinate of the bottom-right corner of the bounding box.
-            text (str): The recognized text within the bounding box.
-            confidence (float): The confidence score of the recognition result.
-        """
-        self.x_1 = x1
-        self.y_1 = y1
-        self.x_2 = x2
-        self.y_2 = y2
-        self.text = text
-        self.confidence = confidence
-
-    def __repr__(self):
-        return f"OcrBlock(x1={self.x_1}, y1={self.y_1}, x2={self.x_2}, y2={self.y_2}, text='{self.text}', confidence={self.confidence})"
-
-    @classmethod
-    def from_rapid_ocr(cls, ocr_result):
-        """Extract OCR text blocks with their coordinates and content"""
-        ocr_blocks = []
-        for block in ocr_result:
-            coords = block[0]
-            text = block[1]
-            confidence = block[2]
-
-            x1 = min(coord[0] for coord in coords)
-            y1 = min(coord[1] for coord in coords)
-            x2 = max(coord[0] for coord in coords)
-            y2 = max(coord[1] for coord in coords)
-
-            ocr_blocks.append(OcrBlock(x1=x1, x2=x2, y1=y1, y2=y2, text=text, confidence=confidence))
-
-        return ocr_blocks
-
+    def __post_init__(self):
+        self.x_1 = self.bbox[0]
+        self.y_1 = self.bbox[1]
+        self.x_2 = self.bbox[2]
+        self.y_2 = self.bbox[3]
 
 @dataclass
 class Block(Box):
@@ -100,7 +74,7 @@ class Block(Box):
         union: union the block with the next block
         to_json: convert the block to json format
     """
-    id: str
+    block_id: str
     x_1: float
     y_1: float
     x_2: float
@@ -110,7 +84,7 @@ class Block(Box):
     page_num: int
     layout_score: float
     content: str = Union[str, None]
-    table_structure = Union[None, list]
+    table_structure = Union[None, List[TableStructure]]
     related_blocks = []
 
     @classmethod
@@ -123,8 +97,8 @@ class Block(Box):
         :return: the block object
         """
         x_1, y_1, x_2, y_2, layout_score, label_id = bbox
-        return cls(
-            id=id,
+        return Block(
+            block_id=id,
             x_1=x_1.item(),
             y_1=y_1.item(),
             x_2=x_2.item(),
@@ -135,7 +109,7 @@ class Block(Box):
             layout_score=layout_score.item(),
         )
 
-    def recognize_table_structure(self, img, table_parser) -> None:
+    def recognize_table_structure(self, img, table_parser, dir_path) -> None:
         """
         Recognize the table structure if this block is a table
         :param img: the image
@@ -145,13 +119,15 @@ class Block(Box):
         if self.label == "Table":
             # recognize table
             print("Recognize Table")
-
+            file_path = f"{dir_path}/table_{self.page_num}_{self.block_id}.png"
             # save the cropped image of the table, the file name is the page number + the block id
             # todo remove the saving of the image
-            img.crop(self.bbox).save(f"./results/table/table_{self.page_num}_{self.id}.png")
+
+            img.crop(self.bbox).save(file_path)
             self.table_structure = table_parser.parse(img, self.bbox)
 
-    def recognize_table_content(self, pdf_page, zoom_factor) -> None:
+    def recognize_table_content(self, pdf_page, zoom_factor, is_scanned: bool,
+                                ocr_blocks: List[OcrBlock] = None) -> None:
         """
         Recognize the table content
         :param pdf_page: the pdf page
@@ -161,8 +137,13 @@ class Block(Box):
         if self.label == "Table":
             # recognize table content
             print("Recognize Table Content")
-            for i in self.table_structure:
-                i.recognize_content(pdf_page, zoom_factor)
+
+            if is_scanned:
+                TextExtractor.match_layout_to_ocr(self.table_structure, ocr_blocks)
+
+            else:
+                for i in self.table_structure:
+                    TextExtractor.parse_by_fitz(pdf_page, [coord / zoom_factor for coord in i.bbox])
 
     @property
     def bbox(self) -> list:
@@ -208,7 +189,7 @@ class Block(Box):
         for cell in self.table_structure:
             for row in cell.row_nums:
                 for column in cell.column_nums:
-                    df.iloc[row, column] = cell.cell_text.strip().replace("\n", " ")
+                    df.iloc[row, column] = cell.content.strip().replace("\n", " ") if cell.content else ""
 
         # convert the dataframe to markdown format
         if not df.empty:
@@ -288,7 +269,7 @@ class Block(Box):
         :return: the json format of the block
         """
         return {
-            "id": self.id,
+            "id": self.block_id,
             "x_1": self.x_1,
             "y_1": self.y_1,
             "x_2": self.x_2,

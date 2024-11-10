@@ -5,8 +5,9 @@ from huggingface_hub import hf_hub_download
 from huggingface_hub import snapshot_download as hf_download
 from modelscope import snapshot_download
 
+from entity.block import TableStructure
 from model.table_transformer.inference import TableExtractionPipeline, infer_by_image
-from entity.table_structure import TableStructure
+
 
 
 class TableExtractor:
