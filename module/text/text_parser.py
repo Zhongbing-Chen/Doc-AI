@@ -54,24 +54,7 @@ class TextExtractor:
         # Extract the text from the OCR results, and join them together, item[0] is the bbox, item[1] is the text
         return " ".join(item[1] for item in result)
 
-    @classmethod
-    def ocr_all_page_result(cls, pdf_page):
-        """
-        Parse the text using OCR
-        :param pdf_page: the pdf page
-        :return: the text
-        """
-        print("Extract with OCR")
 
-        # Extract the image from the PDF based on the bounding box
-        pix = pdf_page.get_pixmap()
-        img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
-
-        result, elapse = cls.engine(img, use_det=True, use_cls=True, use_rec=True)
-        if result is None:
-            return []
-
-        return result
 
     @classmethod
     def ocr_all_image_result(cls, image):

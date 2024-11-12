@@ -19,7 +19,7 @@ class OcrBlock(Box):
         confidence (float): The confidence score of the recognition result.
     """
 
-    def __init__(self, x1, y1, x2, y2, text, confidence):
+    def __init__(self, x1, y1, x2, y2, text, confidence, raw_ocr_result=None):
         """
         Initializes an OcrBlock instance.
 
@@ -37,6 +37,7 @@ class OcrBlock(Box):
         self.y_2 = y2
         self.content = text
         self.confidence = confidence
+        self.raw_ocr_result = raw_ocr_result
 
     def __repr__(self):
         return f"OcrBlock(x1={self.x_1}, y1={self.y_1}, x2={self.x_2}, y2={self.y_2}, text='{self.content}', confidence={self.confidence})"
@@ -55,6 +56,7 @@ class OcrBlock(Box):
             x2 = max(coord[0] for coord in coords)
             y2 = max(coord[1] for coord in coords)
 
-            ocr_blocks.append(OcrBlock(x1=x1, x2=x2, y1=y1, y2=y2, text=text, confidence=confidence))
+            ocr_blocks.append(
+                OcrBlock(x1=x1, x2=x2, y1=y1, y2=y2, text=text, confidence=confidence, raw_ocr_result=block))
 
         return ocr_blocks

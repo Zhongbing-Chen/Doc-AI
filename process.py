@@ -131,7 +131,7 @@ class PDFProcessor:
             # convert the page to image
 
             print(f"The memory taked by ocr engine:{get_variable_memory(TextExtractor.engine)}")
-            page = doc.load_page(page_num)
+            page = doc[page_num]
 
             img, img_bytes = self.convert_page_to_image(page)
             img_rotated = img
@@ -163,10 +163,14 @@ class PDFProcessor:
             # text part
             page.extract_text()
 
+            page.add_text_layer()
+
+            doc.insert_pdf(page.pdf_page,page_num+1)
             # append the image to the list
             pages.append(page)
 
         Visualizer.depict_bbox(pages, dir_path_detail)
+        doc.close()
         return pages
 
     @staticmethod
@@ -229,7 +233,7 @@ if __name__ == '__main__':
     start = time.time()
     pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
                                  model_source="/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/runs/detect/train63/weights/best.pt")
-    output_pages = pdf_processor.process("./pdf/test4.pdf", use_ocr=False)
+    output_pages = pdf_processor.process("./pdf/test8.pdf", use_ocr=False)
     print("Time taken: ", time.time() - start)
     blocks = []
     for page in output_pages:

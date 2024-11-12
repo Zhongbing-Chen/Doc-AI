@@ -1,3 +1,4 @@
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Union, List
@@ -85,15 +86,13 @@ class Page:
                 # recognize the table content based on the table structure
                 block.recognize_table_content(self.pdf_page, self.zoom_factor, self.is_scanned)
         else:
-
-            self.ocr_blocks = OcrBlock.from_rapid_ocr(TextExtractor.ocr_all_image_result(self.image))
+            self.raw_ocr_result = TextExtractor.ocr_all_image_result(self.image)
+            self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
             TextExtractor.match_layout_to_ocr(self.blocks, self.ocr_blocks)
 
             for block in self.blocks:
                 # recognize the table content based on the table structure
                 block.recognize_table_content(self.pdf_page, self.zoom_factor, self.is_scanned, self.ocr_blocks)
-
-
 
     def recognize_table(self, table_parser, save_path: str):
         """
@@ -193,6 +192,56 @@ class Page:
                     j += 1
             # if the current block is merged with any adjacent block, update the index of the outer loop
             i += 1
+
+    def add_text_layer(self):
+
+        """
+        Write OCR results to PDF with appropriate font sizes.
+        ocr_data: list of [bbox, text, confidence] items
+        """
+        # Open the PDF
+
+        for item in self.ocr_blocks:
+            bbox, text, confidence = item.raw_ocr_result
+            # Calculate font size
+            font_size = self.calculate_font_size(bbox, text)
+
+            # Convert bbox to fitz rectangle format (x0, y0, x2, y2)
+            rect = fitz.Rect(bbox[0][0], bbox[0][1], bbox[2][0], bbox[2][1])
+
+            # Create text insertion object
+            text_kwargs = {
+                "fontname": "helvetica",  # Use a standard font
+                "fontsize": font_size
+            }
+
+            # Insert text
+            self.pdf_page.insert_text(rect.tl, text, **text_kwargs)
+
+    @staticmethod
+    def calculate_font_size(bbox, text):
+        """
+        Calculate appropriate font size based on bounding box and text length.
+        bbox: list of coordinates [[x0, y0], [x1, y1], [x2, y2], [x3, y3]]
+        """
+        # Calculate box width and height
+        width = math.sqrt((bbox[1][0] - bbox[0][0]) ** 2 + (bbox[1][1] - bbox[0][1]) ** 2)
+        height = math.sqrt((bbox[3][0] - bbox[0][0]) ** 2 + (bbox[3][1] - bbox[0][1]) ** 2)
+
+        # Convert pixel to point (72 points = 1 inch, assume 96 DPI)
+        width_pt = width * 72 / 96
+        height_pt = height * 72 / 96
+
+        # Estimate font size based on height, with some padding
+        font_size_by_height = height_pt * 0.7
+
+        # Estimate font size based on width and text length
+        # Assume average character width is 0.6 times the font size
+        char_count = len(text)
+        font_size_by_width = width_pt / (char_count * 0.6)
+
+        # Take the smaller of the two sizes to ensure text fits in both dimensions
+        return min(font_size_by_height, font_size_by_width)
 
     def to_map(self):
         """
