@@ -1,5 +1,6 @@
 import gc
 import io
+import json
 import os
 import sys
 import time
@@ -139,7 +140,7 @@ class PDFProcessor:
             rotated_angle = 0
 
             # deprecated the pre_process function
-            # deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page)
+            deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page)
             # print(angle)
             # print(time.time() - start)
             page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=self.zoom_factor,
@@ -165,7 +166,6 @@ class PDFProcessor:
 
             page.add_text_layer()
 
-            doc.insert_pdf(page.pdf_page,page_num+1)
             # append the image to the list
             pages.append(page)
 
@@ -183,7 +183,8 @@ class PDFProcessor:
         """
         img_rotated, rotated_angle = OrientationCorrector.rotate_through_tesseract(img, page)
         print(rotated_angle)
-        img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
+        # img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
+        deskew_angle = 0
         return deskew_angle, img_rotated, rotated_angle
 
     @staticmethod
@@ -226,14 +227,24 @@ class PDFProcessor:
         content = []
         for i in pages:
             content.extend(i.to_map())
+
+        # 将列表转换为JSON格式并保存
+        json_content = json.dumps(content, ensure_ascii=False)
+
+        # 指定JSON文件路径
+        json_file_path = "json_output.json"
+
+        # 将JSON内容写入文件
+        with open(json_file_path, "w", encoding="utf-8") as file:
+            file.write(json_content)
         print(content)
 
 
 if __name__ == '__main__':
     start = time.time()
     pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
-                                 model_source="/home/zhongbing/Projects/MLE/Document-AI/yolo-document-layout-analysis/runs/detect/train63/weights/best.pt")
-    output_pages = pdf_processor.process("./pdf/test8.pdf", use_ocr=False)
+                                 model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
+    output_pages = pdf_processor.process("./pdf/test9.pdf", use_ocr=False)
     print("Time taken: ", time.time() - start)
     blocks = []
     for page in output_pages:

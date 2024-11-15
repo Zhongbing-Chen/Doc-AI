@@ -86,14 +86,14 @@ class TextExtractor:
         return len(page_text.strip()) == 0
 
     @classmethod
-    def match_layout_to_ocr(cls, layout_blocks: List[Box], ocr_blocks: List[OcrBlock],
-                            overlap_threshold: float = 0.7):
+    def match_box_to_ocr(cls, boxes: List[Box], ocr_blocks: List[OcrBlock],
+                         overlap_threshold: float = 0.7):
         """Match layout blocks to OCR text blocks based on overlap ratio"""
-        for layout_block in layout_blocks:
+        for box in boxes:
             matching_texts = []
 
             for ocr_block in ocr_blocks:
-                overlap_area = cls.calculate_overlap_area(layout_block, ocr_block)
+                overlap_area = cls.calculate_overlap_area(box, ocr_block)
                 ocr_area = cls.calculate_box_area(ocr_block)
 
                 # Calculate what portion of the OCR box is overlapped
@@ -109,9 +109,9 @@ class TextExtractor:
             matching_texts.sort(key=lambda x: x[1])
 
             # Join all matching texts with newlines, preserving vertical order
-            layout_block.content = '\n'.join(text for text, _ in matching_texts) if matching_texts else None
+            box.content = '\n'.join(text for text, _ in matching_texts) if matching_texts else None
 
-        return layout_blocks
+        return boxes
 
     @classmethod
     def calculate_overlap_area(cls, box1: Box, box2: Box):

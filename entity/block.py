@@ -139,7 +139,7 @@ class Block(Box):
             print("Recognize Table Content")
 
             if is_scanned:
-                TextExtractor.match_layout_to_ocr(self.table_structure, ocr_blocks)
+                TextExtractor.match_box_to_ocr(self.table_structure, ocr_blocks)
 
             else:
                 for i in self.table_structure:
@@ -279,6 +279,5 @@ class Block(Box):
             "page_num": self.page_num,
             "layout_score": self.layout_score,
             "content": self.content,
-            "table_structure": self.table_structure,
             "related_blocks": self.related_blocks
         }

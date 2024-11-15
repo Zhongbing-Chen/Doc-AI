@@ -58,6 +58,10 @@ class Page:
         self.image = image
         self.zoom_factor = zoom_factor
         self.is_scanned = TextExtractor.is_scanned_pdf_page(pdf_page)
+
+        if self.is_scanned:
+            self.raw_ocr_result = TextExtractor.ocr_all_image_result(self.image)
+
         self.skewed_angle = skewed_angle
 
     def build_blocks(self, results: Results):
@@ -86,9 +90,8 @@ class Page:
                 # recognize the table content based on the table structure
                 block.recognize_table_content(self.pdf_page, self.zoom_factor, self.is_scanned)
         else:
-            self.raw_ocr_result = TextExtractor.ocr_all_image_result(self.image)
             self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
-            TextExtractor.match_layout_to_ocr(self.blocks, self.ocr_blocks)
+            TextExtractor.match_box_to_ocr(self.blocks, self.ocr_blocks)
 
             for block in self.blocks:
                 # recognize the table content based on the table structure
@@ -201,8 +204,8 @@ class Page:
         """
         # Open the PDF
 
-        for item in self.ocr_blocks:
-            bbox, text, confidence = item.raw_ocr_result
+        for item in self.raw_ocr_result:
+            bbox, text, confidence = item
             # Calculate font size
             font_size = self.calculate_font_size(bbox, text)
 
