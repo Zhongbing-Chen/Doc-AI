@@ -76,7 +76,7 @@ detection_class_thresholds = {
 structure_class_thresholds = {
     "table": 0.5,
     "table column": 0.5,
-    "table row": 0.95,
+    "table row": 0.9,
     "table column header": 0.5,
     "table projected row header": 0.5,
     "table spanning cell": 0.5,

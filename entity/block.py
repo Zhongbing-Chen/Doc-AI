@@ -32,18 +32,22 @@ class TableStructure(Box):
     """
     bbox: list
     cell_text: str
+
     column_header: bool
     column_nums: list
     projected_row_header: bool
     row_nums: list
     spans: list
     subcell: Optional[bool] = False
+    table_type: str = "wired"
 
     def __post_init__(self):
         self.x_1 = self.bbox[0]
         self.y_1 = self.bbox[1]
         self.x_2 = self.bbox[2]
         self.y_2 = self.bbox[3]
+        self.content = self.cell_text
+
 
 @dataclass
 class Block(Box):
@@ -118,7 +122,7 @@ class Block(Box):
         """
         if self.label == "Table":
             # recognize table
-            print("Recognize Table")
+
             file_path = f"{dir_path}/table_{self.page_num}_{self.block_id}.png"
             # save the cropped image of the table, the file name is the page number + the block id
             # todo remove the saving of the image
@@ -143,7 +147,7 @@ class Block(Box):
 
             else:
                 for i in self.table_structure:
-                    TextExtractor.parse_by_fitz(pdf_page, [coord / zoom_factor for coord in i.bbox])
+                    i.content = TextExtractor.parse_by_fitz(pdf_page, [coord / zoom_factor for coord in i.bbox])
 
     @property
     def bbox(self) -> list:

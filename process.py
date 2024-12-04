@@ -1,10 +1,12 @@
 import gc
 import io
 import json
+import multiprocessing
 import os
 import sys
 import time
 from datetime import datetime
+from functools import partial
 
 import fitz
 import ocrmypdf
@@ -130,61 +132,121 @@ class PDFProcessor:
         doc = fitz.open(file_path)
         for page_num in range(len(doc)):
             # convert the page to image
-
-            print(f"The memory taked by ocr engine:{get_variable_memory(TextExtractor.engine)}")
+            print("Processing page: ", page_num)
+            start = time.time()
+            # print(f"The memory taked by ocr engine:{get_variable_memory(TextExtractor.engine)}")
             page = doc[page_num]
 
             img, img_bytes = self.convert_page_to_image(page)
             img_rotated = img
-            deskew_angle = 0
-            rotated_angle = 0
 
+            is_scanned = TextExtractor.is_scanned_pdf_page(page)
             # deprecated the pre_process function
-            deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page)
+            deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page, is_scanned)
             # print(angle)
             # print(time.time() - start)
             page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=self.zoom_factor,
-                        rotated_angle=rotated_angle, skewed_angle=deskew_angle)
+                        rotated_angle=rotated_angle, skewed_angle=deskew_angle, is_scanned=False)
+
             layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
             # layouts.append(layout)
             page.build_blocks(layout)
-
             # filter item by label
             page.filter_items_by_label(filters=["Header", "Footer", "Figure"])
-
             # merge the overlap block
             page.merge_overlap_block(threshold=0.7)
-
             # sort the items
             page.sort()
-
             # table part
             page.recognize_table(self.table_parser, dir_path_table)
-
             # text part
             page.extract_text()
-
             page.add_text_layer()
 
             # append the image to the list
             pages.append(page)
 
+            # print the time usage
+            print("Time taken for this page: ", time.time() - start)
+
         Visualizer.depict_bbox(pages, dir_path_detail)
         doc.close()
         return pages
 
+    import multiprocessing
+    from functools import partial
+
+    def process_page(doc, self, dir_path_table, page_num):
+        start = time.time()
+        page = doc[page_num]
+        img, img_bytes = self.convert_page_to_image(page)
+        img_rotated = img
+        is_scanned = TextExtractor.is_scanned_pdf_page(page)
+
+        deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page, is_scanned)
+
+        page = Page(
+            page_num=page_num,
+            image=img_rotated,
+            pdf_page=page,
+            zoom_factor=self.zoom_factor,
+            rotated_angle=rotated_angle,
+            skewed_angle=deskew_angle,
+            is_scanned=False
+        )
+
+        layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
+        page.build_blocks(layout)
+        page.filter_items_by_label(filters=["Header", "Footer", "Figure"])
+        page.merge_overlap_block(threshold=0.7)
+        page.sort()
+        page.recognize_table(self.table_parser, dir_path_table)
+        page.extract_text()
+        page.add_text_layer()
+
+        print(f"Time taken for page {page_num}: {time.time() - start}")
+        return page
+
+    def process_pdf_multiprocess(self, doc, dir_path_table, max_workers=None):
+        if max_workers is None:
+            max_workers = multiprocessing.cpu_count()
+
+        # Use partial to create a function with some arguments pre-filled
+        process_page_partial = partial(
+            self.process_page,
+            doc,
+            self,
+            dir_path_table
+        )
+
+        # Use multiprocessing Pool to process pages in parallel
+        with multiprocessing.Pool(processes=max_workers) as pool:
+            pages = pool.map(process_page_partial, range(len(doc)))
+
+        return pages
+
+
+
     @staticmethod
-    def pre_process(img, page):
+    def pre_process(img, page, is_scanned: bool = False):
         """
         pre-process the image
         :param img: the image object
         :param page: the page object
         :return: the deskew angle, the rotated image, the rotated angle
         """
-        img_rotated, rotated_angle = OrientationCorrector.rotate_through_tesseract(img, page)
-        print(rotated_angle)
-        # img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
-        deskew_angle = 0
+        try:
+            img_rotated, rotated_angle = OrientationCorrector.rotate_through_tesseract(img, page)
+        except Exception as e:
+            print(f"Error in rotating the image: {e}")
+            img_rotated = img
+            rotated_angle = 0
+
+        if is_scanned:
+            img_rotated, deskew_angle = OrientationCorrector.deskew_image(img_rotated)
+        else:
+            deskew_angle = 0
+
         return deskew_angle, img_rotated, rotated_angle
 
     @staticmethod
@@ -244,8 +306,8 @@ if __name__ == '__main__':
     start = time.time()
     pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
                                  model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
-    output_pages = pdf_processor.process("./pdf/test9.pdf", use_ocr=False)
-    print("Time taken: ", time.time() - start)
+    output_pages = pdf_processor.process("./pdf/test3.pdf", use_ocr=False)
+    print("Time taken for this doc: ", time.time() - start)
     blocks = []
     for page in output_pages:
         blocks.extend(page.blocks)

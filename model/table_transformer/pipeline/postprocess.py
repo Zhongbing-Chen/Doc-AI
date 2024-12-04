@@ -151,11 +151,12 @@ def refine_rows(rows, tokens, score_threshold):
     """
 
     if len(tokens) > 0:
-        rows = nms_by_containment(rows, tokens, overlap_threshold=0.5)
+        rows = nms_by_containment(rows, tokens, overlap_threshold=0.3)
+        print("Attention Please!!!!!")
         remove_objects_without_content(tokens, rows)
     else:
         rows = nms(rows, match_criteria="object2_overlap",
-                   match_threshold=0.5, keep_higher=True)
+                   match_threshold=0.3, keep_higher=True)
     if len(rows) > 1:
         rows = sort_objects_top_to_bottom(rows)
 

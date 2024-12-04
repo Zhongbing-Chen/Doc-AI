@@ -1,6 +1,9 @@
 import re
 
+import PIL
+import cv2
 import numpy as np
+from PIL.Image import Image
 from jdeskew.estimator import get_angle
 from jdeskew.utility import rotate
 from pytesseract import pytesseract
@@ -68,8 +71,53 @@ class OrientationCorrector:
         """
         image_array = np.array(img)
         angle = get_angle(image_array, angle_max=10)
+        print("Deskew angle: ", angle)
+
         img_deskew = img
-        if abs(angle) >= 1:
-            img_deskew = rotate(img, angle)
-        print(angle)
+        if abs(angle) >= 0.3:
+            cv2_image = cls.pil_to_cv2(img)
+            img_deskew = rotate(cv2_image, angle)
+            img_deskew = cls.cv2_to_pil(img_deskew)
         return img_deskew, angle
+
+    @staticmethod
+    def pil_to_cv2(pil_image):
+        """
+        将PIL图像转换为OpenCV格式
+
+        Args:
+            pil_image (PIL.Image.Image): PIL格式的图像
+
+        Returns:
+            numpy.ndarray: OpenCV格式的图像(BGR)
+        """
+        # 首先确保图像在RGB模式
+        if pil_image.mode != 'RGB':
+            pil_image = pil_image.convert('RGB')
+
+        # 转换为numpy数组
+        image_array = np.array(pil_image)
+
+        # 转换RGB为BGR
+        opencv_image = cv2.cvtColor(image_array, cv2.COLOR_RGB2BGR)
+
+        return opencv_image
+
+    @staticmethod
+    def cv2_to_pil(cv2_image):
+        """
+        将OpenCV格式图像转换为PIL格式
+
+        Args:
+            cv2_image (numpy.ndarray): OpenCV格式的图像(BGR)
+
+        Returns:
+            PIL.Image.Image: PIL格式的图像
+        """
+        # 转换BGR为RGB
+        rgb_image = cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB)
+
+        # 转换为PIL Image
+        pil_image = PIL.Image.fromarray(rgb_image.astype('uint8'))
+
+        return pil_image

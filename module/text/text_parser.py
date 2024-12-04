@@ -87,7 +87,7 @@ class TextExtractor:
 
     @classmethod
     def match_box_to_ocr(cls, boxes: List[Box], ocr_blocks: List[OcrBlock],
-                         overlap_threshold: float = 0.7):
+                         overlap_threshold: float = 0.6):
         """Match layout blocks to OCR text blocks based on overlap ratio"""
         for box in boxes:
             matching_texts = []

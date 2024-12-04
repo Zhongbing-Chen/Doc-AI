@@ -50,14 +50,14 @@ class Page:
     is_scanned: bool
     ocr_blocks: List[OcrBlock]
 
-    def __init__(self, pdf_page, page_num, image, zoom_factor, items=None, rotated_angle=None, skewed_angle=None):
+    def __init__(self, pdf_page, page_num, image, zoom_factor, items=None, rotated_angle=None, skewed_angle=None,is_scanned=False):
         self.pdf_page = pdf_page
         self.page_num = page_num
         self.blocks = items
         self.rotated_angle = rotated_angle
         self.image = image
         self.zoom_factor = zoom_factor
-        self.is_scanned = TextExtractor.is_scanned_pdf_page(pdf_page)
+        self.is_scanned = is_scanned
 
         if self.is_scanned:
             self.raw_ocr_result = TextExtractor.ocr_all_image_result(self.image)
@@ -196,14 +196,15 @@ class Page:
             # if the current block is merged with any adjacent block, update the index of the outer loop
             i += 1
 
-    def add_text_layer(self):
+    def add_text_layer(self) -> None:
 
         """
         Write OCR results to PDF with appropriate font sizes.
         ocr_data: list of [bbox, text, confidence] items
         """
         # Open the PDF
-
+        if not self.is_scanned:
+            return
         for item in self.raw_ocr_result:
             bbox, text, confidence = item
             # Calculate font size
