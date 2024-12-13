@@ -215,10 +215,6 @@ class Block(Box):
         if img.shape[2] == 3:  # If the image has 3 channels
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        # Create a figure and axis for drawing
-        fig, ax = plt.subplots(1)
-        ax.imshow(img)
-
         cells = self.table_structure
 
         # Assume img is already in the correct color format (RGB or BGR as per your working environment)

@@ -306,7 +306,7 @@ if __name__ == '__main__':
     start = time.time()
     pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
                                  model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
-    output_pages = pdf_processor.process("./pdf/test3.pdf", use_ocr=False)
+    output_pages = pdf_processor.process("./pdf/test29.pdf", use_ocr=False)
     print("Time taken for this doc: ", time.time() - start)
     blocks = []
     for page in output_pages:
