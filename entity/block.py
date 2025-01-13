@@ -4,12 +4,10 @@ from typing import Union, List, Optional
 import cv2
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 from torch import Tensor
 
-from entity.box import Box, OcrBlock
-from module.layout.layout_detector import LayoutDetector
-from module.text.text_parser import TextExtractor
+from entity.box import Box
+from module.layout.layout_constant import type_dict
 
 
 @dataclass
@@ -107,7 +105,7 @@ class Block(Box):
             y_1=y_1.item(),
             x_2=x_2.item(),
             y_2=y_2.item(),
-            label=LayoutDetector.type_dict[label_id.item()],
+            label=type_dict[label_id.item()],
             label_id=label_id.item(),
             page_num=page,
             layout_score=layout_score.item(),
@@ -130,24 +128,24 @@ class Block(Box):
             img.crop(self.bbox).save(file_path)
             self.table_structure = table_parser.parse(img, self.bbox)
 
-    def recognize_table_content(self, pdf_page, zoom_factor, is_scanned: bool,
-                                ocr_blocks: List[OcrBlock] = None) -> None:
-        """
-        Recognize the table content
-        :param pdf_page: the pdf page
-        :param zoom_factor: the zoom factor
-        :return: None
-        """
-        if self.label == "Table":
-            # recognize table content
-            print("Recognize Table Content")
-
-            if is_scanned:
-                TextExtractor.match_box_to_ocr(self.table_structure, ocr_blocks)
-
-            else:
-                for i in self.table_structure:
-                    i.content = TextExtractor.parse_by_fitz(pdf_page, [coord / zoom_factor for coord in i.bbox])
+    # def recognize_table_content(self, pdf_page, zoom_factor, is_scanned: bool,
+    #                             ocr_blocks: List[OcrBlock] = None) -> None:
+    #     """
+    #     Recognize the table content
+    #     :param pdf_page: the pdf page
+    #     :param zoom_factor: the zoom factor
+    #     :return: None
+    #     """
+    #     if self.label == "Table":
+    #         # recognize table content
+    #         print("Recognize Table Content")
+    #
+    #         if is_scanned:
+    #             BoxUtil.match_box_to_ocr(self.table_structure, ocr_blocks)
+    #
+    #         else:
+    #             for i in self.table_structure:
+    #                 i.content = TextExtractor.parse_by_fitz(pdf_page, [coord / zoom_factor for coord in i.bbox])
 
     @property
     def bbox(self) -> list:

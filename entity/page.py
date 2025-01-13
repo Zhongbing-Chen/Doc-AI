@@ -9,7 +9,9 @@ import numpy as np
 import torch
 from ultralytics.engine.results import Results
 
-from entity.block import Block, OcrBlock
+from entity.block import Block
+from entity.box import BoxUtil, OcrBlock
+from module.layout.layout_constant import type_dict
 from util.coordinate_util import CoordinateUtil
 from util.gap_tree import GapTree
 from module.text.text_parser import TextExtractor
@@ -50,7 +52,8 @@ class Page:
     is_scanned: bool
     ocr_blocks: List[OcrBlock]
 
-    def __init__(self, pdf_page, page_num, image, zoom_factor, items=None, rotated_angle=None, skewed_angle=None,is_scanned=False):
+    def __init__(self, pdf_page, page_num, image, zoom_factor, items=None, rotated_angle=None, skewed_angle=None,
+                 is_scanned=False):
         self.pdf_page = pdf_page
         self.page_num = page_num
         self.blocks = items
@@ -61,6 +64,10 @@ class Page:
 
         if self.is_scanned:
             self.raw_ocr_result = TextExtractor.ocr_all_image_result(self.image)
+            self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
+        else:
+            self.raw_ocr_result = TextExtractor.detection_all_image_result(self.image)
+            self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
 
         self.skewed_angle = skewed_angle
 
@@ -72,6 +79,16 @@ class Page:
         """
         self.blocks = [Block.from_bbox(i, self.page_num, box) for i, box in
                        enumerate(results.boxes.data)]
+
+    @classmethod
+    def build_blocks_with_results(cls, results: Results):
+        """
+        build the blocks from the results
+        :param results: the results object
+        :return: None
+        """
+        return [Block.from_bbox(i, "", box) for i, box in
+                enumerate(results.boxes.data)]
 
     # extract text from the items using pdf api fitz
     def extract_text(self):
@@ -88,14 +105,34 @@ class Page:
                 block.content = TextExtractor.parse_by_fitz(self.pdf_page, block.adjusted_bbox(self.zoom_factor))
 
                 # recognize the table content based on the table structure
-                block.recognize_table_content(self.pdf_page, self.zoom_factor, self.is_scanned)
+                self.recognize_table_content(block, self.pdf_page, self.zoom_factor, self.is_scanned)
         else:
             self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
-            TextExtractor.match_box_to_ocr(self.blocks, self.ocr_blocks)
+            BoxUtil.match_box_to_ocr(self.blocks, self.ocr_blocks)
 
             for block in self.blocks:
                 # recognize the table content based on the table structure
-                block.recognize_table_content(self.pdf_page, self.zoom_factor, self.is_scanned, self.ocr_blocks)
+                self.recognize_table_content(block, self.pdf_page, self.zoom_factor, self.is_scanned, self.ocr_blocks)
+
+    @classmethod
+    def recognize_table_content(cls, block: Block, pdf_page, zoom_factor, is_scanned: bool,
+                                ocr_blocks: List[OcrBlock] = None) -> None:
+        """
+        Recognize the table content
+        :param pdf_page: the pdf page
+        :param zoom_factor: the zoom factor
+        :return: None
+        """
+        if block.label == "Table":
+            # recognize table content
+            print("Recognize Table Content")
+
+            if is_scanned:
+                BoxUtil.match_box_to_ocr(block.table_structure, ocr_blocks)
+
+            else:
+                for cell in block.table_structure:
+                    cell.content = TextExtractor.parse_by_fitz(pdf_page, [coord / zoom_factor for coord in cell.bbox])
 
     def recognize_table(self, table_parser, save_path: str):
         """
@@ -254,3 +291,46 @@ class Page:
         """
 
         return [item.to_json() for item in self.blocks]
+
+    def fix_block_using_ocr(self):
+        for ocr_block in self.ocr_blocks:
+
+            for block in self.blocks:
+                overlap_area = BoxUtil.calculate_overlap_area(block, ocr_block)
+                ocr_area = BoxUtil.calculate_box_area(ocr_block)
+
+                if ocr_area > 0 and overlap_area > 0:
+                    ocr_block.relationships[block.block_id] = overlap_area / ocr_area
+
+        for ocr_block in self.ocr_blocks:
+            if ocr_block.relationships:
+                max_block_id = max(ocr_block.relationships, key=ocr_block.relationships.get)
+                for block in self.blocks:
+                    if block.block_id == max_block_id:
+                        if ocr_block.relationships[max_block_id] < 0.8:
+                            BoxUtil.extend_layout_box(block, ocr_block)
+
+            else:
+                # find key through value {0: 'Text', 1: 'Title', 2: 'Header', 3: 'Footer', 4: 'Figure', 5: 'Table', 6: 'Toc',
+                #                  7: 'Figure caption', 8: 'Table caption'} get the Header's label
+                label_id = self.get_key_from_value(type_dict, "Text")
+                layout = Block(
+                    block_id="",
+                    x_1=ocr_block.x_1,
+                    y_1=ocr_block.y_1,
+                    x_2=ocr_block.x_2,
+                    y_2=ocr_block.y_2,
+                    label="Text",
+                    label_id=label_id,
+                    page_num=self.page_num,
+                    layout_score=1.0,
+                )
+
+                self.blocks.append(layout)
+
+    @staticmethod
+    def get_key_from_value(dictionary, value):
+        for key, val in dictionary.items():
+            if val == value:
+                return key
+        return None

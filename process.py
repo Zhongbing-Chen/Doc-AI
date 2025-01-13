@@ -151,6 +151,9 @@ class PDFProcessor:
             layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
             # layouts.append(layout)
             page.build_blocks(layout)
+
+            page.fix_block_using_ocr()
+
             # filter item by label
             page.filter_items_by_label(filters=["Header", "Footer", "Figure"])
             # merge the overlap block
@@ -306,9 +309,10 @@ if __name__ == '__main__':
     start = time.time()
     pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
                                  model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
-    output_pages = pdf_processor.process("./pdf/test29.pdf", use_ocr=False)
+    output_pages = pdf_processor.process("/Users/zhongbing/Projects/MLE/Doc-AI/pdf/test31.PDF", use_ocr=False)
     print("Time taken for this doc: ", time.time() - start)
     blocks = []
+
     for page in output_pages:
         blocks.extend(page.blocks)
 
