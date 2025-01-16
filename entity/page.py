@@ -307,7 +307,7 @@ class Page:
                 max_block_id = max(ocr_block.relationships, key=ocr_block.relationships.get)
                 for block in self.blocks:
                     if block.block_id == max_block_id:
-                        if ocr_block.relationships[max_block_id] < 0.8:
+                        if ocr_block.relationships[max_block_id] < 0.9:
                             BoxUtil.extend_layout_box(block, ocr_block)
 
             else:

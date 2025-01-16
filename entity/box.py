@@ -98,7 +98,7 @@ class BoxUtil:
                 if ocr_area > 0:
                     overlap_ratio = overlap_area / ocr_area
                     if overlap_ratio >= overlap_threshold:
-                        matching_texts.append(ocr_block.content)
+                        matching_texts.append(ocr_block)
 
             # Sort matching texts by vertical position for proper reading order
             matching_texts = [(ocr_block.content, ocr_block.y_1)

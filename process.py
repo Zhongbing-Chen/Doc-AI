@@ -1,16 +1,14 @@
-import gc
 import io
 import json
 import multiprocessing
 import os
-import sys
 import time
 from datetime import datetime
 from functools import partial
 
 import fitz
+import img2pdf
 import ocrmypdf
-import psutil
 from PIL import Image
 
 from entity.page import Page
@@ -19,30 +17,6 @@ from module.rotation.orientation_corrector import OrientationCorrector
 from module.table.table_parser import TableExtractor
 from module.text.text_parser import TextExtractor
 from util.visualizer import Visualizer
-
-
-def get_variable_memory(variable):
-    """
-    获取Python变量的内存使用量(单位为bytes)。
-
-    参数:
-    variable -- 需要检查内存使用量的变量
-
-    返回:
-    变量的内存使用量(单位为bytes)
-    """
-    # 获取变量的引用计数
-    ref_count = sys.getrefcount(variable)
-
-    # 遍历所有Python对象,找到与变量匹配的对象
-    total_size = 0
-    for obj in gc.get_objects():
-        if id(obj) == id(variable):
-            total_size = sys.getsizeof(obj)
-            break
-
-    # 根据引用计数调整内存使用量
-    return total_size * (ref_count - 1)
 
 
 class PDFProcessor:
@@ -109,15 +83,13 @@ class PDFProcessor:
         img = Image.open(img_stream)
         return img, img_bytes
 
-    def process(self, file_path, language="chi_sim+eng", use_ocr=False):
+    def process(self, file_path=None, document=None):
         """
         process the pdf file
         :param file_path: the path of the original pdf file
         :param language: the language of the text in the pdf, default is "chi_sim+eng"
         """
         # recognize the text in the pdf, and output the pdf file with the text layer
-        if use_ocr:
-            file_path = self.pre_ocr(file_path, language=language)
         pages = []
 
         current_time_string = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -129,55 +101,61 @@ class PDFProcessor:
             os.makedirs(dir_path_table, exist_ok=True)
 
         # open the updated pdf file
-        doc = fitz.open(file_path)
+        if file_path is None:
+            doc = document
+        else:
+            doc = fitz.open(file_path)
+
         for page_num in range(len(doc)):
             # convert the page to image
-            print("Processing page: ", page_num)
-            start = time.time()
-            # print(f"The memory taked by ocr engine:{get_variable_memory(TextExtractor.engine)}")
-            page = doc[page_num]
-
-            img, img_bytes = self.convert_page_to_image(page)
-            img_rotated = img
-
-            is_scanned = TextExtractor.is_scanned_pdf_page(page)
-            # deprecated the pre_process function
-            deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page, is_scanned)
-            # print(angle)
-            # print(time.time() - start)
-            page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=self.zoom_factor,
-                        rotated_angle=rotated_angle, skewed_angle=deskew_angle, is_scanned=False)
-
-            layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
-            # layouts.append(layout)
-            page.build_blocks(layout)
-
-            page.fix_block_using_ocr()
-
-            # filter item by label
-            page.filter_items_by_label(filters=["Header", "Footer", "Figure"])
-            # merge the overlap block
-            page.merge_overlap_block(threshold=0.7)
-            # sort the items
-            page.sort()
-            # table part
-            page.recognize_table(self.table_parser, dir_path_table)
-            # text part
-            page.extract_text()
-            page.add_text_layer()
-
-            # append the image to the list
+            page = self.process_one_page(dir_path_table, doc, page_num)
             pages.append(page)
-
-            # print the time usage
-            print("Time taken for this page: ", time.time() - start)
-
         Visualizer.depict_bbox(pages, dir_path_detail)
         doc.close()
         return pages
 
-    import multiprocessing
-    from functools import partial
+    def process_one_page(self, dir_path_table, doc, page_num):
+        print("Processing page: ", page_num)
+        start = time.time()
+        page = doc[page_num]
+        img, img_bytes = self.convert_page_to_image(page)
+        img_rotated = img
+        is_scanned = TextExtractor.is_scanned_pdf_page(page)
+        # deprecated the pre_process function
+        deskew_angle, img_rotated, rotated_angle = self.pre_process(img_rotated, page, is_scanned)
+        # print(angle)
+        # print(time.time() - start)
+        page = Page(page_num=page_num, image=img_rotated, pdf_page=page, zoom_factor=self.zoom_factor,
+                    rotated_angle=rotated_angle, skewed_angle=deskew_angle, is_scanned=is_scanned)
+        layout = self.layout_detector.detect(page.image, conf=0.5, iou=0.45)
+        # layouts.append(layout)
+        page.build_blocks(layout)
+        page.fix_block_using_ocr()
+        # filter item by label
+        page.filter_items_by_label(filters=["Header", "Footer", "Figure"])
+        # merge the overlap block
+        page.merge_overlap_block(threshold=0.7)
+        # sort the items
+        page.sort()
+        # table part
+        page.recognize_table(self.table_parser, dir_path_table)
+        # text part
+        page.extract_text()
+        page.add_text_layer()
+        # append the image to the list
+
+        # print the time usage
+        print("Time taken for this page: ", time.time() - start)
+        return page
+
+    def process_img(self, image_path):
+        # 转换图片为PDF bytes
+        pdf_bytes = img2pdf.convert(image_path)
+
+        # 直接加载到fitz
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+
+        return self.process(document=doc)
 
     def process_page(doc, self, dir_path_table, page_num):
         start = time.time()
@@ -227,8 +205,6 @@ class PDFProcessor:
             pages = pool.map(process_page_partial, range(len(doc)))
 
         return pages
-
-
 
     @staticmethod
     def pre_process(img, page, is_scanned: bool = False):
@@ -309,7 +285,8 @@ if __name__ == '__main__':
     start = time.time()
     pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
                                  model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
-    output_pages = pdf_processor.process("/Users/zhongbing/Projects/MLE/Doc-AI/pdf/test31.PDF", use_ocr=False)
+    # output_pages = pdf_processor.process("/Users/zhongbing/Projects/MLE/Doc-AI/pdf/ann/复宏汉霖important.PDF")
+    output_pages = pdf_processor.process_img("/Users/zhongbing/Projects/MLE/Doc-AI/results/20250113230912/detail/5_original.png")
     print("Time taken for this doc: ", time.time() - start)
     blocks = []
 
