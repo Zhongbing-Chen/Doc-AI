@@ -8,7 +8,6 @@ from functools import partial
 
 import fitz
 import img2pdf
-import ocrmypdf
 from PIL import Image
 
 from entity.page import Page
@@ -39,31 +38,6 @@ class PDFProcessor:
 
     def set_layout_detector(self, model):
         self.layout_detector = model
-
-    @staticmethod
-    def pre_ocr(file_path, output_file=None, language="eng", rotate_pages_threshold=3.0):
-        # recognize the text in the pdf
-        """
-        using ocrmypdf to recognize the text in the pdf, and output the pdf file with the text layer
-        :param file_path: the path of the pdf file
-        :param output_file: the path of the output pdf file
-        :param language: the language of the text in the pdf, default is "eng", could be "chi_sim+eng"
-        :param rotate_pages_threshold: the threshold of the rotation, higher threshold means more strict standard to rotate the pages
-        :return: the path of the output pdf file
-        """
-        if output_file is None:
-            output_file = file_path.replace(".pdf", "_ocr.pdf")
-
-        ocrmypdf.ocr(file_path, output_file, rotate_pages=True,
-                     rotate_pages_threshold=rotate_pages_threshold, language=language,
-                     deskew=True,
-                     skip_text=True,
-                     clean=True,
-                     invalidate_digital_signatures=True,
-                     oversample=200
-                     # force_ocr=True
-                     )
-        return output_file
 
     def convert_page_to_image(self, page):
         """
@@ -108,8 +82,11 @@ class PDFProcessor:
 
         for page_num in range(len(doc)):
             # convert the page to image
-            page = self.process_one_page(dir_path_table, doc, page_num)
-            pages.append(page)
+            processed_page: Page = self.process_one_page(dir_path_table, doc, page_num)
+
+            # create PageResult using the page object
+            compressed_page = processed_page.compress_copy()
+            pages.append(compressed_page)
         Visualizer.depict_bbox(pages, dir_path_detail)
         doc.close()
         return pages
@@ -286,7 +263,8 @@ if __name__ == '__main__':
     pdf_processor = PDFProcessor(device="cpu", zoom_factor=3,
                                  model_source="/Users/zhongbing/Projects/MLE/Doc-AI/model/yolo/best.pt")
     # output_pages = pdf_processor.process("/Users/zhongbing/Projects/MLE/Doc-AI/pdf/ann/复宏汉霖important.PDF")
-    output_pages = pdf_processor.process_img("/Users/zhongbing/Projects/MLE/Doc-AI/results/20250113230912/detail/5_original.png")
+    output_pages = pdf_processor.process(
+        "/Users/zhongbing/Projects/MLE/Doc-AI/pdf/test31.pdf")
     print("Time taken for this doc: ", time.time() - start)
     blocks = []
 

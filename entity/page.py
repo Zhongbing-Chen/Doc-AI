@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Union, List
 
-import cv2
 import fitz
 import numpy as np
 import torch
@@ -12,9 +11,9 @@ from ultralytics.engine.results import Results
 from entity.block import Block
 from entity.box import BoxUtil, OcrBlock
 from module.layout.layout_constant import type_dict
+from module.text.text_parser import TextExtractor
 from util.coordinate_util import CoordinateUtil
 from util.gap_tree import GapTree
-from module.text.text_parser import TextExtractor
 
 
 @dataclass
@@ -43,7 +42,7 @@ class Page:
         to_map: convert the page to a map
     """
     page_num: Union[None, int]
-    blocks: Union[None, list]
+    blocks: Union[None, List[Block]]
     rotated_angle: Union[None, float]
     skewed_angle: Union[None, float]
     pdf_page: fitz.Page
@@ -61,15 +60,15 @@ class Page:
         self.image = image
         self.zoom_factor = zoom_factor
         self.is_scanned = is_scanned
-
-        if self.is_scanned:
-            self.raw_ocr_result = TextExtractor.ocr_all_image_result(self.image)
-            self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
-        else:
-            self.raw_ocr_result = TextExtractor.detection_all_image_result(self.image)
-            self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
-
         self.skewed_angle = skewed_angle
+
+        if self.image is not None:
+            if self.is_scanned:
+                self.raw_ocr_result = TextExtractor.ocr_all_image_result(self.image)
+                self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
+            else:
+                self.raw_ocr_result = TextExtractor.detection_all_image_result(self.image)
+                self.ocr_blocks = OcrBlock.from_rapid_ocr(self.raw_ocr_result)
 
     def build_blocks(self, results: Results):
         """
@@ -146,30 +145,6 @@ class Page:
     @property
     def texts(self):
         return [item.markdown_content for item in self.blocks]
-
-    def draw_bbox(self):
-        """
-        Draw the bounding box on the image
-        :return: the image with bounding boxes
-        """
-        image = np.array(self.image)
-
-        for item in self.blocks:
-            # Get the bounding box coordinates and convert them to integers
-            x1, y1, x2, y2 = map(int, item.bbox)
-
-            # Draw the bounding box on the image
-            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
-            # Draw the item id on the image
-            cv2.putText(image, str(item.block_id) + " " + item.label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (0, 255, 0),
-                        2)
-
-            image = item.depict_table(image)
-
-        # Return the image with bounding boxes
-        return image
 
     def sort(self):
         """
@@ -334,3 +309,32 @@ class Page:
             if val == value:
                 return key
         return None
+
+    # @staticmethod
+    # def from_page(page: fitz.Page, page_num: int, zoom_factor: float, is_scanned: bool) -> 'Page':
+
+    def compress_copy(self) -> 'Page':
+        """
+        Compress the page by removing the image and the pdf page
+        """
+        # print the memory usage of the pdf page and image separately with the k memory unit
+        # pdf page is the fitz page object
+
+        width, height = self.image.size
+        bytes_per_pixel = len(self.image.getbands())
+        memory_size_bytes = width * height * bytes_per_pixel
+
+        # 转换为KB
+        memory_size_kb = memory_size_bytes / 1024
+
+        print(f"图像占用的内存大小: {memory_size_kb:.2f} KB")
+        return Page(
+            page_num=self.page_num,
+            items=self.blocks,
+            rotated_angle=self.rotated_angle,
+            skewed_angle=self.skewed_angle,
+            pdf_page=self.pdf_page,
+            image=None,
+            zoom_factor=self.zoom_factor,
+            is_scanned=self.is_scanned,
+        )
