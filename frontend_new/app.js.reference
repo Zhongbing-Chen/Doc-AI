@@ -1,0 +1,1604 @@
+// MinerU Document Comparison Viewer - Main Application
+
+console.log('=== app.js loading ===');
+
+// API Base URL
+const API_BASE_URL = 'http://localhost:5001/api';
+
+// Application State
+const state = {
+    currentTaskId: null,
+    currentPage: 1,
+    totalPages: 1,
+    scale: 1.5,
+    pdfDoc: null,
+    markdownContent: '',
+    coordinateMappings: [],
+    syncScrollEnabled: true,
+    isResizing: false,
+    highlightedElement: null
+};
+
+// PDF.js setup
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// DOM Elements (initialized after DOM ready)
+let elements = {};
+
+// Initialize DOM elements
+function initializeElements() {
+    elements = {
+        uploadSection: document.getElementById('uploadSection'),
+        progressSection: document.getElementById('progressSection'),
+        viewerSection: document.getElementById('viewerSection'),
+        urlForm: document.getElementById('urlForm'),
+        fileForm: document.getElementById('fileForm'),
+        progressBar: document.getElementById('progressBar'),
+        progressStatus: document.getElementById('progressStatus'),
+        pdfCanvas: document.getElementById('pdfCanvas'),
+        markdownContainer: document.getElementById('markdownContainer'),
+        originalContainer: document.getElementById('originalContainer'),
+        originalOverlay: document.getElementById('originalOverlay'),
+        pageInfo: document.getElementById('pageInfo'),
+        zoomInfo: document.getElementById('zoomInfo'),
+        coordStatus: document.getElementById('coordStatus'),
+        taskStatus: document.getElementById('taskStatus'),
+        helpModal: document.getElementById('helpModal'),
+        historyModal: document.getElementById('historyModal')
+    };
+    console.log('✓ DOM elements initialized');
+}
+
+// Utility Functions
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.getElementById('toastContainer').appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
+}
+
+function showSection(section) {
+    elements.uploadSection.classList.add('hidden');
+    elements.progressSection.classList.add('hidden');
+    elements.viewerSection.classList.add('hidden');
+    section.classList.remove('hidden');
+}
+
+function updateProgress(percent, status) {
+    elements.progressBar.style.width = `${percent}%`;
+    if (status) {
+        elements.progressStatus.textContent = status;
+    }
+}
+
+// Make showSection and updateProgress available globally for history.js
+window.showSection = showSection;
+window.updateProgress = updateProgress;
+window.showToast = showToast;
+
+// Debug function to test highlighting manually
+window.testHighlight = function() {
+    console.log('Testing highlight function...');
+    console.log('State:', {
+        markdownLength: state.markdownContent?.length,
+        coordinateMappings: state.coordinateMappings?.length,
+        pdfDoc: !!state.pdfDoc
+    });
+
+    if (state.coordinateMappings && state.coordinateMappings.length > 0) {
+        const firstMapping = state.coordinateMappings[0];
+        console.log('First mapping:', firstMapping);
+        highlightInOriginal(firstMapping.markdown_offset);
+    } else {
+        console.error('No coordinate mappings available');
+    }
+};
+
+console.log('Debug function loaded. Call testHighlight() in console to test');
+
+// API Functions
+async function parseFromUrl(url, modelVersion) {
+    // Validate URL format
+    try {
+        new URL(url);
+    } catch (e) {
+        showToast('Invalid URL format. Please enter a valid URL (e.g., https://example.com/document.pdf)', 'error');
+        return;
+    }
+
+    showSection(elements.progressSection);
+    updateProgress(10, 'Submitting parsing task...');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/parse/url`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                url: url,
+                model_version: modelVersion
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Failed to submit parsing task (status ${response.status})`);
+        }
+
+        const data = await response.json();
+        state.currentTaskId = data.task_id;
+
+        updateProgress(20, 'Task submitted. Waiting for processing...');
+        await pollTaskStatus(data.task_id);
+
+    } catch (error) {
+        console.error('URL parsing error:', error);
+        showToast(error.message || 'Failed to submit parsing task', 'error');
+        showSection(elements.uploadSection);
+    }
+}
+
+async function uploadFile(file, modelVersion) {
+    // Validate file size (max 50MB)
+    const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+    if (file.size > maxSize) {
+        showToast(`File size exceeds 50MB limit. Your file is ${(file.size / (1024 * 1024)).toFixed(2)}MB`, 'error');
+        return;
+    }
+
+    // Validate file format
+    const allowedFormats = ['application/pdf', 'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/png', 'image/jpeg', 'image/jpg'];
+    if (!allowedFormats.includes(file.type)) {
+        showToast(`Unsupported file format: ${file.type}. Supported formats: PDF, DOC, DOCX, PNG, JPG`, 'error');
+        return;
+    }
+
+    showSection(elements.progressSection);
+    updateProgress(10, 'Uploading file...');
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('model_version', modelVersion);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/upload`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Upload failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        state.currentTaskId = data.task_id;
+
+        updateProgress(30, 'File uploaded. Parsing document...');
+        await pollTaskStatus(data.task_id);
+
+    } catch (error) {
+        console.error('Upload error:', error);
+        showToast(error.message || 'Failed to upload file', 'error');
+        showSection(elements.uploadSection);
+    }
+}
+
+// Store polling timeout ID for cancellation
+let pollingTimeoutId = null;
+
+async function pollTaskStatus(taskId) {
+    const maxAttempts = 120; // 10 minutes with 5-second intervals
+    let attempts = 0;
+
+    const poll = async () => {
+        attempts++;
+
+        if (attempts > maxAttempts) {
+            throw new Error('Parsing timeout. Please try again.');
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/task/${taskId}`);
+
+            if (!response.ok) {
+                throw new Error('Failed to check task status');
+            }
+
+            const data = await response.json();
+
+            if (data.status === 'pending' || data.status === 'running' || data.status === 'processing') {
+                // Use actual progress from API if available, otherwise estimate
+                const progress = data.progress !== undefined ?
+                    Math.min(90, data.progress) :
+                    Math.min(90, 30 + (attempts / maxAttempts) * 60);
+
+                const statusMsg = data.status_message || `Parsing document... (${attempts}/${maxAttempts})`;
+                updateProgress(progress, statusMsg);
+
+                pollingTimeoutId = setTimeout(poll, 5000);
+            } else if (data.status === 'done') {
+                updateProgress(100, 'Parsing complete!');
+                pollingTimeoutId = null;
+                setTimeout(() => loadResults(data), 500);
+            } else if (data.status === 'error') {
+                pollingTimeoutId = null;
+                throw new Error(data.error || 'Parsing failed');
+            } else {
+                // Unknown status, continue polling
+                pollingTimeoutId = setTimeout(poll, 5000);
+            }
+
+        } catch (error) {
+            pollingTimeoutId = null;
+            throw error;
+        }
+    };
+
+    await poll();
+}
+
+// Cancel parsing
+function cancelParsing() {
+    if (pollingTimeoutId) {
+        clearTimeout(pollingTimeoutId);
+        pollingTimeoutId = null;
+    }
+    state.currentTaskId = null;
+    showSection(elements.uploadSection);
+    showToast('Parsing cancelled', 'info');
+}
+
+async function loadResults(taskData) {
+    try {
+        // Validate that we have results
+        if (!taskData.results) {
+            throw new Error('No results in task data');
+        }
+
+        state.markdownContent = taskData.results.markdown || '';
+        state.coordinateMappings = taskData.results.coordinate_mappings || [];
+
+        if (!state.markdownContent) {
+            showToast('Warning: No markdown content generated', 'warning');
+        }
+
+        // Render markdown
+        renderMarkdown();
+
+        // Update download button state
+        updateDownloadButtonState();
+
+        // Load PDF if available
+        try {
+            const originalResponse = await fetch(`${API_BASE_URL}/task/${state.currentTaskId}/original`);
+
+            if (originalResponse.ok) {
+                const blob = await originalResponse.blob();
+                const arrayBuffer = await blob.arrayBuffer();
+                await loadPDF(arrayBuffer);
+            } else {
+                // No PDF available, just show markdown
+                console.warn('Original document not available from API');
+                showToast('Original document not available, showing parsed markdown only', 'warning');
+            }
+        } catch (pdfError) {
+            console.error('Error loading original PDF:', pdfError);
+            showToast('Could not load original PDF, showing parsed markdown only', 'warning');
+        }
+
+        showSection(elements.viewerSection);
+        showToast('Document parsed successfully!', 'success');
+
+    } catch (error) {
+        console.error('Error loading results:', error);
+        showToast(`Failed to load results: ${error.message}`, 'error');
+        showSection(elements.uploadSection);
+    }
+}
+
+async function loadPDF(arrayBuffer) {
+    try {
+        // Cleanup previous PDF resources
+        await cleanupPDF();
+
+        console.log('Loading PDF from arrayBuffer...');
+        const loadingTask = pdfjsLib.getDocument(arrayBuffer);
+        state.pdfDoc = await loadingTask.promise;
+        state.totalPages = state.pdfDoc.numPages;
+        state.currentPage = 1;
+
+        console.log(`✓ PDF loaded successfully with ${state.totalPages} pages`);
+        showToast(`Loading ${state.totalPages} pages...`, 'info');
+
+        // Reset to page 1 and render
+        state.currentPage = 1;
+
+        // Render current page with a small delay to avoid blocking
+        setTimeout(async () => {
+            try {
+                await renderCurrentPage();
+            } catch (renderError) {
+                console.error('Failed to render page:', renderError);
+                showToast('Failed to render PDF page', 'error');
+            }
+        }, 100);
+
+        updatePageInfo();
+        updateZoomInfo();
+        updateZoomButtonStates();
+    } catch (error) {
+        console.error('❌ Error loading PDF:', error);
+        showToast('Failed to load original document: ' + error.message, 'error');
+    }
+}
+
+// Cleanup function to prevent memory leaks
+async function cleanupPDF() {
+    console.log('Cleaning up PDF resources...');
+
+    // Clear element mapping cache
+    if (state.elementMappingCache) {
+        state.elementMappingCache.clear();
+        state.elementMappingCache = null;
+    }
+
+    // Clear all page overlays
+    for (let i = 1; i <= state.totalPages; i++) {
+        const pageOverlay = document.getElementById(`pdfPageOverlay${i}`);
+        if (pageOverlay) {
+            pageOverlay.innerHTML = '';
+        }
+    }
+
+    // Clear PDF container
+    const container = elements.originalContainer || document.getElementById('originalContainer');
+    if (container) {
+        // Remove all event listeners by cloning the container
+        const newContainer = container.cloneNode(false);
+        container.parentNode.replaceChild(newContainer, container);
+        // Update the reference in elements
+        elements.originalContainer = newContainer;
+    }
+
+    // Clear markdown container
+    const markdownContainer = elements.markdownContainer || document.getElementById('markdownContainer');
+    if (markdownContainer) {
+        markdownContainer.innerHTML = '';
+    }
+
+    // Remove any remaining highlights
+    document.querySelectorAll('.markdown-highlight').forEach(el => {
+        el.classList.remove('markdown-highlight');
+        el.style.backgroundColor = '';
+        el.style.border = '';
+    });
+
+    console.log('✓ PDF cleanup complete');
+}
+
+async function renderAllPages() {
+    if (!state.pdfDoc) {
+        console.error('No PDF document loaded');
+        return;
+    }
+
+    // Make sure the container exists
+    const container = elements.originalContainer || document.getElementById('originalContainer');
+    if (!container) {
+        console.error('originalContainer element not found!');
+        showToast('PDF container not found', 'error');
+        return;
+    }
+
+    try {
+        console.log('Starting to render pages...');
+
+        // Clear container
+        container.innerHTML = '';
+
+        // Create wrapper for all pages
+        const pdfWrapper = document.createElement('div');
+        pdfWrapper.id = 'pdfWrapper';
+        pdfWrapper.style.position = 'relative';
+        pdfWrapper.style.display = 'inline-block';
+        pdfWrapper.style.backgroundColor = 'white';
+
+        // Render pages one at a time, each with its own overlay
+        let renderedCount = 0;
+
+        for (let pageNum = 1; pageNum <= state.totalPages; pageNum++) {
+            try {
+                console.log(`Rendering page ${pageNum}/${state.totalPages}...`);
+
+                const page = await state.pdfDoc.getPage(pageNum);
+                const viewport = page.getViewport({ scale: state.scale });
+
+                // Create a page wrapper
+                const pageWrapper = document.createElement('div');
+                pageWrapper.id = `pdfPageWrapper${pageNum}`;
+                pageWrapper.style.position = 'relative';
+                pageWrapper.style.display = 'inline-block';
+                pageWrapper.style.marginBottom = '20px';
+
+                // Create canvas for this page
+                const canvas = document.createElement('canvas');
+                canvas.id = `pdfPage${pageNum}`;
+                canvas.className = 'pdf-page';
+                canvas.style.display = 'block';
+                canvas.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                canvas.style.cursor = 'crosshair';
+                canvas.style.transition = 'box-shadow 0.2s';
+
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render this page
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+
+                // Create page-specific overlay
+                const pageOverlay = document.createElement('div');
+                pageOverlay.id = `pdfPageOverlay${pageNum}`;
+                pageOverlay.className = 'page-overlay';
+                pageOverlay.style.position = 'absolute';
+                pageOverlay.style.top = '0';
+                pageOverlay.style.left = '0';
+                pageOverlay.style.width = viewport.width + 'px';
+                pageOverlay.style.height = viewport.height + 'px';
+                pageOverlay.style.pointerEvents = 'none';
+                pageOverlay.style.zIndex = '5';
+
+                // Assemble page wrapper
+                pageWrapper.appendChild(canvas);
+                pageWrapper.appendChild(pageOverlay);
+                pdfWrapper.appendChild(pageWrapper);
+
+                // Add hover effect to show canvas is interactive
+                canvas.addEventListener('mouseenter', () => {
+                    canvas.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.3)';
+                });
+                canvas.addEventListener('mouseleave', () => {
+                    canvas.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                    // Clear hover preview
+                    pageOverlay.innerHTML = '';
+                });
+
+                // Helper function to find element with tolerance
+                const findElementAtPosition = (pdfX, pdfY, tolerance = 0.005) => {
+                    return state.coordinateMappings.find(m =>
+                        m.page_num === pageNum &&
+                        pdfX >= m.bbox[0] - tolerance &&
+                        pdfX <= m.bbox[2] + tolerance &&
+                        pdfY >= m.bbox[1] - tolerance &&
+                        pdfY <= m.bbox[3] + tolerance
+                    );
+                };
+
+                // Add hover preview (show what will be highlighted)
+                canvas.addEventListener('mousemove', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    // Convert to PDF coordinates
+                    const pdfX = x / viewport.width;
+                    const pdfY = y / viewport.height;
+
+                    // Find element at this position with tolerance
+                    const mapping = findElementAtPosition(pdfX, pdfY);
+
+                    // Clear and show preview
+                    pageOverlay.innerHTML = '';
+
+                    if (mapping) {
+                        const hoverX = mapping.bbox[0] * viewport.width;
+                        const hoverY = mapping.bbox[1] * viewport.height;
+                        const hoverWidth = (mapping.bbox[2] - mapping.bbox[0]) * viewport.width;
+                        const hoverHeight = (mapping.bbox[3] - mapping.bbox[1]) * viewport.height;
+
+                        const preview = document.createElement('div');
+                        preview.style.position = 'absolute';
+                        preview.style.left = `${hoverX}px`;
+                        preview.style.top = `${hoverY}px`;
+                        preview.style.width = `${hoverWidth}px`;
+                        preview.style.height = `${hoverHeight}px`;
+                        preview.style.border = '2px solid rgba(37, 99, 235, 0.5)';
+                        preview.style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
+                        preview.style.pointerEvents = 'none';
+
+                        pageOverlay.appendChild(preview);
+
+                        // Update status on hover
+                        const coordStatus = elements.coordStatus || document.getElementById('coordStatus');
+                        if (coordStatus) {
+                            coordStatus.textContent = `Hover: ${mapping.element_type} | Click to highlight in markdown`;
+                        }
+                    }
+                });
+
+                // Add click handler to canvas for reverse mapping
+                canvas.addEventListener('click', async (e) => {
+                    console.log('=== PDF CLICK DETECTED ===');
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    // Convert pixel coordinates to PDF coordinates
+                    const pdfX = x / viewport.width;
+                    const pdfY = y / viewport.height;
+
+                    console.log(`PDF Click: page=${pageNum}, pdfX=${pdfX.toFixed(3)}, pdfY=${pdfY.toFixed(3)}`);
+                    console.log('Available mappings:', state.coordinateMappings.length);
+
+                    // Find element at this position with tolerance
+                    const mapping = findElementAtPosition(pdfX, pdfY);
+
+                    if (mapping) {
+                        console.log('✓ Found mapping for PDF click:', mapping);
+                        highlightInMarkdown(mapping);
+                    } else {
+                        console.log('✗ No mapping found for this position');
+                        console.log('Checking all mappings for page', pageNum, ':');
+                        state.coordinateMappings
+                            .filter(m => m.page_num === pageNum)
+                            .forEach(m => {
+                                console.log(`  BBox: [${m.bbox.map(v => v.toFixed(3)).join(', ')}]`);
+                            });
+                    }
+                });
+
+                renderedCount++;
+                console.log(`✓ Page ${pageNum} rendered (${canvas.width}x${canvas.height})`);
+
+            } catch (pageError) {
+                console.error(`❌ Error rendering page ${pageNum}:`, pageError);
+                // Continue with next page
+            }
+        }
+
+        // Add wrapper to container
+        container.appendChild(pdfWrapper);
+
+        // Update page info
+        if (elements.pageInfo) {
+            elements.pageInfo.textContent = `All ${state.totalPages} pages (${renderedCount} rendered)`;
+        }
+        console.log(`✓ Rendered ${renderedCount}/${state.totalPages} pages successfully`);
+
+        // Verify click handlers are attached
+        console.log('Verifying click handlers...');
+        for (let i = 1; i <= state.totalPages; i++) {
+            const canvas = document.getElementById(`pdfPage${i}`);
+            if (canvas) {
+                const hasClickHandler = canvas.onclick !== null;
+                console.log(`  Page ${i} canvas has click handler: ${hasClickHandler ? 'YES' : 'NO'}`);
+            }
+        }
+
+        if (renderedCount > 0) {
+            showToast(`Loaded ${renderedCount} pages`, 'success');
+        } else {
+            showToast('Failed to render any pages', 'error');
+        }
+
+    } catch (error) {
+        console.error('❌ Error in renderAllPages:', error);
+        showToast('Failed to render PDF pages: ' + error.message, 'error');
+    }
+}
+
+async function renderCurrentPage() {
+    if (!state.pdfDoc) {
+        console.error('No PDF document loaded');
+        return;
+    }
+
+    const pageNum = state.currentPage;
+
+    // Make sure the container exists
+    const container = elements.originalContainer || document.getElementById('originalContainer');
+    if (!container) {
+        console.error('originalContainer element not found!');
+        showToast('PDF container not found', 'error');
+        return;
+    }
+
+    try {
+        console.log(`Rendering single page ${pageNum}/${state.totalPages}...`);
+
+        // Clear container
+        container.innerHTML = '';
+
+        // Get the page
+        const page = await state.pdfDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale: state.scale });
+
+        // Create a page wrapper
+        const pageWrapper = document.createElement('div');
+        pageWrapper.id = `pdfPageWrapper${pageNum}`;
+        pageWrapper.className = 'pdf-page-wrapper';
+        pageWrapper.style.position = 'relative';
+        pageWrapper.style.display = 'inline-block';
+
+        // Create canvas for this page
+        const canvas = document.createElement('canvas');
+        canvas.id = `pdfPage${pageNum}`;
+        canvas.className = 'pdf-page';
+        canvas.style.display = 'block';
+        canvas.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+        canvas.style.cursor = 'crosshair';
+        canvas.style.transition = 'box-shadow 0.2s';
+
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        // Render this page
+        await page.render({
+            canvasContext: context,
+            viewport: viewport
+        }).promise;
+
+        // Create page-specific overlay
+        const pageOverlay = document.createElement('div');
+        pageOverlay.id = `pdfPageOverlay${pageNum}`;
+        pageOverlay.className = 'page-overlay';
+        pageOverlay.style.position = 'absolute';
+        pageOverlay.style.top = '0';
+        pageOverlay.style.left = '0';
+        pageOverlay.style.width = viewport.width + 'px';
+        pageOverlay.style.height = viewport.height + 'px';
+        pageOverlay.style.pointerEvents = 'none';
+        pageOverlay.style.zIndex = '5';
+
+        // Assemble page wrapper
+        pageWrapper.appendChild(canvas);
+        pageWrapper.appendChild(pageOverlay);
+        container.appendChild(pageWrapper);
+
+        // Add hover effect to show canvas is interactive
+        canvas.addEventListener('mouseenter', () => {
+            canvas.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.3)';
+        });
+        canvas.addEventListener('mouseleave', () => {
+            canvas.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+            // Clear hover preview
+            pageOverlay.innerHTML = '';
+        });
+
+        // Helper function to find element with tolerance
+        const findElementAtPosition = (pdfX, pdfY, tolerance = 0.005) => {
+            return state.coordinateMappings.find(m =>
+                m.page_num === pageNum &&
+                pdfX >= m.bbox[0] - tolerance &&
+                pdfX <= m.bbox[2] + tolerance &&
+                pdfY >= m.bbox[1] - tolerance &&
+                pdfY <= m.bbox[3] + tolerance
+            );
+        };
+
+        // Add hover preview (show what will be highlighted)
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Convert to PDF coordinates
+            const pdfX = x / viewport.width;
+            const pdfY = y / viewport.height;
+
+            // Find element at this position with tolerance
+            const mapping = findElementAtPosition(pdfX, pdfY);
+
+            // Clear and show preview
+            pageOverlay.innerHTML = '';
+
+            if (mapping) {
+                const hoverX = mapping.bbox[0] * viewport.width;
+                const hoverY = mapping.bbox[1] * viewport.height;
+                const hoverWidth = (mapping.bbox[2] - mapping.bbox[0]) * viewport.width;
+                const hoverHeight = (mapping.bbox[3] - mapping.bbox[1]) * viewport.height;
+
+                const preview = document.createElement('div');
+                preview.style.position = 'absolute';
+                preview.style.left = `${hoverX}px`;
+                preview.style.top = `${hoverY}px`;
+                preview.style.width = `${hoverWidth}px`;
+                preview.style.height = `${hoverHeight}px`;
+                preview.style.border = '2px solid rgba(37, 99, 235, 0.5)';
+                preview.style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
+                preview.style.pointerEvents = 'none';
+
+                pageOverlay.appendChild(preview);
+
+                // Update status on hover
+                const coordStatus = elements.coordStatus || document.getElementById('coordStatus');
+                if (coordStatus) {
+                    coordStatus.textContent = `Hover: ${mapping.element_type} | Click to highlight in markdown`;
+                }
+            }
+        });
+
+        // Add click handler to canvas for reverse mapping
+        canvas.addEventListener('click', async (e) => {
+            console.log('=== PDF CLICK DETECTED ===');
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Convert pixel coordinates to PDF coordinates
+            const pdfX = x / viewport.width;
+            const pdfY = y / viewport.height;
+
+            console.log(`PDF Click: page=${pageNum}, pdfX=${pdfX.toFixed(3)}, pdfY=${pdfY.toFixed(3)}`);
+
+            // Find element at this position with tolerance
+            const mapping = findElementAtPosition(pdfX, pdfY);
+
+            if (mapping) {
+                console.log('✓ Found mapping for PDF click:', mapping);
+                highlightInMarkdown(mapping);
+            } else {
+                console.log('✗ No mapping found for this position');
+            }
+        });
+
+        console.log(`✓ Page ${pageNum} rendered successfully (${canvas.width}x${canvas.height})`);
+        updatePageNavigationButtons();
+        updateZoomButtonStates();
+
+    } catch (error) {
+        console.error(`❌ Error rendering page ${pageNum}:`, error);
+        showToast(`Failed to render page ${pageNum}: ${error.message}`, 'error');
+    }
+}
+
+// Update navigation button states
+function updatePageNavigationButtons() {
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+
+    if (prevBtn) {
+        prevBtn.disabled = state.currentPage <= 1;
+        prevBtn.style.opacity = state.currentPage <= 1 ? '0.5' : '1';
+        prevBtn.style.cursor = state.currentPage <= 1 ? 'not-allowed' : 'pointer';
+    }
+
+    if (nextBtn) {
+        nextBtn.disabled = state.currentPage >= state.totalPages;
+        nextBtn.style.opacity = state.currentPage >= state.totalPages ? '0.5' : '1';
+        nextBtn.style.cursor = state.currentPage >= state.totalPages ? 'not-allowed' : 'pointer';
+    }
+}
+
+// Update zoom button states
+function updateZoomButtonStates() {
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+
+    if (zoomInBtn) {
+        const atMaxZoom = state.scale >= 3;
+        zoomInBtn.disabled = atMaxZoom;
+        zoomInBtn.style.opacity = atMaxZoom ? '0.5' : '1';
+        zoomInBtn.style.cursor = atMaxZoom ? 'not-allowed' : 'pointer';
+    }
+
+    if (zoomOutBtn) {
+        const atMinZoom = state.scale <= 0.5;
+        zoomOutBtn.disabled = atMinZoom;
+        zoomOutBtn.style.opacity = atMinZoom ? '0.5' : '1';
+        zoomOutBtn.style.cursor = atMinZoom ? 'not-allowed' : 'pointer';
+    }
+}
+
+function renderMarkdown() {
+    console.log('renderMarkdown called, markdown length:', state.markdownContent.length);
+
+    // Parse markdown to HTML
+    const html = marked.parse(state.markdownContent);
+    console.log('Parsed HTML length:', html.length);
+
+    // Sanitize HTML to prevent XSS attacks
+    const sanitizedHtml = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'strong', 'em', 'u', 's',
+                       'ul', 'ol', 'li', 'a', 'blockquote', 'code', 'pre', 'br', 'hr',
+                       'table', 'thead', 'tbody', 'tr', 'th', 'td', 'div', 'span'],
+        ALLOWED_ATTR: ['href', 'title', 'class', 'id', 'data-mapping-id', 'data-mapping-page',
+                       'data-mapping-type', 'data-mapping-offset', 'style'],
+        ALLOW_DATA_ATTR: true
+    });
+    console.log('Sanitized HTML length:', sanitizedHtml.length);
+
+    // Add data attributes for coordinate mapping
+    const container = elements.markdownContainer || document.getElementById('markdownContainer');
+    if (!container) {
+        console.error('markdownContainer not found!');
+        return;
+    }
+
+    container.innerHTML = sanitizedHtml;
+    console.log('Markdown rendered to container');
+
+    // NEW: Attach mapping data to markdown elements
+    attachMappingDataToElements(container);
+
+    // Add click handlers to elements
+    addMarkdownInteractivity();
+}
+
+// Attach mapping data to markdown elements
+function attachMappingDataToElements(container) {
+    console.log('Attaching mapping data to elements...');
+
+    const elements = container.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, td, th, pre, div');
+    console.log(`Found ${elements.length} elements to tag`);
+
+    let mappingIndex = 0;
+
+    for (const el of elements) {
+        if (mappingIndex < state.coordinateMappings.length) {
+            const mapping = state.coordinateMappings[mappingIndex];
+            el.dataset.mappingId = mapping.element_id;
+            el.dataset.mappingPage = mapping.page_num;
+            el.dataset.mappingType = mapping.element_type;
+            el.dataset.mappingOffset = mapping.markdown_offset;
+
+            // Store reference in state for quick lookup
+            if (!state.elementMappingCache) {
+                state.elementMappingCache = new Map();
+            }
+            state.elementMappingCache.set(mapping.element_id, el);
+
+            mappingIndex++;
+        }
+    }
+
+    console.log(`Attached mappings to ${mappingIndex} elements`);
+}
+
+// Add click interactivity to markdown
+function addMarkdownInteractivity() {
+    console.log('addMarkdownInteractivity called');
+    const container = elements.markdownContainer;
+
+    if (!container) {
+        console.error('markdownContainer not found!');
+        return;
+    }
+
+    console.log('Adding click handlers to markdown container');
+
+    // Add click handler to container
+    container.addEventListener('click', (e) => {
+        console.log('Click detected on:', e.target.tagName, e.target.textContent.substring(0, 30));
+        const target = e.target.closest('p, h1, h2, h3, h4, h5, h6, li, td, th, pre, div');
+
+        if (target) {
+            // Get the offset from the data attribute that was set during renderMarkdown
+            const offset = target.dataset.mappingOffset;
+            console.log('Target offset from data attribute:', offset);
+
+            if (offset !== undefined && offset !== null && offset !== '') {
+                console.log('Calling highlightInOriginal with offset:', offset);
+                highlightInOriginal(parseInt(offset, 10));
+            } else {
+                console.log('No mapping offset found on element');
+            }
+        }
+    });
+
+    // Add hover handler
+    container.addEventListener('mouseover', (e) => {
+        const target = e.target.closest('p, h1, h2, h3, h4, h5, h6, li, td, th, pre, div');
+
+        if (target) {
+            // Get the offset from the data attribute
+            const offset = target.dataset.mappingOffset;
+
+            if (offset !== undefined && offset !== null && offset !== '') {
+                showCoordinateInfo(parseInt(offset, 10), 'markdown');
+            }
+        }
+    });
+
+    // Add cursor style to clickable elements
+    container.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, td, th, pre').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.style.transition = 'background-color 0.2s';
+    });
+
+    // Add hover effect
+    container.addEventListener('mouseover', (e) => {
+        const target = e.target.closest('p, h1, h2, h3, h4, h5, h6, li, td, th, pre');
+        if (target) {
+            target.style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
+        }
+    });
+
+    container.addEventListener('mouseout', (e) => {
+        const target = e.target.closest('p, h1, h2, h3, h4, h5, h6, li, td, th, pre');
+        if (target) {
+            target.style.backgroundColor = '';
+        }
+    });
+
+    console.log('Click handlers added successfully');
+}
+
+async function highlightInOriginal(markdownOffset) {
+    console.log('highlightInOriginal called with offset:', markdownOffset);
+
+    // Find coordinate mapping
+    const mapping = state.coordinateMappings.find(m =>
+        markdownOffset >= m.markdown_offset &&
+        markdownOffset < m.markdown_offset + m.markdown_length
+    );
+
+    if (!mapping) {
+        console.log('No mapping found for offset:', markdownOffset);
+        const coordStatus = elements.coordStatus || document.getElementById('coordStatus');
+        if (coordStatus) {
+            coordStatus.textContent = 'No coordinate mapping found';
+        }
+        return;
+    }
+
+    console.log('Found mapping for page:', mapping.page_num);
+
+    // Clear all page overlays
+    for (let i = 1; i <= state.totalPages; i++) {
+        const pageOverlay = document.getElementById(`pdfPageOverlay${i}`);
+        if (pageOverlay) {
+            pageOverlay.innerHTML = '';
+        }
+    }
+
+    // Get the page-specific overlay
+    const pageOverlay = document.getElementById(`pdfPageOverlay${mapping.page_num}`);
+    if (!pageOverlay) {
+        console.error('Page overlay not found for page:', mapping.page_num);
+        return;
+    }
+
+    // Get page viewport
+    const page = await state.pdfDoc.getPage(mapping.page_num);
+    const viewport = page.getViewport({ scale: state.scale });
+
+    // Convert PDF coordinates to pixel coordinates
+    const x = mapping.bbox[0] * viewport.width;
+    const y = mapping.bbox[1] * viewport.height;
+    const width = (mapping.bbox[2] - mapping.bbox[0]) * viewport.width;
+    const height = (mapping.bbox[3] - mapping.bbox[1]) * viewport.height;
+
+    console.log(`Highlight: page=${mapping.page_num}, x=${x.toFixed(1)}, y=${y.toFixed(1)}, w=${width.toFixed(1)}, h=${height.toFixed(1)}`);
+
+    const highlight = document.createElement('div');
+    highlight.className = 'highlight-box';
+    highlight.style.position = 'absolute';
+    highlight.style.left = `${x}px`;
+    highlight.style.top = `${y}px`;
+    highlight.style.width = `${width}px`;
+    highlight.style.height = `${height}px`;
+    highlight.style.border = '3px solid #2563eb';
+    highlight.style.backgroundColor = 'rgba(37, 99, 235, 0.2)';
+    highlight.style.pointerEvents = 'none';
+    highlight.style.zIndex = '10';
+
+    pageOverlay.appendChild(highlight);
+    console.log('Highlight added to page overlay');
+
+    // Scroll to the highlighted page
+    const pageWrapper = document.getElementById(`pdfPageWrapper${mapping.page_num}`);
+    if (pageWrapper) {
+        pageWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Update status
+    const coordStatus = elements.coordStatus || document.getElementById('coordStatus');
+    if (coordStatus) {
+        coordStatus.textContent =
+            `Element: ${mapping.element_type} | Page: ${mapping.page_num} | BBox: ${mapping.bbox.map(v => v.toFixed(2)).join(', ')}`;
+    }
+
+    showToast(`Highlighted ${mapping.element_type} on page ${mapping.page_num}`, 'success');
+}
+
+// Highlight in markdown (reverse direction) - USING DATA ATTRIBUTES
+function highlightInMarkdown(mapping) {
+    console.log('highlightInMarkdown called with mapping:', mapping);
+
+    // Remove previous highlights
+    const container = elements.markdownContainer || document.getElementById('markdownContainer');
+    if (!container) {
+        console.error('markdownContainer not found');
+        return;
+    }
+
+    container.querySelectorAll('.markdown-highlight').forEach(el => {
+        el.classList.remove('markdown-highlight');
+        el.style.backgroundColor = '';
+        el.style.border = '';
+        el.style.borderRadius = '';
+        el.style.padding = '';
+    });
+
+    // NEW: Use the cached mapping lookup
+    if (state.elementMappingCache && state.elementMappingCache.has(mapping.element_id)) {
+        const targetElement = state.elementMappingCache.get(mapping.element_id);
+
+        targetElement.classList.add('markdown-highlight');
+        targetElement.style.backgroundColor = 'rgba(16, 185, 129, 0.3)';
+        targetElement.style.transition = 'background-color 0.3s';
+        targetElement.style.border = '2px solid #10b981';
+        targetElement.style.borderRadius = '4px';
+        targetElement.style.padding = '2px';
+
+        // Scroll to the element
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        console.log('✓ Highlighted element by ID:', mapping.element_id, targetElement.tagName, targetElement.textContent.substring(0, 50));
+
+        // Update status
+        const coordStatus = elements.coordStatus || document.getElementById('coordStatus');
+        if (coordStatus) {
+            coordStatus.textContent =
+                `Page: ${mapping.page_num} | Type: ${mapping.element_type} | ID: ${mapping.element_id.substring(0, 8)}...`;
+        }
+
+        showToast(`Highlighted ${mapping.element_type} in markdown`, 'success');
+    } else {
+        console.log('✗ Mapping ID not found in cache:', mapping.element_id);
+        console.log('Cache size:', state.elementMappingCache?.size || 0);
+
+        // Fallback: try to find by data attribute
+        const fallback = container.querySelector(`[data-mapping-id="${mapping.element_id}"]`);
+        if (fallback) {
+            fallback.classList.add('markdown-highlight');
+            fallback.style.backgroundColor = 'rgba(16, 185, 129, 0.3)';
+            fallback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            console.log('✓ Found via data attribute query');
+            showToast(`Highlighted ${mapping.element_type} in markdown`, 'success');
+        } else {
+            showToast('Could not find element in markdown', 'warning');
+        }
+    }
+}
+
+function showCoordinateInfo(offset, source) {
+    const mapping = state.coordinateMappings.find(m =>
+        offset >= m.markdown_offset &&
+        offset < m.markdown_offset + m.markdown_length
+    );
+
+    if (mapping) {
+        if (source === 'markdown') {
+            elements.coordStatus.textContent =
+                `Page: ${mapping.page_num} | Type: ${mapping.element_type} | BBox: ${mapping.bbox.map(v => v.toFixed(2)).join(', ')}`;
+        }
+    }
+}
+
+function updatePageInfo() {
+    elements.pageInfo.textContent = `Page ${state.currentPage} of ${state.totalPages}`;
+}
+
+// Update download button state
+function updateDownloadButtonState() {
+    const downloadBtn = document.getElementById('downloadBtn');
+    if (downloadBtn) {
+        const hasMarkdown = state.markdownContent && state.markdownContent.length > 0;
+        downloadBtn.disabled = !hasMarkdown;
+        downloadBtn.style.opacity = hasMarkdown ? '1' : '0.5';
+        downloadBtn.style.cursor = hasMarkdown ? 'pointer' : 'not-allowed';
+    }
+}
+
+// Fallback: render single page if multi-page fails
+async function renderSinglePage() {
+    if (!state.pdfDoc) return;
+
+    // Make sure the container exists
+    const container = elements.originalContainer || document.getElementById('originalContainer');
+    if (!container) {
+        console.error('originalContainer element not found!');
+        return;
+    }
+
+    try {
+        console.log('Rendering single page view...');
+        const page = await state.pdfDoc.getPage(1);
+        const viewport = page.getViewport({ scale: state.scale });
+
+        container.innerHTML = '';
+
+        const canvas = document.createElement('canvas');
+        canvas.id = 'pdfCanvas';
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        await page.render({
+            canvasContext: context,
+            viewport: viewport
+        }).promise;
+
+        container.appendChild(canvas);
+
+        const overlay = document.createElement('div');
+        overlay.id = 'originalOverlay';
+        overlay.className = 'overlay';
+        container.appendChild(overlay);
+
+        if (elements.pageInfo) {
+            elements.pageInfo.textContent = `Page 1 of ${state.totalPages}`;
+        }
+        showToast('Loaded page 1 (multi-page view unavailable)', 'warning');
+
+    } catch (error) {
+        console.error('Error rendering single page:', error);
+    }
+}
+
+function updateZoomInfo() {
+    elements.zoomInfo.textContent = `${Math.round(state.scale * 100)}%`;
+}
+
+// Event Handlers (moved to DOMContentLoaded section)
+function setupEventHandlers() {
+    // URL Form submit
+    elements.urlForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('docUrl').value;
+    const modelVersion = document.getElementById('modelVersion').value;
+
+    if (!url) {
+        showToast('Please enter a URL', 'error');
+        return;
+    }
+
+    await parseFromUrl(url, modelVersion);
+});
+
+elements.fileForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('docFile');
+    const modelVersion = document.getElementById('modelVersionFile').value;
+
+    if (!fileInput.files.length) {
+        showToast('Please select a file', 'error');
+        return;
+    }
+
+    const file = fileInput.files[0];
+    await uploadFile(file, modelVersion);
+});
+
+document.getElementById('newDocBtn').addEventListener('click', () => {
+    state.currentTaskId = null;
+    state.currentPage = 1;
+    state.pdfDoc = null;
+    state.markdownContent = '';
+    updateDownloadButtonState();
+    showSection(elements.uploadSection);
+});
+
+document.getElementById('helpBtn').addEventListener('click', () => {
+    elements.helpModal.classList.remove('hidden');
+});
+
+document.getElementById('closeHelpBtn').addEventListener('click', () => {
+    elements.helpModal.classList.add('hidden');
+});
+
+document.getElementById('prevPageBtn').addEventListener('click', () => {
+    if (state.currentPage > 1) {
+        state.currentPage--;
+        renderCurrentPage();
+        updatePageInfo();
+        updatePageNavigationButtons();
+    }
+});
+
+document.getElementById('nextPageBtn').addEventListener('click', () => {
+    if (state.currentPage < state.totalPages) {
+        state.currentPage++;
+        renderCurrentPage();
+        updatePageInfo();
+        updatePageNavigationButtons();
+    }
+});
+
+document.getElementById('zoomInBtn').addEventListener('click', () => {
+    state.scale = Math.min(3, state.scale + 0.25);
+    renderCurrentPage();
+    updateZoomInfo();
+    updatePageNavigationButtons();
+    updateZoomButtonStates();
+});
+
+document.getElementById('zoomOutBtn').addEventListener('click', () => {
+    state.scale = Math.max(0.5, state.scale - 0.25);
+    renderCurrentPage();
+    updateZoomInfo();
+    updatePageNavigationButtons();
+    updateZoomButtonStates();
+});
+
+document.getElementById('syncScrollBtn').addEventListener('click', (e) => {
+    state.syncScrollEnabled = !state.syncScrollEnabled;
+    e.target.classList.toggle('active', state.syncScrollEnabled);
+
+    // Initialize sync scroll if enabling
+    if (state.syncScrollEnabled) {
+        initSyncScroll();
+    }
+
+    showToast(state.syncScrollEnabled ? 'Scroll sync enabled' : 'Scroll sync disabled');
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+    if (!state.markdownContent) {
+        showToast('No markdown content to download', 'error');
+        return;
+    }
+
+    const blob = new Blob([state.markdownContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `parsed_document_${state.currentTaskId}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('Markdown downloaded successfully', 'success');
+});
+
+document.getElementById('closeViewerBtn').addEventListener('click', () => {
+    state.currentTaskId = null;
+    state.pdfDoc = null;
+    state.markdownContent = '';
+    updateDownloadButtonState();
+    showSection(elements.uploadSection);
+});
+
+document.getElementById('cancelBtn').addEventListener('click', () => {
+    cancelParsing();
+});
+
+// PDF Canvas click handler for highlighting in markdown
+elements.pdfCanvas.addEventListener('click', async (e) => {
+    if (!state.pdfDoc) return;
+
+    const rect = elements.pdfCanvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Convert pixel coordinates to PDF coordinates
+    const page = await state.pdfDoc.getPage(state.currentPage);
+    const viewport = page.getViewport({ scale: state.scale });
+
+    const pdfX = x / viewport.width;
+    const pdfY = y / viewport.height;
+
+    // Find element at this position
+    const mapping = state.coordinateMappings.find(m =>
+        m.page_num === state.currentPage &&
+        pdfX >= m.bbox[0] &&
+        pdfX <= m.bbox[2] &&
+        pdfY >= m.bbox[1] &&
+        pdfY <= m.bbox[3]
+    );
+
+    if (mapping) {
+        highlightInMarkdown(mapping.page_num, mapping.bbox);
+    }
+});
+
+// Synchronized scrolling with content-aware ratio calculation
+let paneLeft = null;
+let paneRight = null;
+let leftScrollTimeout = null;
+let rightScrollTimeout = null;
+let isScrollingLeft = false;
+let isScrollingRight = false;
+
+// Initialize synchronized scrolling after DOM is ready
+function initSyncScroll() {
+    paneLeft = document.querySelector('.pane-left .pane-content');
+    paneRight = document.querySelector('.pane-right .pane-content');
+
+    if (!paneLeft || !paneRight) {
+        console.warn('Sync scroll panes not found, sync scrolling disabled');
+        return;
+    }
+
+    // Remove existing listeners if any
+    paneLeft.removeEventListener('scroll', handleLeftScroll);
+    paneRight.removeEventListener('scroll', handleRightScroll);
+
+    // Add scroll listeners
+    paneLeft.addEventListener('scroll', handleLeftScroll);
+    paneRight.addEventListener('scroll', handleRightScroll);
+
+    console.log('Sync scroll initialized');
+}
+
+// Handle left pane scroll
+function handleLeftScroll() {
+    if (!state.syncScrollEnabled || isScrollingRight) return;
+
+    clearTimeout(leftScrollTimeout);
+
+    leftScrollTimeout = setTimeout(() => {
+        isScrollingLeft = true;
+
+        // Calculate scroll percentage of left pane
+        const leftScrollableHeight = paneLeft.scrollHeight - paneLeft.clientHeight;
+        const leftScrollPercentage = leftScrollableHeight > 0 ? paneLeft.scrollTop / leftScrollableHeight : 0;
+
+        // Apply same percentage to right pane
+        const rightScrollableHeight = paneRight.scrollHeight - paneRight.clientHeight;
+        paneRight.scrollTop = leftScrollPercentage * rightScrollableHeight;
+
+        // Reset flag after a short delay
+        setTimeout(() => {
+            isScrollingLeft = false;
+        }, 100);
+    }, 50);
+}
+
+// Handle right pane scroll
+function handleRightScroll() {
+    if (!state.syncScrollEnabled || isScrollingLeft) return;
+
+    clearTimeout(rightScrollTimeout);
+
+    rightScrollTimeout = setTimeout(() => {
+        isScrollingRight = true;
+
+        // Calculate scroll percentage of right pane
+        const rightScrollableHeight = paneRight.scrollHeight - paneRight.clientHeight;
+        const rightScrollPercentage = rightScrollableHeight > 0 ? paneRight.scrollTop / rightScrollableHeight : 0;
+
+        // Apply same percentage to left pane
+        const leftScrollableHeight = paneLeft.scrollHeight - paneLeft.clientHeight;
+        paneLeft.scrollTop = rightScrollPercentage * leftScrollableHeight;
+
+        // Reset flag after a short delay
+        setTimeout(() => {
+            isScrollingRight = false;
+        }, 100);
+    }, 50);
+}
+
+// Initialize sync scroll when DOM is ready
+document.addEventListener('DOMContentLoaded', initSyncScroll);
+
+// Also initialize after markdown is rendered
+const originalRenderMarkdown = renderMarkdown;
+renderMarkdown = function() {
+    originalRenderMarkdown.apply(this, arguments);
+    // Re-initialize sync scroll after markdown is loaded
+    setTimeout(initSyncScroll, 100);
+};
+
+// Resizer functionality
+const resizer = document.getElementById('resizer');
+const paneLeftContainer = document.querySelector('.pane-left');
+const paneRightContainer = document.querySelector('.pane-right');
+const splitPaneContainer = document.querySelector('.split-pane-container');
+
+// Store current split percentage
+let splitPercentage = 50;
+
+resizer.addEventListener('mousedown', (e) => {
+    state.isResizing = true;
+    resizer.classList.add('active');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!state.isResizing) return;
+
+    const containerRect = splitPaneContainer.getBoundingClientRect();
+    const percentage = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+
+    // Enforce min/max pane widths (20% - 80%)
+    if (percentage >= 20 && percentage <= 80) {
+        splitPercentage = percentage;
+        paneLeftContainer.style.flex = `0 0 ${splitPercentage}%`;
+        paneRightContainer.style.flex = `0 0 ${100 - splitPercentage}%`;
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    if (state.isResizing) {
+        state.isResizing = false;
+        resizer.classList.remove('active');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+    }
+});
+
+// Handle orientation changes and window resize
+window.addEventListener('resize', () => {
+    // Reset to 50/50 split on major orientation changes
+    if (window.innerWidth < 768) {
+        // Mobile: reset to 50/50
+        splitPercentage = 50;
+        paneLeftContainer.style.flex = '0 0 50%';
+        paneRightContainer.style.flex = '0 0 50%';
+    } else {
+        // Desktop: maintain current split if within bounds
+        if (splitPercentage < 20) splitPercentage = 20;
+        if (splitPercentage > 80) splitPercentage = 80;
+        paneLeftContainer.style.flex = `0 0 ${splitPercentage}%`;
+        paneRightContainer.style.flex = `0 0 ${100 - splitPercentage}%`;
+    }
+});
+
+// Handle orientation change specifically
+window.addEventListener('orientationchange', () => {
+    // Wait for orientation change to complete, then reset to 50/50
+    setTimeout(() => {
+        splitPercentage = 50;
+        paneLeftContainer.style.flex = '0 0 50%';
+        paneRightContainer.style.flex = '0 0 50%';
+        showToast('Layout reset to 50/50 after rotation', 'info');
+    }, 100);
+});
+
+// Close modal on outside click
+elements.helpModal.addEventListener('click', (e) => {
+    if (e.target === elements.helpModal) {
+        elements.helpModal.classList.add('hidden');
+    }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    // Only handle navigation shortcuts when viewer is visible
+    const viewerVisible = !elements.viewerSection.classList.contains('hidden');
+
+    if (e.key === 'Escape') {
+        elements.helpModal.classList.add('hidden');
+    }
+
+    // Page navigation with arrow keys (only when viewer is visible)
+    if (viewerVisible && state.pdfDoc) {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            if (state.currentPage > 1) {
+                state.currentPage--;
+                renderCurrentPage();
+                updatePageInfo();
+                updatePageNavigationButtons();
+            }
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            if (state.currentPage < state.totalPages) {
+                state.currentPage++;
+                renderCurrentPage();
+                updatePageInfo();
+                updatePageNavigationButtons();
+            }
+        }
+    }
+
+    if (e.ctrlKey || e.metaKey) {
+        if (e.key === 'o') {
+            e.preventDefault();
+            document.getElementById('newDocBtn').click();
+        }
+    }
+});
+
+} // End of setupEventHandlers()
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('=== DOM ready, initializing app.js ===');
+
+    // Initialize DOM element references
+    initializeElements();
+
+    // Make viewTaskResult available globally
+    window.viewTaskResult = async function(taskId) {
+        console.log('✓ viewTaskResult called from app.js');
+        try {
+            console.log('Viewing task result:', taskId);
+            showSection(elements.progressSection);
+            updateProgress(10, 'Loading results...');
+
+            const response = await fetch(`${API_BASE_URL}/task/${taskId}/results`);
+
+            if (!response.ok) {
+                throw new Error('Failed to load results');
+            }
+
+            const data = await response.json();
+            console.log('Results data received:', {
+                markdownLength: data.markdown?.length,
+                coordinateMappings: data.coordinate_mappings?.length
+            });
+
+            updateProgress(100, 'Results loaded!');
+
+            if (data.markdown && data.markdown.length > 0) {
+                // Load results
+                state.markdownContent = data.markdown;
+                state.coordinateMappings = data.coordinate_mappings || [];
+                state.currentTaskId = taskId;
+
+                console.log('State updated:', {
+                    markdownLength: state.markdownContent.length,
+                    coordinateMappings: state.coordinateMappings.length
+                });
+
+                // Render markdown
+                renderMarkdown();
+                console.log('Markdown rendered');
+
+                // Try to load PDF
+                try {
+                    console.log('Fetching PDF...');
+                    const pdfResponse = await fetch(`${API_BASE_URL}/task/${taskId}/original`);
+
+                    if (pdfResponse.ok) {
+                        console.log('PDF response OK, reading blob...');
+                        const blob = await pdfResponse.blob();
+                        console.log('Blob size:', blob.size, 'bytes');
+
+                        const arrayBuffer = await blob.arrayBuffer();
+                        console.log('ArrayBuffer size:', arrayBuffer.byteLength, 'bytes');
+
+                        await loadPDF(arrayBuffer);
+                        console.log('PDF loaded successfully');
+                    } else {
+                        console.error('PDF not available:', pdfResponse.status);
+                        showToast('Original PDF not available', 'warning');
+                    }
+                } catch (e) {
+                    console.error('Could not load original PDF:', e);
+                    showToast('Failed to load original PDF', 'warning');
+                }
+
+                showSection(elements.viewerSection);
+                showToast('Results loaded successfully!', 'success');
+            } else {
+                showToast('No results available yet. Task may still be processing.', 'warning');
+                showSection(elements.uploadSection);
+            }
+
+        } catch (error) {
+            console.error('Error viewing task:', error);
+            showToast('Failed to load results: ' + error.message, 'error');
+            showSection(elements.uploadSection);
+        }
+    };
+
+    console.log('✓ window.viewTaskResult defined:', typeof window.viewTaskResult);
+
+    // Set up event handlers
+    setupEventHandlers();
+
+    // Set up initial section
+    showSection(elements.uploadSection);
+
+    console.log('=== app.js fully loaded ===');
+    console.log('window.viewTaskResult defined:', typeof window.viewTaskResult);
+});
