@@ -131,8 +131,19 @@
             padding: 2px 4px;
             border-radius: 4px;
             transition: all 0.2s;
+            display: inline;
         }
-        .markdown-element:hover { background: #f1f5f9; }
+        .markdown-element:hover {
+            background: #f1f5f9;
+        }
+        .markdown-element > table {
+            display: inline-table;
+            margin: 0.5rem 0;
+        }
+        .markdown-element > img {
+            display: block;
+            margin: 0.5rem auto;
+        }
 
         .markdown-highlight {
             background: rgba(34, 197, 94, 0.4) !important;
@@ -161,12 +172,24 @@
             width: 100%;
             margin-bottom: 1rem;
             font-size: 0.875rem;
+            background: white;
         }
         .markdown-body table th, .markdown-body table td {
             border: 1px solid #e2e8f0;
             padding: 0.75rem;
+            vertical-align: top;
         }
-        .markdown-body table th { background: #f8fafc; font-weight: 600; }
+        .markdown-body table th {
+            background: #f8fafc;
+            font-weight: 600;
+            text-align: left;
+        }
+        .markdown-body table tr:hover {
+            background: #f8fafc;
+        }
+        .markdown-body table td[rowspan] {
+            vertical-align: middle;
+        }
         .markdown-body pre {
             background: #1e293b;
             color: #e2e8f0;
@@ -384,7 +407,7 @@
             }
         }
 
-        // Render markdown with element_id mapping based on text content matching
+        // Render markdown with element_id mapping based on offset ranges
         function renderMarkdown(markdownText) {
             const container = document.getElementById('markdownContent');
             if (!markdownText) {
@@ -392,37 +415,153 @@
                 return;
             }
 
-            // Simple markdown parsing that preserves element_id mapping
-            // We'll use the coordinate mappings to wrap text spans with element_id
-            let html = markdownText;
+            // Step 1: Extract and protect HTML tables, images
+            const protectedElements = [];
+            let protectedHtml = markdownText;
 
-            // Escape HTML first
-            html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            // Extract tables
+            protectedHtml = protectedHtml.replace(/<table>[\s\S]*?<\/table>/g, (match) => {
+                protectedElements.push({ type: 'table', html: match });
+                return `<!--PROTECTED_${protectedElements.length - 1}-->`;
+            });
 
-            // Process mappings in reverse order to preserve offsets
-            const sortedMappings = [...coordinateMappings]
-                .filter(m => m.element_id && m.markdown_offset >= 0 && m.markdown_length > 0)
-                .sort((a, b) => b.markdown_offset - a.markdown_offset);
+            // Extract images
+            protectedHtml = protectedHtml.replace(/!\[\]\([^)]+\)/g, (match) => {
+                protectedElements.push({ type: 'image', html: match });
+                return `<!--PROTECTED_${protectedElements.length - 1}-->`;
+            });
 
-            for (const mapping of sortedMappings) {
+            // Step 2: Build extended mappings - for zero-length elements, detect actual content
+            const extendedMappings = [];
+            for (const mapping of coordinateMappings) {
+                if (!mapping.element_id || mapping.markdown_offset < 0) continue;
+
+                let start = mapping.markdown_offset;
+                let length = mapping.markdown_length;
+
+                // For zero-length elements, try to detect actual content length
+                if (length === 0) {
+                    if (mapping.element_type === 'table') {
+                        // Find the nearest table placeholder after this offset
+                        const placeholderRegex = /<!--PROTECTED_(\d+)-->/g;
+                        let match;
+                        while ((match = placeholderRegex.exec(protectedHtml)) !== null) {
+                            if (match.index >= start) {
+                                // Found a table placeholder after our offset
+                                // Find the corresponding element
+                                const elemIndex = parseInt(match[1]);
+                                if (protectedElements[elemIndex]?.type === 'table') {
+                                    // Extend the mapping to cover this table
+                                    length = match[0].length;
+                                    // Also include some context before the table (the title)
+                                    const contextLength = Math.min(50, start);
+                                    start = start - contextLength;
+                                    length = length + contextLength;
+                                }
+                                break;
+                            }
+                        }
+                    } else if (mapping.element_type === 'image') {
+                        // Images are handled by the markdown syntax
+                        length = 1; // Minimal length to mark the position
+                    }
+                }
+
+                extendedMappings.push({
+                    ...mapping,
+                    markdown_offset: start,
+                    markdown_length: length
+                });
+            }
+
+            // Step 3: Build a map from character position to element info
+            const charToElement = new Array(protectedHtml.length).fill(null);
+
+            for (const mapping of extendedMappings) {
                 const start = mapping.markdown_offset;
-                const length = mapping.markdown_length;
-                if (start + length <= html.length) {
-                    // Only wrap if not already wrapped
-                    const before = html.substring(0, start);
-                    const content = html.substring(start, start + length);
-                    const after = html.substring(start + length);
+                const length = Math.max(mapping.markdown_length, 1);
 
-                    // Skip if the content contains HTML tags (already processed)
-                    if (!content.includes('<span')) {
-                        html = before + `<span class="markdown-element" data-element-id="${mapping.element_id}" data-type="${mapping.element_type}">${content}</span>` + after;
+                for (let i = start; i < Math.min(protectedHtml.length, start + length); i++) {
+                    if (charToElement[i] === null) {
+                        charToElement[i] = { id: mapping.element_id, type: mapping.element_type };
                     }
                 }
             }
 
-            // Convert markdown syntax to HTML
-            html = convertMarkdownToHtml(html);
-            container.innerHTML = html;
+            // Step 4: Convert markdown to HTML
+            let html = convertMarkdownToHtml(protectedHtml);
+
+            // Step 5: Escape and wrap with element IDs
+            let result = '';
+            let currentElement = null;
+
+            for (let i = 0; i < html.length; i++) {
+                const char = html[i];
+
+                // Check for protected element placeholder
+                const placeholderMatch = html.substring(i).match(/^<!--PROTECTED_(\d+)-->/);
+                if (placeholderMatch) {
+                    // Close any open element
+                    if (currentElement) {
+                        result += '</span>';
+                        currentElement = null;
+                    }
+                    // Insert the protected HTML
+                    const elemIndex = parseInt(placeholderMatch[1]);
+                    const element = protectedElements[elemIndex];
+
+                    if (element.type === 'table') {
+                        // Wrap table with a clickable element
+                        const mapping = extendedMappings.find(m =>
+                            m.element_type === 'table' &&
+                            Math.abs(m.markdown_offset - (i - 20)) < 100
+                        );
+                        if (mapping) {
+                            result += `<div class="markdown-element" data-element-id="${mapping.element_id}" data-type="${mapping.element_type}" style="cursor:pointer;">${element.html}</div>`;
+                        } else {
+                            result += element.html;
+                        }
+                    } else if (element.type === 'image') {
+                        // Convert markdown image to HTML img
+                        const imgMatch = element.html.match(/!\[\]\(([^)]+)\)/);
+                        if (imgMatch) {
+                            result += `<img src="${imgMatch[1]}" style="max-width:100%;height:auto;display:block;margin:1rem auto;">`;
+                        }
+                    }
+
+                    i += placeholderMatch[0].length - 1;
+                    continue;
+                }
+
+                // Determine which element this character belongs to
+                const element = charToElement[i] || null;
+
+                // Handle element changes
+                if (element && element !== currentElement) {
+                    if (currentElement) {
+                        result += '</span>';
+                    }
+                    result += `<span class="markdown-element" data-element-id="${element.id}" data-type="${element.type}">`;
+                    currentElement = element;
+                } else if (!element && currentElement) {
+                    result += '</span>';
+                    currentElement = null;
+                }
+
+                // Escape the character
+                if (char === '&') result += '&amp;';
+                else if (char === '<') result += '&lt;';
+                else if (char === '>') result += '&gt;';
+                else if (char === '\n') result += '<br>';
+                else result += char;
+            }
+
+            // Close any remaining open element
+            if (currentElement) {
+                result += '</span>';
+            }
+
+            container.innerHTML = result;
 
             // Attach event listeners
             container.querySelectorAll('.markdown-element').forEach(el => {
@@ -433,27 +572,31 @@
                         e.stopPropagation();
                         onMarkdownClick(elementId);
                     });
+                    el.addEventListener('mouseenter', () => {
+                        const mapping = elementIdToMapping.get(elementId);
+                        if (mapping) {
+                            document.getElementById('statusText').textContent =
+                                `PDF Page ${mapping.page_num} | ${mapping.element_type}`;
+                        }
+                    });
                 }
             });
 
             console.log('Rendered', container.querySelectorAll('.markdown-element').length, 'clickable elements');
+            console.log('Protected elements:', protectedElements.length);
         }
 
         function convertMarkdownToHtml(html) {
-            // Headers
-            html = html.replace(/^### (.*?)(?=\n|$)/gm, '<h3>$1</h3>');
-            html = html.replace(/^## (.*?)(?=\n|$)/gm, '<h2>$1</h2>');
-            html = html.replace(/^# (.*?)(?=\n|$)/gm, '<h1>$1</h1>');
+            // Protect all placeholders first
+            html = html.replace(/<!--PROTECTED_(\d+)-->/g, '___PROTECTED_$1___');
 
-            // Tables - simple conversion
-            html = html.replace(/\|(.+?)\|/g, (match, content) => {
-                const cells = content.split('|').map(c => `<td>${c.trim()}</td>`).join('');
-                return `<tr>${cells}</tr>`;
-            });
-            html = html.replace(/<tr>(.+?)<\/tr>/g, (match, content) => {
-                if (content.includes('<th>')) return match;
-                return match.replace(/<td>/g, '<th>').replace(/<\/td>/g, '</th>');
-            });
+            // Headers (process in order to avoid partial matches)
+            html = html.replace(/^### (.+?)(?:\n|$)/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.+?)(?:\n|$)/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.+?)(?:\n|$)/gm, '<h1>$1</h1>');
+
+            // Restore placeholders
+            html = html.replace(/___PROTECTED_(\d+)___/g, '<!--PROTECTED_$1-->');
 
             // Code blocks
             html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
@@ -462,12 +605,6 @@
             // Bold and italic
             html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
             html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-            // Line breaks
-            html = html.replace(/\n/g, '<br>');
-
-            // Clean up multiple br tags
-            html = html.replace(/(<br>){3,}/g, '<br><br>');
 
             return html;
         }
