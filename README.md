@@ -6,21 +6,14 @@ A document parsing and analysis system powered by VLM (Vision Language Models) a
 
 ```
 DocAI/
-├── src/                    # Source code (all you need for development)
-│   ├── entity/            # Data entities (block, box, page)
-│   ├── module/            # Processing modules
-│   │   ├── layout/       # Layout detection
-│   │   ├── text/         # Text recognition (OCR)
-│   │   ├── table/        # Table parsing
-│   │   └── rotation/     # Orientation correction
-│   ├── model/             # Model definitions
-│   │   └── table_transformer/  # Table Transformer model
+├── src/
 │   ├── mineru_client/     # MinerU API client
 │   ├── mineru_server/     # MinerU server implementation
-│   ├── frontend/          # Web frontend (Flask + vanilla JS)
-│   └── util/              # Utility functions
-├── assets/                # Large files (models, PDFs, images - not tracked)
+│   └── frontend/          # Web frontend (Flask + vanilla JS)
+├── model/                 # Model definitions (table transformer, etc.)
+├── module/                # Processing modules (layout, text, table, rotation)
 ├── docs/                  # Documentation
+├── assets/                # Large files (not tracked)
 └── .gitignore            # Git ignore rules
 ```
 
@@ -29,7 +22,6 @@ DocAI/
 ### Prerequisites
 
 - Python 3.8+
-- Node.js (optional, for some frontend features)
 
 ### Installation
 
@@ -39,13 +31,9 @@ git clone https://github.com/Zhongbing-Chen/DocAI-UI.git
 cd DocAI-UI
 ```
 
-2. Download model weights (if needed):
-- Table Transformer models
-- OCR models (PaddleOCR)
-
-3. Install dependencies:
+2. Install dependencies:
 ```bash
-pip install -r src/requirements.txt
+pip install -r src/mineru_server/requirements.txt
 ```
 
 ### Running the Frontend

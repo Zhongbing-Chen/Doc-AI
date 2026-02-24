@@ -1,21 +1,37 @@
-# Source directory for DocAI
+# DocAI Source Code
 
-This directory contains all the source code for the DocAI project.
+This directory contains the main source code for DocAI.
 
 ## Structure
 
-- `entity/` - Data entities (block, box, page)
-- `module/` - Processing modules
-  - `layout/` - Layout detection
-  - `text/` - Text recognition
-  - `table/` - Table parsing
-  - `rotation/` - Orientation correction
-- `model/` - Model definitions
-  - `table_transformer/` - Table Transformer model
-  - `ocr/` - OCR model files
-- `mineru_client/` - MinerU API client
-- `mineru_server/` - MinerU server implementation
-- `frontend/` - Web frontend
-- `util/` - Utility functions
-- `process.py` - Main processing script
-- `requirements.txt` - Python dependencies
+```
+src/
+├── mineru_client/     # MinerU API client library
+├── mineru_server/     # Flask server for MinerU API
+└── frontend/          # Web frontend UI
+```
+
+## Quick Start
+
+### Frontend Server
+
+```bash
+cd frontend
+python server.py
+```
+
+Then open http://localhost:5002 in your browser.
+
+### MinerU Server
+
+```bash
+cd mineru_server
+pip install -r requirements.txt
+python app.py
+```
+
+## Requirements
+
+- Python 3.8+
+- Flask
+- See `mineru_server/requirements.txt` for full dependencies

@@ -40,11 +40,8 @@ htmlcov/
 *.7z
 
 # Model weights (should be downloaded separately)
-src/model/ocr/*.onnx
-src/model/ocr/server/
-src/model/table_transformer/*.pth
-src/model/table_transformer/*.pt
 model/
+module/
 assets/
 
 # Images (keep only essential ones)
