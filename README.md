@@ -33,7 +33,7 @@ cd DocAI-UI
 
 2. Install dependencies:
 ```bash
-pip install -r src/mineru_server/requirements.txt
+pip install -r src/requirements.txt
 ```
 
 ### Running the Frontend

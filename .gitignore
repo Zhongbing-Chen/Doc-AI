@@ -25,6 +25,9 @@ htmlcov/
 .pydevproject
 .settings/
 
+# Editor directory (separate project)
+editor/
+
 # Jupyter Notebook
 .ipynb_checkpoints
 
@@ -43,6 +46,12 @@ htmlcov/
 model/
 module/
 assets/
+
+# Other untracked directories
+miner/
+poc/
+tests/
+pdf/
 
 # Images (keep only essential ones)
 *.png
@@ -65,6 +74,17 @@ outputs/
 *_cells_visualization.png
 rotated_output.pdf
 
+# Backup and markdown files
+*_backup.md
+*_summary.md
+tables_markdown.md
+boc_mineru_results.json
+boc_mineru_output.md
+json_output.json
+list_output.md
+mineru_results.json
+test_document_mineru_results.json
+
 # Test and demo files
 test*.py
 demo*.py
@@ -77,6 +97,12 @@ gradio_*.py
 *_app.py
 run_*.sh
 *.bat
+
+# Scripts and misc
+scripts/
+restart_server.sh
+start_server.sh
+example_usage.py
 
 # Logs
 *.log
@@ -99,6 +125,11 @@ package-lock.json
 # OS files
 .DS_Store
 Thumbs.db
+
+# Nested git repositories
+miner/MinerU/
+miner/mineru-vl-utils/
+ralph/
 
 # Documentation generated files
 docs/output/
