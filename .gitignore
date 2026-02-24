@@ -134,3 +134,20 @@ ralph/
 # Documentation generated files
 docs/output/
 docs/results/
+
+# Duplicate directories - only src/ is tracked
+entity/
+module/
+model/
+util/
+frontend/
+frontend_new/
+mineru_client/
+mineru_frontend/
+mineru_server/
+process.py
+requirements.txt
+*.md
+!README.md
+!src/README.md
+!docs/

@@ -23,7 +23,10 @@ task_store = {}
 
 def load_tasks():
     """Load tasks from mineru_server task_store_init.json and scan results directory"""
-    init_file = os.path.join(PROJECT_ROOT, 'mineru_server', 'task_store_init.json')
+    # Try src/mineru_server first (new structure), then mineru_server (old structure)
+    init_file = os.path.join(PROJECT_ROOT, 'src', 'mineru_server', 'task_store_init.json')
+    if not os.path.exists(init_file):
+        init_file = os.path.join(PROJECT_ROOT, 'mineru_server', 'task_store_init.json')
 
     # 1. Load from task_store_init.json
     if os.path.exists(init_file):
@@ -161,6 +164,15 @@ def load_tasks():
     total = len(task_store)
     print(f"✓ Total tasks in memory: {total}")
 
+    # Debug: print task info
+    for tid, task in task_store.items():
+        print(f"  Task {tid}:")
+        print(f"    file_path: {task.get('file_path')}")
+        print(f"    file_exists: {os.path.exists(task.get('file_path', '')) if task.get('file_path') else 'N/A'}")
+        if 'results' in task and 'folder' in task['results']:
+            print(f"    results_folder: {task['results']['folder']}")
+            print(f"    folder_exists: {os.path.exists(task['results']['folder'])}")
+
     return total
 
 # Load tasks on startup
@@ -226,17 +238,27 @@ def get_original(task_id):
 
     task = task_store[task_id]
 
-    # Try to get from results folder first
+    # Try file_path first
+    if 'file_path' in task:
+        file_path = task['file_path']
+        print(f"Checking file_path: {file_path}")
+        if os.path.exists(file_path):
+            print(f"Found PDF at: {file_path}")
+            return send_file(file_path)
+        else:
+            print(f"File not found at: {file_path}")
+
+    # Try to get from results folder
     if 'results' in task and 'folder' in task['results']:
         result_folder = task['results']['folder']
+        print(f"Checking results folder: {result_folder}")
         if os.path.exists(result_folder):
-            pdf_files = [f for f in os.listdir(result_folder) if f.endswith('.pdf')]
+            pdf_files = [f for f in os.listdir(result_folder) if f.endswith('_origin.pdf') or f.endswith('.pdf')]
             if pdf_files:
+                print(f"Found PDF files: {pdf_files}")
                 return send_file(os.path.join(result_folder, pdf_files[0]))
-
-    # Try file_path
-    if 'file_path' in task and os.path.exists(task['file_path']):
-        return send_file(task['file_path'])
+            else:
+                print(f"No PDF files in folder: {result_folder}")
 
     return jsonify({'error': 'PDF not found'}), 404
 

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DocAI Document Viewer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f8fafc; }
@@ -92,17 +91,14 @@
         }
 
         #pdfWrapper { text-align: center; }
-        .pdf-page { display: inline-block; position: relative; margin-bottom: 20px; pointer-events: auto; }
+        .pdf-page { display: inline-block; position: relative; margin-bottom: 20px; }
         .pdf-page canvas {
             display: block;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            pointer-events: auto;
             border-radius: 4px;
         }
-        .pdf-page canvas:hover { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3); }
 
-        .page-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; overflow: hidden; }
+        .page-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 
         .highlight-box {
             position: absolute;
@@ -121,32 +117,30 @@
 
         .bbox-hint {
             position: absolute;
-            border: 2px solid transparent;
-            background: transparent;
             cursor: pointer;
             pointer-events: auto;
             z-index: 20;
             transition: all 0.2s;
-            box-sizing: border-box;
-            opacity: 0;
         }
         .bbox-hint:hover {
-            border: 2px solid #3b82f6;
             background: rgba(59, 130, 246, 0.2);
-            opacity: 1;
         }
 
-        .markdown-highlight {
-            background: rgba(34, 197, 94, 0.3);
+        .markdown-element {
+            cursor: pointer;
+            padding: 2px 4px;
             border-radius: 4px;
             transition: all 0.2s;
+        }
+        .markdown-element:hover { background: #f1f5f9; }
+
+        .markdown-highlight {
+            background: rgba(34, 197, 94, 0.4) !important;
             outline: 2px solid #22c55e;
             outline-offset: 2px;
         }
         .markdown-hover-highlight {
-            background: rgba(251, 191, 36, 0.3);
-            border-radius: 4px;
-            transition: all 0.1s;
+            background: rgba(251, 191, 36, 0.3) !important;
         }
 
         .markdown-body { line-height: 1.8; color: #1e293b; }
@@ -154,30 +148,14 @@
         .markdown-body h4, .markdown-body h5, .markdown-body h6 {
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            cursor: pointer;
             padding: 0.5rem;
             border-radius: 6px;
-            color: #1e293b;
-        }
-        .markdown-body h1:hover, .markdown-body h2:hover, .markdown-body h3:hover,
-        .markdown-body h4:hover, .markdown-body h5:hover, .markdown-body h6:hover {
-            background: #f1f5f9;
         }
         .markdown-body h1 { font-size: 1.75rem; }
         .markdown-body h2 { font-size: 1.5rem; }
         .markdown-body h3 { font-size: 1.25rem; }
 
-        .markdown-body p {
-            margin-bottom: 1rem;
-            cursor: pointer;
-            padding: 0.35rem;
-            border-radius: 4px;
-            line-height: 1.7;
-        }
-        .markdown-body p:hover { background: #f1f5f9; }
-
+        .markdown-body p { margin-bottom: 1rem; }
         .markdown-body table {
             border-collapse: collapse;
             width: 100%;
@@ -187,11 +165,8 @@
         .markdown-body table th, .markdown-body table td {
             border: 1px solid #e2e8f0;
             padding: 0.75rem;
-            cursor: pointer;
         }
         .markdown-body table th { background: #f8fafc; font-weight: 600; }
-        .markdown-body table th:hover, .markdown-body table td:hover { background: #f1f5f9; }
-
         .markdown-body pre {
             background: #1e293b;
             color: #e2e8f0;
@@ -199,16 +174,6 @@
             border-radius: 6px;
             overflow-x: auto;
             margin-bottom: 1rem;
-        }
-        .markdown-body code {
-            background: #f1f5f9;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.85em;
-        }
-        .markdown-body pre code {
-            background: transparent;
-            padding: 0;
         }
         .markdown-body blockquote {
             border-left: 4px solid #3b82f6;
@@ -225,12 +190,10 @@
             font-size: 0.8rem;
             display: flex;
             justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         .hidden { display: none !important; }
 
-        /* Toast notifications */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -243,11 +206,8 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideIn 0.3s ease-out;
             border-left: 4px solid;
+            animation: slideIn 0.3s ease-out;
         }
         .toast.success { border-left-color: #22c55e; }
         .toast.error { border-left-color: #ef4444; }
@@ -259,7 +219,6 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* Loading spinner */
         .spinner {
             width: 20px;
             height: 20px;
@@ -268,66 +227,55 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #94a3b8;
-        }
+        .empty-state { text-align: center; padding: 3rem; color: #94a3b8; }
         .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📄 DocAI Document Viewer</h1>
-        <div>
-            <button class="btn btn-secondary" onclick="showUpload()">📜 History</button>
-        </div>
+        <h1>DocAI Document Viewer</h1>
+        <button class="btn btn-secondary" onclick="showUpload()">History</button>
     </div>
 
     <div class="container">
-        <!-- Upload Section -->
         <div id="uploadSection" class="upload-section">
-            <h2>📚 Document History</h2>
-            <button class="btn btn-primary" onclick="loadHistory()">🔄 Refresh History</button>
+            <h2>Document History</h2>
+            <button class="btn btn-primary" onclick="loadHistory()">Refresh</button>
             <div id="historyList" class="history-list"></div>
         </div>
 
-        <!-- Viewer Section -->
         <div id="viewerSection" class="viewer-section">
             <div class="toolbar">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <button class="btn btn-secondary" onclick="prevPage()" id="prevPageBtn">◀ Prev</button>
+                    <button class="btn btn-secondary" onclick="prevPage()" id="prevPageBtn">Prev</button>
                     <span id="pageInfo" class="page-info">Page 1 of 1</span>
-                    <button class="btn btn-secondary" onclick="nextPage()" id="nextPageBtn">Next ▶</button>
+                    <button class="btn btn-secondary" onclick="nextPage()" id="nextPageBtn">Next</button>
                 </div>
                 <div style="width: 1px; height: 24px; background: #e2e8f0; margin: 0 0.5rem;"></div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <button class="btn btn-secondary" onclick="zoomOut()" id="zoomOutBtn">➖</button>
+                    <button class="btn btn-secondary" onclick="zoomOut()" id="zoomOutBtn">-</button>
                     <span id="zoomInfo" class="page-info">100%</span>
-                    <button class="btn btn-secondary" onclick="zoomIn()" id="zoomInBtn">➕</button>
+                    <button class="btn btn-secondary" onclick="zoomIn()" id="zoomInBtn">+</button>
                 </div>
                 <div style="flex: 1;"></div>
-                <button class="btn btn-secondary" onclick="showUpload()">✕ Close Viewer</button>
+                <button class="btn btn-secondary" onclick="showUpload()">Close</button>
             </div>
 
             <div class="split-pane">
                 <div class="pane">
-                    <h3>📄 Original PDF</h3>
+                    <h3>Original PDF</h3>
                     <div id="pdfWrapper"></div>
                 </div>
                 <div class="pane">
-                    <h3>📝 Parsed Markdown</h3>
+                    <h3>Parsed Markdown</h3>
                     <div id="markdownContent" class="markdown-body"></div>
                 </div>
             </div>
 
             <div class="status-bar">
-                <span id="statusText">💡 Hover over elements to see mappings, click to highlight</span>
+                <span id="statusText">Click on PDF regions or markdown elements to see bidirectional highlighting</span>
                 <span id="statsText"></span>
             </div>
         </div>
@@ -337,7 +285,6 @@
 
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
         const API_BASE = 'http://localhost:5002/api';
 
         // State
@@ -347,35 +294,27 @@
         let totalPages = 1;
         let scale = 1.5;
         let coordinateMappings = [];
-        let markdownContent = '';
         let elementIdToMapping = new Map();
-        let elementIdToElement = new Map();
+        let elementIdToMarkdownEl = new Map();
+        let markdownOffsetToMapping = [];
 
-        // Toast notifications
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<span>${message}</span>`;
+            toast.textContent = message;
             container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // Show upload section
         function showUpload() {
             document.getElementById('uploadSection').classList.remove('hidden');
             document.getElementById('viewerSection').classList.remove('active');
         }
 
-        // Load history
         async function loadHistory() {
             const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '<div class="empty-state"><div class="spinner" style="margin: 0 auto;"></div><p>Loading history...</p></div>';
+            historyList.innerHTML = '<div class="empty-state"><div class="spinner" style="margin: 0 auto;"></div><p>Loading...</p></div>';
 
             try {
                 const response = await fetch(`${API_BASE}/tasks`);
@@ -386,177 +325,173 @@
                     return;
                 }
 
-                const html = data.tasks.map(task => `
+                historyList.innerHTML = data.tasks.map(task => `
                     <div class="history-item">
                         <div class="history-item-info">
-                            <strong>📄 ${task.file_name || 'Unknown Document'}</strong>
-                            <small>
-                                Status: <span style="color: ${task.status === 'done' ? '#22c55e' : '#f59e0b'}">${task.status}</span> |
-                                Model: ${task.model_version || 'N/A'}
-                            </small>
+                            <strong>${task.file_name || 'Unknown'}</strong>
+                            <small>Status: <span style="color: ${task.status === 'done' ? '#22c55e' : '#f59e0b'}">${task.status}</span> | Model: ${task.model_version || 'N/A'}</small>
                         </div>
                         ${task.status === 'done' ?
-                            `<button class="btn btn-primary" onclick="viewDocument('${task.task_id}')">📖 View Document</button>` :
-                            `<button class="btn btn-secondary" disabled>⏳ Processing...</button>`
+                            `<button class="btn btn-primary" onclick="viewDocument('${task.task_id}')">View</button>` :
+                            `<button class="btn btn-secondary" disabled>Processing...</button>`
                         }
                     </div>
                 `).join('');
-
-                historyList.innerHTML = html;
                 showToast(`Loaded ${data.tasks.length} document(s)`, 'success');
             } catch (error) {
-                console.error('Failed to load history:', error);
-                historyList.innerHTML = '<div class="empty-state"><p style="color: #ef4444">❌ Error loading history: ' + error.message + '</p></div>';
-                showToast('Failed to load history', 'error');
+                historyList.innerHTML = '<div class="empty-state"><p style="color: #ef4444">Error: ' + error.message + '</p></div>';
             }
         }
 
-        // View document
         async function viewDocument(taskId) {
-            console.log('Loading document:', taskId);
-
             try {
                 const response = await fetch(`${API_BASE}/task/${taskId}/results`);
                 const data = await response.json();
-
                 if (!response.ok) throw new Error(data.error || 'Failed to load');
 
-                console.log('Got results:', {
-                    markdownLength: data.markdown?.length,
-                    mappings: data.coordinate_mappings?.length
-                });
-
                 currentTaskId = taskId;
-                markdownContent = data.markdown || '';
                 coordinateMappings = data.coordinate_mappings || [];
 
-                // Build lookups
+                // Build lookup maps
                 elementIdToMapping.clear();
-                elementIdToElement.clear();
+                elementIdToMarkdownEl.clear();
+                markdownOffsetToMapping = [];
 
                 for (const mapping of coordinateMappings) {
                     if (mapping.element_id) {
                         elementIdToMapping.set(mapping.element_id, mapping);
+                        markdownOffsetToMapping.push({
+                            start: mapping.markdown_offset,
+                            end: mapping.markdown_offset + mapping.markdown_length,
+                            mapping: mapping
+                        });
                     }
                 }
-                console.log('✓ Built element_id mapping with', elementIdToMapping.size, 'entries');
+                // Sort by start offset for binary search
+                markdownOffsetToMapping.sort((a, b) => a.start - b.start);
 
-                renderMarkdown();
+                console.log('Built mappings:', elementIdToMapping.size, 'elements');
+
+                renderMarkdown(data.markdown || '');
                 await loadPDF(taskId);
 
                 document.getElementById('uploadSection').classList.add('hidden');
                 document.getElementById('viewerSection').classList.add('active');
-
-                updateStatsText();
-                showToast('Document loaded successfully!', 'success');
-
+                document.getElementById('statsText').textContent = `${totalPages} pages | ${coordinateMappings.length} elements`;
+                showToast('Document loaded!', 'success');
             } catch (error) {
-                console.error('Error loading document:', error);
                 showToast('Error: ' + error.message, 'error');
             }
         }
 
-        function updateStatsText() {
-            const statsText = document.getElementById('statsText');
-            statsText.textContent = `📊 ${totalPages} pages | ${coordinateMappings.length} mapped elements`;
-        }
-
-        // Render markdown with clickable elements
-        function renderMarkdown() {
-            console.log('=== renderMarkdown called ===');
-            console.log('Total coordinate mappings:', coordinateMappings.length);
-
+        // Render markdown with element_id mapping based on text content matching
+        function renderMarkdown(markdownText) {
             const container = document.getElementById('markdownContent');
-            if (!markdownContent) {
-                container.innerHTML = '<div class="empty-state"><p>No markdown content available</p></div>';
+            if (!markdownText) {
+                container.innerHTML = '<div class="empty-state"><p>No content</p></div>';
                 return;
             }
 
-            // Insert markers for element_id
-            let markdownWithMarkers = markdownContent;
+            // Simple markdown parsing that preserves element_id mapping
+            // We'll use the coordinate mappings to wrap text spans with element_id
+            let html = markdownText;
+
+            // Escape HTML first
+            html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Process mappings in reverse order to preserve offsets
             const sortedMappings = [...coordinateMappings]
-                .filter(m => m.element_id)
+                .filter(m => m.element_id && m.markdown_offset >= 0 && m.markdown_length > 0)
                 .sort((a, b) => b.markdown_offset - a.markdown_offset);
 
             for (const mapping of sortedMappings) {
-                const offset = mapping.markdown_offset;
-                const endOffset = offset + mapping.markdown_length;
-                const marker = `<!--ID:${mapping.element_id}-->`;
+                const start = mapping.markdown_offset;
+                const length = mapping.markdown_length;
+                if (start + length <= html.length) {
+                    // Only wrap if not already wrapped
+                    const before = html.substring(0, start);
+                    const content = html.substring(start, start + length);
+                    const after = html.substring(start + length);
 
-                if (endOffset <= markdownWithMarkers.length) {
-                    markdownWithMarkers = markdownWithMarkers.slice(0, endOffset) + marker + markdownWithMarkers.slice(endOffset);
+                    // Skip if the content contains HTML tags (already processed)
+                    if (!content.includes('<span')) {
+                        html = before + `<span class="markdown-element" data-element-id="${mapping.element_id}" data-type="${mapping.element_type}">${content}</span>` + after;
+                    }
                 }
             }
 
-            container.innerHTML = marked.parse(markdownWithMarkers);
+            // Convert markdown syntax to HTML
+            html = convertMarkdownToHtml(html);
+            container.innerHTML = html;
 
-            // Build mapping from element_id to DOM elements
-            const walker = document.createTreeWalker(
-                container,
-                NodeFilter.SHOW_ELEMENT,
-                null,
-                false
-            );
-
-            let currentElement = walker.nextNode();
-            let elementCount = 0;
-            let mappedCount = 0;
-
-            while (currentElement) {
-                const tagName = currentElement.tagName.toLowerCase();
-                if (['p', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'pre'].includes(tagName)) {
-                    elementCount++;
-
-                    let nextNode = currentElement.nextSibling;
-                    while (nextNode && nextNode.nodeType === Node.TEXT_NODE && nextNode.textContent.trim() === '') {
-                        nextNode = nextNode.nextSibling;
-                    }
-
-                    if (nextNode && nextNode.nodeType === Node.COMMENT_NODE) {
-                        const match = nextNode.textContent.match(/ID:([a-f0-9-]+)/);
-                        if (match) {
-                            const elementId = match[1];
-                            elementIdToElement.set(elementId, currentElement);
-                            currentElement.dataset.elementId = elementId;
-                            currentElement.addEventListener('click', handleMarkdownClick);
-                            currentElement.style.transition = 'background-color 0.2s';
-                            mappedCount++;
-                        }
-                    }
+            // Attach event listeners
+            container.querySelectorAll('.markdown-element').forEach(el => {
+                const elementId = el.dataset.elementId;
+                if (elementId) {
+                    elementIdToMarkdownEl.set(elementId, el);
+                    el.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        onMarkdownClick(elementId);
+                    });
                 }
-                currentElement = walker.nextNode();
-            }
-
-            console.log(`✓ Found ${elementCount} clickable elements, mapped ${mappedCount} to element_id`);
-        }
-
-        // Handle markdown click
-        function handleMarkdownClick(e) {
-            e.stopPropagation();
-            const element = e.currentTarget;
-            const elementId = element.dataset.elementId;
-
-            // Remove previous highlights
-            document.querySelectorAll('.markdown-highlight').forEach(el => {
-                el.classList.remove('markdown-highlight');
             });
 
-            if (!elementId) {
-                updateStatus('No element_id found');
+            console.log('Rendered', container.querySelectorAll('.markdown-element').length, 'clickable elements');
+        }
+
+        function convertMarkdownToHtml(html) {
+            // Headers
+            html = html.replace(/^### (.*?)(?=\n|$)/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.*?)(?=\n|$)/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.*?)(?=\n|$)/gm, '<h1>$1</h1>');
+
+            // Tables - simple conversion
+            html = html.replace(/\|(.+?)\|/g, (match, content) => {
+                const cells = content.split('|').map(c => `<td>${c.trim()}</td>`).join('');
+                return `<tr>${cells}</tr>`;
+            });
+            html = html.replace(/<tr>(.+?)<\/tr>/g, (match, content) => {
+                if (content.includes('<th>')) return match;
+                return match.replace(/<td>/g, '<th>').replace(/<\/td>/g, '</th>');
+            });
+
+            // Code blocks
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+            // Bold and italic
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+            // Line breaks
+            html = html.replace(/\n/g, '<br>');
+
+            // Clean up multiple br tags
+            html = html.replace(/(<br>){3,}/g, '<br><br>');
+
+            return html;
+        }
+
+        function onMarkdownClick(elementId) {
+            // Clear highlights
+            document.querySelectorAll('.markdown-highlight').forEach(el => el.classList.remove('markdown-highlight'));
+
+            const mapping = elementIdToMapping.get(elementId);
+            if (!mapping) {
+                document.getElementById('statusText').textContent = 'No mapping found for element';
                 return;
             }
 
-            const mapping = elementIdToMapping.get(elementId);
-            if (mapping) {
-                element.classList.add('markdown-highlight');
-                highlightPDF(mapping);
-                updateStatus(`📍 PDF: Page ${mapping.page_num} | Type: ${mapping.element_type} | BBox: [${mapping.bbox.map(v => v.toFixed(2)).join(', ')}]`);
-            } else {
-                updateStatus('No coordinate mapping found');
+            const el = elementIdToMarkdownEl.get(elementId);
+            if (el) {
+                el.classList.add('markdown-highlight');
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+
+            highlightPDF(mapping);
+            document.getElementById('statusText').textContent = `PDF Page ${mapping.page_num} | ${mapping.element_type} | [${mapping.bbox.map(v => v.toFixed(3)).join(', ')}]`;
         }
 
-        // Load PDF
         async function loadPDF(taskId) {
             try {
                 const response = await fetch(`${API_BASE}/task/${taskId}/original`);
@@ -564,22 +499,16 @@
 
                 const blob = await response.blob();
                 const arrayBuffer = await blob.arrayBuffer();
-
                 pdfDoc = await pdfjsLib.getDocument(arrayBuffer).promise;
                 totalPages = pdfDoc.numPages;
                 currentPage = 1;
 
-                console.log(`✓ PDF loaded: ${totalPages} pages`);
                 await renderAllPages();
-
             } catch (error) {
-                console.error('PDF load error:', error);
-                document.getElementById('pdfWrapper').innerHTML = '<div class="empty-state"><p style="color: #ef4444">❌ PDF not available</p></div>';
-                showToast('Failed to load PDF', 'error');
+                document.getElementById('pdfWrapper').innerHTML = '<div class="empty-state"><p style="color: #ef4444">PDF not available</p></div>';
             }
         }
 
-        // Render all PDF pages
         async function renderAllPages() {
             const pdfWrapper = document.getElementById('pdfWrapper');
             pdfWrapper.innerHTML = '';
@@ -598,19 +527,18 @@
                 const canvas = document.createElement('canvas');
                 canvas.id = `pdfPage${pageNum}`;
                 canvas.style.display = 'block';
-
-                const context = canvas.getContext('2d');
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
 
+                const context = canvas.getContext('2d');
                 await page.render({ canvasContext: context, viewport: viewport }).promise;
 
-                const pageOverlay = document.createElement('div');
-                pageOverlay.id = `pdfPageOverlay${pageNum}`;
-                pageOverlay.className = 'page-overlay';
+                const overlay = document.createElement('div');
+                overlay.id = `pdfPageOverlay${pageNum}`;
+                overlay.className = 'page-overlay';
 
                 pageWrapper.appendChild(canvas);
-                pageWrapper.appendChild(pageOverlay);
+                pageWrapper.appendChild(overlay);
                 pdfWrapper.appendChild(pageWrapper);
             }
 
@@ -618,19 +546,10 @@
             document.getElementById('zoomInfo').textContent = `${Math.round(scale * 100)}%`;
             updatePageButtonStates();
             updateZoomButtonStates();
-
             renderBBoxHints();
         }
 
-        // Render bbox hints
         function renderBBoxHints() {
-            console.log('=== renderBBoxHints ===');
-
-            if (coordinateMappings.length === 0) {
-                console.log('⚠️ No coordinate mappings');
-                return;
-            }
-
             const byPage = {};
             for (const mapping of coordinateMappings) {
                 if (!byPage[mapping.page_num]) byPage[mapping.page_num] = [];
@@ -640,77 +559,56 @@
             for (const pageNum in byPage) {
                 const overlay = document.getElementById(`pdfPageOverlay${pageNum}`);
                 const canvas = document.getElementById(`pdfPage${pageNum}`);
-
                 if (!overlay || !canvas) continue;
 
                 const canvasWidth = canvas.width;
                 const canvasHeight = canvas.height;
-                const mappings = byPage[pageNum];
 
-                for (const mapping of mappings) {
+                for (const mapping of byPage[pageNum]) {
                     const [x0, y0, x1, y1] = mapping.bbox;
-
-                    const hint = document.createElement('div');
-                    hint.className = 'bbox-hint';
-
                     const pixelLeft = x0 * canvasWidth;
                     const pixelTop = y0 * canvasHeight;
                     const pixelWidth = (x1 - x0) * canvasWidth;
                     const pixelHeight = (y1 - y0) * canvasHeight;
 
-                    hint.style.left = pixelLeft + 'px';
-                    hint.style.top = pixelTop + 'px';
-                    hint.style.width = pixelWidth + 'px';
-                    hint.style.height = pixelHeight + 'px';
-
                     if (pixelWidth > 0 && pixelHeight > 0) {
-                        hint.title = `${mapping.element_type}`;
+                        const hint = document.createElement('div');
+                        hint.className = 'bbox-hint';
+                        hint.style.left = pixelLeft + 'px';
+                        hint.style.top = pixelTop + 'px';
+                        hint.style.width = pixelWidth + 'px';
+                        hint.style.height = pixelHeight + 'px';
                         hint.dataset.elementId = mapping.element_id;
+                        hint.dataset.type = mapping.element_type;
 
                         hint.addEventListener('click', (e) => {
                             e.stopPropagation();
-                            highlightMarkdown(mapping);
+                            onPDFClick(mapping);
                         });
 
                         hint.addEventListener('mouseenter', () => {
-                            document.querySelectorAll('.markdown-hover-highlight').forEach(el => {
-                                el.classList.remove('markdown-hover-highlight');
-                            });
-                            const element = elementIdToElement.get(mapping.element_id);
-                            if (element) {
-                                element.classList.add('markdown-hover-highlight');
-                                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                            }
-                            updateStatus(`📝 Markdown: ${mapping.element_type} (hover to highlight)`);
+                            highlightMarkdownHover(mapping.element_id);
+                            document.getElementById('statusText').textContent = `Markdown: ${mapping.element_type}`;
                         });
 
                         hint.addEventListener('mouseleave', () => {
-                            document.querySelectorAll('.markdown-hover-highlight').forEach(el => {
-                                el.classList.remove('markdown-hover-highlight');
-                            });
+                            clearHoverHighlights();
                         });
 
                         overlay.appendChild(hint);
                     }
                 }
             }
-            console.log('✓ BBox hints rendered');
         }
 
-        // Highlight PDF
         function highlightPDF(mapping) {
-            const pageNum = mapping.page_num;
-
             // Clear all overlays
-            document.querySelectorAll('.page-overlay').forEach(overlay => {
-                overlay.innerHTML = '';
-            });
+            document.querySelectorAll('.page-overlay').forEach(o => o.innerHTML = '');
 
+            const pageNum = mapping.page_num;
             const overlay = document.getElementById(`pdfPageOverlay${pageNum}`);
-            if (!overlay) return;
-
             const canvas = document.getElementById(`pdfPage${pageNum}`);
-            if (!canvas) return;
+            if (!overlay || !canvas) return;
 
             const [x0, y0, x1, y1] = mapping.bbox;
             const canvasWidth = canvas.width;
@@ -725,36 +623,45 @@
 
             overlay.appendChild(highlight);
 
-            // Scroll to highlight
             const pageWrapper = document.getElementById(`pdfPageWrapper${pageNum}`);
             if (pageWrapper) {
                 pageWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
-        // Highlight markdown
-        function highlightMarkdown(mapping) {
-            document.querySelectorAll('.markdown-highlight').forEach(el => {
-                el.classList.remove('markdown-highlight');
-            });
+        function onPDFClick(mapping) {
+            highlightPDF(mapping);
 
-            const element = elementIdToElement.get(mapping.element_id);
-            if (element) {
-                element.classList.add('markdown-highlight');
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                updateStatus(`📝 Highlighted: ${mapping.element_type}`);
+            // Highlight corresponding markdown
+            document.querySelectorAll('.markdown-highlight').forEach(el => el.classList.remove('markdown-highlight'));
+
+            const el = elementIdToMarkdownEl.get(mapping.element_id);
+            if (el) {
+                el.classList.add('markdown-highlight');
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                document.getElementById('statusText').textContent = `Highlighted: ${mapping.element_type}`;
                 showToast(`Highlighted ${mapping.element_type}`, 'success');
             } else {
-                updateStatus('Element not found in markdown');
+                document.getElementById('statusText').textContent = 'Markdown element not found';
             }
         }
 
-        // Update status
+        function highlightMarkdownHover(elementId) {
+            clearHoverHighlights();
+            const el = elementIdToMarkdownEl.get(elementId);
+            if (el) {
+                el.classList.add('markdown-hover-highlight');
+            }
+        }
+
+        function clearHoverHighlights() {
+            document.querySelectorAll('.markdown-hover-highlight').forEach(el => el.classList.remove('markdown-hover-highlight'));
+        }
+
         function updateStatus(text) {
             document.getElementById('statusText').textContent = text;
         }
 
-        // Navigation
         function prevPage() {
             if (currentPage > 1) {
                 currentPage--;
@@ -776,7 +683,6 @@
             document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
         }
 
-        // Zoom
         function zoomIn() {
             scale = Math.min(scale + 0.25, 3);
             renderAllPages();
@@ -792,9 +698,7 @@
             document.getElementById('zoomOutBtn').disabled = scale <= 0.5;
         }
 
-        // Initialize
         window.addEventListener('DOMContentLoaded', () => {
-            console.log('✓ DocAI Viewer loaded');
             loadHistory();
         });
     </script>
