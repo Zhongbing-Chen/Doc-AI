@@ -28,15 +28,24 @@ htmlcov/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Large files and assets
+# Large files and assets - GitHub has 50MB limit
 *.pdf
 *.pth
 *.pt
+*.onnx
 *.zip
 *.tar.gz
 *.tgz
 *.tar
 *.7z
+
+# Model weights (should be downloaded separately)
+src/model/ocr/*.onnx
+src/model/ocr/server/
+src/model/table_transformer/*.pth
+src/model/table_transformer/*.pt
+model/
+assets/
 
 # Images (keep only essential ones)
 *.png
