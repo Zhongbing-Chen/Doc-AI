@@ -1,0 +1,1903 @@
+{
+  "5feaebf9-559b-43f3-aa07-eab1aed0b826": {
+    "task_id": "5feaebf9-559b-43f3-aa07-eab1aed0b826",
+    "data_id": "e8266491-67c6-43cf-ba4f-1160bcfdb819",
+    "status": "done",
+    "model_version": "vlm",
+    "file_path": "results/5feaebf9-559b-43f3-aa07-eab1aed0b826/fc87e963-1b4c-4f73-bf8e-0fd126b49b1c_origin.pdf",
+    "file_name": "boc_first_10_pages.pdf",
+    "results": {
+      "folder": "results/5feaebf9-559b-43f3-aa07-eab1aed0b826",
+      "markdown": "# \u4e2d\u56fd\u94f6\u884c\u80a1\u4efd\u6709\u9650\u516c\u53f8\n\n\u80a1\u7968\u4ee3\u7801\uff1a601988\n\n2024 \u5e74\u5e74\u5ea6\u62a5\u544a\n\n# \u4e2d\u56fd\u94f6\u884c\u7b80\u4ecb\n\n\u4e2d\u56fd\u94f6\u884c\u662f\u4e2d\u56fd\u6301\u7eed\u7ecf\u8425\u65f6\u95f4\u6700\u4e45\u7684\u94f6\u884c\u30021912\u5e742\u6708\u6b63\u5f0f\u6210\u7acb\uff0c\u5148\u540e\u884c\u4f7f\u4e2d\u592e\u94f6\u884c\u3001\u56fd\u9645\u6c47\u5151\u94f6\u884c\u548c\u56fd\u9645\u8d38\u6613\u4e13\u4e1a\u94f6\u884c\u804c\u80fd\u30021949 \u5e74\u4ee5\u540e\uff0c\u957f\u671f\u4f5c\u4e3a\u56fd\u5bb6\u5916\u6c47\u5916\u8d38\u4e13\u4e1a\u94f6\u884c\uff0c\u7edf\u4e00\u7ecf\u8425\u7ba1\u7406\u56fd\u5bb6\u5916\u6c47\uff0c\u5f00\u5c55\u56fd\u9645\u8d38\u6613\u7ed3\u7b97\u3001\u4fa8\u6c47\u548c\u5176\u4ed6\u975e\u8d38\u6613\u5916\u6c47\u4e1a\u52a1\u30021994\u5e74\u6539\u7ec4\u4e3a\u56fd\u6709\u72ec\u8d44\u5546\u4e1a\u94f6\u884c\uff0c\u5168\u9762\u63d0\u4f9b\u5404\u7c7b\u91d1\u878d\u670d\u52a1\uff0c\u53d1\u5c55\u6210\u4e3a\u672c\u5916\u5e01\u517c\u8425\u3001\u4e1a\u52a1\u54c1\u79cd\u9f50\u5168\u3001\u5b9e\u529b\u96c4\u539a\u7684\u5927\u578b\u5546\u4e1a\u94f6\u884c\u30022006 \u5e74\u7387\u5148\u6210\u529f\u5728\u9999\u6e2f\u8054\u4ea4\u6240\u548c\u4e0a\u4ea4\u6240\u6302\u724c\u4e0a\u5e02\uff0c\u6210\u4e3a\u56fd\u5185\u9996\u5bb6\u201cA+H\u201d\u4e0a\u5e02\u94f6\u884c\u3002\u4e2d\u56fd\u94f6\u884c\u662f 2008 \u5e74\u5317\u4eac\u590f\u5b63\u5965\u8fd0\u4f1a\u548c 2022 \u5e74\u5317\u4eac\u51ac\u5b63\u5965\u8fd0\u4f1a\u552f\u4e00\u5b98\u65b9\u94f6\u884c\u5408\u4f5c\u4f19\u4f34\uff0c\u662f\u4e2d\u56fd\u552f\u4e00\u7684\u201c\u53cc\u5965\u94f6\u884c\u201d\u30022011\u5e74\uff0c\u4e2d\u56fd\u94f6\u884c\u6210\u4e3a\u65b0\u5174\u7ecf\u6d4e\u4f53\u4e2d\u9996\u5bb6\u5168\u7403\u7cfb\u7edf\u91cd\u8981\u6027\u94f6\u884c\uff0c\u76ee\u524d\u5df2\u8fde\u7eed14\u5e74\u5165\u9009\uff0c\u56fd\u9645\u5730\u4f4d\u3001\u7ade\u4e89\u80fd\u529b\u3001\u7efc\u5408\u5b9e\u529b\u8dfb\u8eab\u5168\u7403\u5927\u578b\u94f6\u884c\u524d\u5217\u3002\u5f53\u524d\uff0c\u4e2d\u56fd\u94f6\u884c\u5bf9\u6807\u515a\u4e2d\u592e\u51b3\u7b56\u90e8\u7f72\uff0c\u4ee5\u670d\u52a1\u5b9e\u4f53\u7ecf\u6d4e\u4e3a\u6839\u672c\u5b97\u65e8\uff0c\u4ee5\u9632\u63a7\u98ce\u9669\u4e3a\u6c38\u6052\u4e3b\u9898\uff0c\u4ee5\u5de9\u56fa\u6269\u5927\u5168\u7403\u5316\u4f18\u52bf\u3001\u63d0\u5347\u5168\u7403\u5e03\u5c40\u80fd\u529b\u4e3a\u9996\u8981\u4efb\u52a1\uff0c\u7740\u529b\u505a\u597d\u79d1\u6280\u91d1\u878d\u3001\u7eff\u8272\u91d1\u878d\u3001\u666e\u60e0\u91d1\u878d\u3001\u517b\u8001\u91d1\u878d\u3001\u6570\u5b57\u91d1\u878d\u4e94\u7bc7\u5927\u6587\u7ae0\uff0c\u5728\u5b9e\u5e72\u7b03\u884c\u4e2d\u52a9\u529b\u91d1\u878d\u5f3a\u56fd\u5efa\u8bbe\u3002\n\n\u4e2d\u56fd\u94f6\u884c\u662f\u4e2d\u56fd\u5168\u7403\u5316\u548c\u7efc\u5408\u5316\u7a0b\u5ea6\u6700\u9ad8\u7684\u94f6\u884c\uff0c\u5728\u4e2d\u56fd\u5883\u5185\u53ca\u5883\u5916 64\u4e2a\u56fd\u5bb6\u548c\u5730\u533a\u8bbe\u6709\u673a\u6784\uff0c\u4e2d\u94f6\u9999\u6e2f\u3001\u6fb3\u95e8\u5206\u884c\u62c5\u4efb\u5f53\u5730\u7684\u53d1\u949e\u884c\u3002\u4e2d\u56fd\u94f6\u884c\u62e5\u6709\u6bd4\u8f83\u5b8c\u5584\u7684\u5168\u7403\u670d\u52a1\u7f51\u7edc\uff0c\u5f62\u6210\u4e86\u4ee5\u516c\u53f8\u91d1\u878d\u3001\u4e2a\u4eba\u91d1\u878d\u548c\u91d1\u878d\u5e02\u573a\u7b49\u5546\u4e1a\u94f6\u884c\u4e1a\u52a1\u4e3a\u4e3b\u4f53\uff0c\u6db5\u76d6\u6295\u8d44\u94f6\u884c\u3001\u76f4\u63a5\u6295\u8d44\u3001\u8bc1\u5238\u3001\u4fdd\u9669\u3001\u57fa\u91d1\u3001\u98de\u673a\u79df\u8d41\u3001\u8d44\u4ea7\u7ba1\u7406\u3001\u91d1\u878d\u79d1\u6280\u3001\u91d1\u878d\u79df\u8d41\u7b49\u591a\u4e2a\u9886\u57df\u7684\u7efc\u5408\u91d1\u878d\u670d\u52a1\u4f53\u7cfb\uff0c\u4e3a\u5ba2\u6237\u63d0\u4f9b\u201c\u4e00\u70b9\u63a5\u5165\u3001\u5168\u7403\u54cd\u5e94\u3001\u7efc\u5408\u670d\u52a1\u201d\u7684\u91d1\u878d\u89e3\u51b3\u65b9\u6848\u3002\n\n\u4e2d\u56fd\u94f6\u884c\u662f\u62e5\u6709\u5d07\u9ad8\u4f7f\u547d\u611f\u548c\u8d23\u4efb\u611f\u7684\u94f6\u884c\u3002\u6210\u7acb 113 \u5e74\u6765\uff0c\u4e2d\u56fd\u94f6\u884c\u59cb\u7ec8\u606a\u5b88\u201c\u4e3a\u793e\u4f1a\u8c0b\u798f\u5229\u3001\u4e3a\u56fd\u5bb6\u6c42\u5bcc\u5f3a\u201d\u7684\u5386\u53f2\u4f7f\u547d\uff0c\u5f62\u6210\u4e86\u5b9d\u8d35\u7684\u7cbe\u795e\u8d22\u5bcc\uff0c\u4e0e\u8bda\u5b9e\u5b88\u4fe1\u3001\u4ee5\u4e49\u53d6\u5229\u3001\u7a33\u5065\u5ba1\u614e\u3001\u5b88\u6b63\u521b\u65b0\u3001\u4f9d\u6cd5\u5408\u89c4\u7684\u4e2d\u56fd\u7279\u8272\u91d1\u878d\u6587\u5316\u540c\u5411\u540c\u9891\u3001\u548c\u58f0\u5171\u9e23\u3002\u5728\u5168\u9762\u5efa\u8bbe\u793e\u4f1a\u4e3b\u4e49\u73b0\u4ee3\u5316\u56fd\u5bb6\u7684\u65b0\u5f81\u7a0b\u4e0a\uff0c\u4e2d\u56fd\u94f6\u884c\u5c06\u575a\u6301\u4ee5\u4e60\u8fd1\u5e73\u65b0\u65f6\u4ee3\u4e2d\u56fd\u7279\u8272\u793e\u4f1a\u4e3b\u4e49\u601d\u60f3\u4e3a\u6307\u5bfc\uff0c\u5b8c\u6574\u51c6\u786e\u5168\u9762\u8d2f\u5f7b\u65b0\u53d1\u5c55\u7406\u5ff5\uff0c\u627e\u51c6\u843d\u5b9e\u4e2d\u592e\u51b3\u7b56\u90e8\u7f72\u548c\u5b9e\u73b0\u81ea\u8eab\u9ad8\u8d28\u91cf\u53d1\u5c55\u7684\u7ed3\u5408\u70b9\u3001\u53d1\u529b\u70b9\u3001\u652f\u6491\u70b9\uff0c\u5f53\u597d\u8d2f\u5f7b\u515a\u4e2d\u592e\u51b3\u7b56\u90e8\u7f72\u7684\u5b9e\u5e72\u5bb6\u3001\u670d\u52a1\u5b9e\u4f53\u7ecf\u6d4e\u7684\u4e3b\u529b\u519b\u3001\u670d\u52a1\u53cc\u5faa\u73af\u65b0\u53d1\u5c55\u683c\u5c40\u7684\u6392\u5934\u5175\u3001\u7ef4\u62a4\u91d1\u878d\u7a33\u5b9a\u7684\u538b\u8231\u77f3\u3001\u505a\u4f18\u505a\u5f3a\u56fd\u6709\u5927\u578b\u91d1\u878d\u673a\u6784\u7684\u884c\u52a8\u6d3e\uff0c\u575a\u5b9a\u4e0d\u79fb\u8d70\u597d\u4e2d\u56fd\u7279\u8272\u91d1\u878d\u53d1\u5c55\u4e4b\u8def\uff0c\u4e0d\u65ad\u5f00\u521b\u4e2d\u56fd\u94f6\u884c\u9ad8\u8d28\u91cf\u53d1\u5c55\u65b0\u5c40\u9762\uff0c\u4e3a\u4ee5\u4e2d\u56fd\u5f0f\u73b0\u4ee3\u5316\u5168\u9762\u63a8\u8fdb\u5f3a\u56fd\u5efa\u8bbe\u3001\u6c11\u65cf\u590d\u5174\u4f1f\u4e1a\u4f5c\u51fa\u66f4\u5927\u8d21\u732e\u3002\n\n\u8363\u8a89\u4e0e\u5956\u9879   \n\n<table><tr><td>The Banker(\u300a\u94f6\u884c\u5bb6\u300b)</td><td>\u5168\u7403\u94f6\u884c 1000 \u5f3a\u7b2c 4 \u4f4d</td></tr><tr><td>The Banker(\u300a\u94f6\u884c\u5bb6\u300b)\u3001Brand Finance(\u300a\u54c1\u724c\u91d1\u878d\u300b)</td><td>\u5168\u7403\u94f6\u884c\u54c1\u724c\u4ef7\u503c 500 \u5f3a\u7b2c 4 \u4f4d</td></tr><tr><td>FORTUNE(\u300a\u8d22\u5bcc\u300b)</td><td>\u4e16\u754c 500 \u5f3a\u7b2c 37 \u4f4d</td></tr><tr><td>Global Finance(\u300a\u73af\u7403\u91d1\u878d\u300b)</td><td>\u4e9a\u592a\u5730\u533a\u6700\u4f73\u53ef\u6301\u7eed\u57fa\u7840\u8bbe\u65bd\u878d\u8d44\u94f6\u884c</td></tr><tr><td rowspan=\"2\">The Asian Banker(\u300a\u4e9a\u6d32\u94f6\u884c\u5bb6\u300b)</td><td>\u4e9a\u592a\u5730\u533a\u6700\u4f73\u4eba\u6c11\u5e01\u6e05\u7b97\u884c</td></tr><tr><td>\u4e2d\u56fd\u5e74\u5ea6\u5bb6\u65cf\u4f20\u627f\u670d\u52a1\u5956</td></tr><tr><td rowspan=\"2\">Euromoney(\u300a\u6b27\u6d32\u8d27\u5e01\u300b)</td><td>\u4e2d\u56fd\u6700\u4f73\u94f6\u884c\u3001\u4e2d\u56fd\u6700\u4f73 ESG \u94f6\u884c</td></tr><tr><td>\u6700\u4f73\u56fd\u6709\u79c1\u4eba\u94f6\u884c</td></tr><tr><td rowspan=\"4\">The Asset(\u300a\u8d22\u8d44\u300b)</td><td>AAA \u91d1\u878d\u79d1\u6280\u5956\u2014\u6700\u4f73\u4e91\u5e94\u7528\u9879\u76ee</td></tr><tr><td>\u6700\u4f73\u4eba\u6c11\u5e01\u94f6\u884c</td></tr><tr><td>\u4e2d\u56fd\u6700\u4f73 QDII \u6258\u7ba1\u94f6\u884c</td></tr><tr><td>\u4e2d\u56fd\u6700\u4f73\u56fd\u9645\u503a\u5238\u987e\u95ee</td></tr><tr><td>Project Finance International(\u300a\u56fd\u9645\u9879\u76ee\u878d\u8d44\u300b)</td><td>\u5168\u7403\u6700\u4f73\u4ea4\u6613\u5956</td></tr><tr><td>GIP(\u201c\u4e00\u5e26\u4e00\u8def\u201d\u7eff\u8272\u6295\u8d44\u539f\u5219)</td><td>\u6700\u4f73\u521b\u65b0\u5956</td></tr><tr><td>IFF(\u56fd\u9645\u91d1\u878d\u8bba\u575b)</td><td>\u5168\u7403\u7eff\u8272\u91d1\u878d\u5956\u2014\u521b\u65b0\u5956</td></tr><tr><td>\u4e2d\u56fd\u4eba\u6c11\u94f6\u884c</td><td>\u91d1\u878d\u79d1\u6280\u53d1\u5c55\u5956</td></tr><tr><td>\u4e2d\u56fd\u94f6\u884c\u4e1a\u534f\u4f1a</td><td>\u7eff\u8272\u94f6\u884c\u8bc4\u4ef7\u5148\u8fdb\u5355\u4f4d</td></tr><tr><td>\u4e2d\u56fd\u4e0a\u5e02\u516c\u53f8\u534f\u4f1a</td><td>\u4e0a\u5e02\u516c\u53f8\u8463\u4e8b\u4f1a\u6700\u4f73\u5b9e\u8df5\u6848\u4f8b</td></tr><tr><td>\u4e2d\u56fd\u4ea4\u6613\u94f6\u884c 50 \u4eba\u8bba\u575b\u3001\u300a\u8d38\u6613\u91d1\u878d\u300b\u3001\u4e2d\u56fd\u8d38\u6613\u91d1\u878d\u7f51\u3001\u73af\u7403\u4ea4\u6613\u94f6\u884c\u7f51</td><td>\u7b2c 14 \u5c4a \u201c\u91d1\u8d38\u5956\u201d \u6700\u4f73\u73b0\u91d1\u7ba1\u7406\u94f6\u884c</td></tr><tr><td>\u4eba\u6c11\u7f51</td><td>\u4eba\u6c11\u4f01\u4e1a\u793e\u4f1a\u8d23\u4efb\u6848\u4f8b</td></tr><tr><td>\u65b0\u534e\u7f51</td><td>\u4e61\u6751\u632f\u5174\u5b9e\u8df5\u6848\u4f8b</td></tr><tr><td>\u300a\u8bc1\u5238\u65f6\u62a5\u300b</td><td>\u4e2d\u56fd\u4e0a\u5e02\u516c\u53f8\u6295\u8d44\u8005\u5173\u7cfb\u80a1\u4e1c\u56de\u62a5\u5929\u9a6c\u5956</td></tr><tr><td>\u300a\u4e2d\u56fd\u8bc1\u5238\u62a5\u300b</td><td>\u94f6\u884c\u4e1a\u7406\u8d22\u91d1\u725b\u5956\u2014\u94f6\u884c\u7406\u8d22\u9500\u552e\u91d1\u725b\u5956</td></tr><tr><td>LACP(\u7f8e\u56fd\u901a\u8baf\u516c\u5173\u804c\u4e1a\u8054\u76df)</td><td>\u5e74\u5ea6\u62a5\u544a\u7efc\u5408\u7c7b\u8bc4\u6bd4\u767d\u91d1\u5956</td></tr><tr><td>\u80e1\u6da6\u7814\u7a76\u9662</td><td>\u4e2d\u56fd\u6700\u5177\u5386\u53f2\u6587\u5316\u5e95\u8574\u54c1\u724c\u699c\u7b2c 5 \u4f4d</td></tr></table>\n\n# \u76ee\u5f55\n\n\u4e2d\u56fd\u94f6\u884c\u7b80\u4ecb..\n\n\u8363\u8a89\u4e0e\u5956\u9879...\n\n\u91ca\u4e49... 4\n\n\u91cd\u8981\u63d0\u793a... 5\n\n\u8d22\u52a1\u6458\u8981.. 6\n\n\u516c\u53f8\u57fa\u672c\u60c5\u51b5..\n\n\u8463\u4e8b\u957f\u81f4\u8f9e.. 10\n\n\u884c\u957f\u81f4\u8f9e.. 12\n\n\u7ba1\u7406\u5c42\u8ba8\u8bba\u4e0e\u5206\u6790.. 14\n\n\u7efc\u5408\u8d22\u52a1\u56de\u987e .. 14\n\n\u4e1a\u52a1\u56de\u987e . .28\n\n\u98ce\u9669\u7ba1\u7406 .54\n\n\u8d44\u672c\u7ba1\u7406 .64\n\n\u673a\u6784\u7ba1\u7406\u3001\u4eba\u529b\u8d44\u6e90\u5f00\u53d1\u4e0e\u7ba1\u7406 .65\n\n\u5c55\u671b . 68\n\n\u73af\u5883\u3001\u793e\u4f1a\u3001\u6cbb\u7406. 69\n\n\u73af\u5883\u8d23\u4efb . 69\n\n\u793e\u4f1a\u8d23\u4efb . 74\n\n\u6cbb\u7406\u8d23\u4efb . 76\n\n\u80a1\u4efd\u53d8\u52a8\u548c\u80a1\u4e1c\u60c5\u51b5.. 78\n\n\u8463\u4e8b\u3001\u76d1\u4e8b\u3001\u9ad8\u7ea7\u7ba1\u7406\u4eba\u5458.. 84\n\n\u516c\u53f8\u6cbb\u7406.. .95\n\n\u8463\u4e8b\u4f1a\u62a5\u544a.. .108\n\n\u76d1\u4e8b\u4f1a\u62a5\u544a.. 115\n\n\u91cd\u8981\u4e8b\u9879... .118\n\n\u8463\u4e8b\u3001\u76d1\u4e8b\u3001\u9ad8\u7ea7\u7ba1\u7406\u4eba\u5458\u5173\u4e8e\u5e74\u5ea6\u62a5\u544a\u7684\u786e\u8ba4\u610f\u89c1 .. .120\n\n\u5ba1\u8ba1\u62a5\u544a.. .121\n\n\u8d22\u52a1\u62a5\u8868.. .129\n\n\u80a1\u4e1c\u53c2\u8003\u8d44\u6599.. .361\n\n\u7ec4\u7ec7\u67b6\u6784.. .363\n\n\u673a\u6784\u540d\u5f55... .364\n\n\u4e13\u9898\u4e00 \uff1a\u624e\u5b9e\u505a\u597d\u201c\u4e94\u7bc7\u5927\u6587\u7ae0\u201d .28\n\n\u4e13\u9898\u4e8c \uff1a\u6301\u7eed\u63d0\u5347\u5168\u7403\u5e03\u5c40\u80fd\u529b. 43\n\n\u4e13\u9898\u4e09 \uff1a\u52a0\u5feb\u63a8\u8fdb\u91d1\u878d\u79d1\u6280\u521b\u65b0.. 52\n\n# \u91ca\u4e49\n\n\u5728\u672c\u62a5\u544a\u4e2d\uff0c\u9664\u975e\u6587\u4e49\u53e6\u6709\u6240\u6307\uff0c\u4e0b\u5217\u8bcd\u8bed\u5177\u6709\u5982\u4e0b\u6db5\u4e49\uff1a\n\n<table><tr><td>\u672c\u884c/\u672c\u96c6\u56e2/\u96c6\u56e2</td><td>\u4e2d\u56fd\u94f6\u884c\u80a1\u4efd\u6709\u9650\u516c\u53f8\u6216\u5176\u524d\u8eab\u53ca(\u9664\u6587\u4e49\u53e6\u6709\u6240\u6307\u5916)\u4e2d\u56fd\u94f6\u884c\u80a1\u4efd\u6709\u9650\u516c\u53f8\u7684\u6240\u6709\u5b50\u516c\u53f8</td></tr><tr><td>A\u80a1</td><td>\u672c\u884c\u666e\u901a\u80a1\u80a1\u672c\u4e2d\u6bcf\u80a1\u9762\u503c\u4eba\u6c11\u5e011.00\u5143\u7684\u5185\u8d44\u80a1,\u6709\u5173\u80a1\u4efd\u4e8e\u4e0a\u4ea4\u6240\u4e0a\u5e02(\u80a1\u7968\u4ee3\u7801:601988)</td></tr><tr><td>H\u80a1</td><td>\u672c\u884c\u666e\u901a\u80a1\u80a1\u672c\u4e2d\u6bcf\u80a1\u9762\u503c\u4eba\u6c11\u5e011.00\u5143\u7684\u5883\u5916\u4e0a\u5e02\u5916\u8d44\u80a1,\u6709\u5173\u80a1\u4efd\u4e8e\u9999\u6e2f\u8054\u4ea4\u6240\u4e0a\u5e02\u53ca\u4ee5\u6e2f\u5e01\u4e70\u5356(\u80a1\u4efd\u4ee3\u53f7:3988)</td></tr><tr><td>\u8d22\u653f\u90e8</td><td>\u4e2d\u534e\u4eba\u6c11\u5171\u548c\u56fd\u8d22\u653f\u90e8</td></tr><tr><td>\u56fd\u5bb6\u91d1\u878d\u76d1\u7763\u7ba1\u7406\u603b\u5c40</td><td>\u56fd\u5bb6\u91d1\u878d\u76d1\u7763\u7ba1\u7406\u603b\u5c40\u6216\u5176\u524d\u8eab</td></tr><tr><td>\u4e2d\u56fd\u8bc1\u76d1\u4f1a</td><td>\u4e2d\u56fd\u8bc1\u5238\u76d1\u7763\u7ba1\u7406\u59d4\u5458\u4f1a</td></tr><tr><td>\u4e0a\u4ea4\u6240</td><td>\u4e0a\u6d77\u8bc1\u5238\u4ea4\u6613\u6240</td></tr><tr><td>\u9999\u6e2f\u4ea4\u6613\u6240</td><td>\u9999\u6e2f\u4ea4\u6613\u53ca\u7ed3\u7b97\u6240\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u9999\u6e2f\u8054\u4ea4\u6240</td><td>\u9999\u6e2f\u8054\u5408\u4ea4\u6613\u6240\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u6c47\u91d1\u516c\u53f8</td><td>\u4e2d\u592e\u6c47\u91d1\u6295\u8d44\u6709\u9650\u8d23\u4efb\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u9999\u6e2f</td><td>\u4e2d\u56fd\u94f6\u884c(\u9999\u6e2f)\u6709\u9650\u516c\u53f8,\u4e00\u5bb6\u6839\u636e\u9999\u6e2f\u6cd5\u5f8b\u6ce8\u518c\u6210\u7acb\u7684\u6301\u724c\u94f6\u884c,\u5e76\u4e3a\u4e2d\u94f6\u9999\u6e2f(\u63a7\u80a1)\u7684\u5168\u8d44\u5b50\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u9999\u6e2f(\u63a7\u80a1)</td><td>\u4e2d\u94f6\u9999\u6e2f(\u63a7\u80a1)\u6709\u9650\u516c\u53f8,\u4e00\u5bb6\u6839\u636e\u9999\u6e2f\u6cd5\u5f8b\u6ce8\u518c\u6210\u7acb\u7684\u516c\u53f8,\u5e76\u4e8e\u9999\u6e2f\u8054\u4ea4\u6240\u4e0a\u5e02</td></tr><tr><td>\u4e2d\u94f6\u4fdd\u9669</td><td>\u4e2d\u94f6\u4fdd\u9669\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u5bcc\u767b</td><td>\u4e2d\u94f6\u5bcc\u767b\u6751\u9547\u94f6\u884c\u80a1\u4efd\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u56fd\u9645\u63a7\u80a1</td><td>\u4e2d\u94f6\u56fd\u9645\u63a7\u80a1\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u822a\u7a7a\u79df\u8d41</td><td>\u4e2d\u94f6\u822a\u7a7a\u79df\u8d41\u6709\u9650\u516c\u53f8,\u4e00\u5bb6\u6839\u636e\u65b0\u52a0\u5761\u516c\u53f8\u6cd5\u5728\u65b0\u52a0\u5761\u6ce8\u518c\u6210\u7acb\u7684\u516c\u4f17\u80a1\u4efd\u6709\u9650\u516c\u53f8,\u5e76\u4e8e\u9999\u6e2f\u8054\u4ea4\u6240\u4e0a\u5e02</td></tr><tr><td>\u4e2d\u94f6\u57fa\u91d1</td><td>\u4e2d\u94f6\u57fa\u91d1\u7ba1\u7406\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u96c6\u56e2\u4fdd\u9669</td><td>\u4e2d\u94f6\u96c6\u56e2\u4fdd\u9669\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u96c6\u56e2\u6295\u8d44</td><td>\u4e2d\u94f6\u96c6\u56e2\u6295\u8d44\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u91d1\u79d1</td><td>\u4e2d\u94f6\u91d1\u878d\u79d1\u6280\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u91d1\u79df</td><td>\u4e2d\u94f6\u91d1\u878d\u79df\u8d41\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u7406\u8d22</td><td>\u4e2d\u94f6\u7406\u8d22\u6709\u9650\u8d23\u4efb\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u4eba\u5bff</td><td>\u4e2d\u94f6\u96c6\u56e2\u4eba\u5bff\u4fdd\u9669\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u4e09\u661f\u4eba\u5bff</td><td>\u4e2d\u94f6\u4e09\u661f\u4eba\u5bff\u4fdd\u9669\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u6d88\u8d39\u91d1\u878d</td><td>\u4e2d\u94f6\u6d88\u8d39\u91d1\u878d\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u8d44\u4ea7</td><td>\u4e2d\u94f6\u91d1\u878d\u8d44\u4ea7\u6295\u8d44\u6709\u9650\u516c\u53f8</td></tr><tr><td>\u4e2d\u94f6\u8bc1\u5238</td><td>\u4e2d\u94f6\u56fd\u9645\u8bc1\u5238\u80a1\u4efd\u6709\u9650\u516c\u53f8,\u4e00\u5bb6\u5728\u4e2d\u56fd\u5883\u5185\u6ce8\u518c\u6210\u7acb\u7684\u516c\u53f8,\u5e76\u4e8e\u4e0a\u4ea4\u6240\u4e0a\u5e02</td></tr><tr><td>\u300a\u516c\u53f8\u6cd5\u300b</td><td>\u300a\u4e2d\u534e\u4eba\u6c11\u5171\u548c\u56fd\u516c\u53f8\u6cd5\u300b</td></tr><tr><td>\u4e2d\u56fd\u4f01\u4e1a\u4f1a\u8ba1\u51c6\u5219</td><td>\u8d22\u653f\u90e8\u9881\u5e03\u7684\u4f01\u4e1a\u4f1a\u8ba1\u51c6\u5219</td></tr><tr><td>\u9999\u6e2f\u4e0a\u5e02\u89c4\u5219</td><td>\u300a\u9999\u6e2f\u8054\u5408\u4ea4\u6613\u6240\u6709\u9650\u516c\u53f8\u8bc1\u5238\u4e0a\u5e02\u89c4\u5219\u300b</td></tr><tr><td>\u9999\u6e2f\u300a\u8bc1\u5238\u53ca\u671f\u8d27\u6761\u4f8b\u300b</td><td>\u300a\u8bc1\u5238\u53ca\u671f\u8d27\u6761\u4f8b\u300b(\u9999\u6e2f\u6cd5\u4f8b\u7b2c571\u7ae0)</td></tr><tr><td>\u516c\u53f8\u7ae0\u7a0b</td><td>\u672c\u884c\u73b0\u884c\u7684\u300a\u4e2d\u56fd\u94f6\u884c\u80a1\u4efd\u6709\u9650\u516c\u53f8\u7ae0\u7a0b\u300b</td></tr><tr><td>\u5883\u5185</td><td>\u5c31\u672c\u62a5\u544a\u800c\u8a00,\u6307\u4e2d\u56fd\u5185\u5730,\u4e0d\u5305\u542b\u9999\u6e2f\u3001\u6fb3\u95e8\u3001\u53f0\u6e7e\u5730\u533a</td></tr><tr><td>\u4e1c\u5317\u5730\u533a</td><td>\u5c31\u672c\u62a5\u544a\u800c\u8a00,\u5305\u62ec\u9ed1\u9f99\u6c5f\u7701\u3001\u5409\u6797\u7701\u3001\u8fbd\u5b81\u7701\u53ca\u5927\u8fde\u5e02\u5206\u884c</td></tr><tr><td>\u897f\u90e8\u5730\u533a</td><td>\u5c31\u672c\u62a5\u544a\u800c\u8a00,\u5305\u62ec\u91cd\u5e86\u5e02\u3001\u56db\u5ddd\u7701\u3001\u8d35\u5dde\u7701\u3001\u4e91\u5357\u7701\u3001\u9655\u897f\u7701\u3001\u7518\u8083\u7701\u3001\u5b81\u590f\u56de\u65cf\u81ea\u6cbb\u533a\u3001\u9752\u6d77\u7701\u3001\u897f\u85cf\u81ea\u6cbb\u533a\u53ca\u65b0\u7586\u7ef4\u543e\u5c14\u81ea\u6cbb\u533a\u5206\u884c</td></tr><tr><td>\u534e\u5317\u5730\u533a</td><td>\u5c31\u672c\u62a5\u544a\u800c\u8a00,\u5305\u62ec\u5317\u4eac\u5e02\u3001\u5929\u6d25\u5e02\u3001\u6cb3\u5317\u7701\u3001\u5c71\u897f\u7701\u3001\u5185\u8499\u53e4\u81ea\u6cbb\u533a\u5206\u884c\u53ca\u603b\u884c\u672c\u90e8</td></tr><tr><td>\u534e\u4e1c\u5730\u533a</td><td>\u5c31\u672c\u62a5\u544a\u800c\u8a00,\u5305\u62ec\u4e0a\u6d77\u5e02\u3001\u6c5f\u82cf\u7701\u3001\u82cf\u5dde\u3001\u6d59\u6c5f\u7701\u3001\u5b81\u6ce2\u5e02\u3001\u5b89\u5fbd\u7701\u3001\u798f\u5efa\u7701\u3001\u6c5f\u897f\u7701\u3001\u5c71\u4e1c\u7701\u53ca\u9752\u5c9b\u5e02\u5206\u884c</td></tr><tr><td>\u4e2d\u5357\u5730\u533a</td><td>\u5c31\u672c\u62a5\u544a\u800c\u8a00,\u5305\u62ec\u6cb3\u5357\u7701\u3001\u6e56\u5317\u7701\u3001\u6e56\u5357\u7701\u3001\u5e7f\u4e1c\u7701\u3001\u6df1\u5733\u5e02\u3001\u5e7f\u897f\u58ee\u65cf\u81ea\u6cbb\u533a\u53ca\u6d77\u5357\u7701\u5206\u884c</td></tr><tr><td>\u72ec\u7acb\u8463\u4e8b</td><td>\u4e0a\u4ea4\u6240\u4e0a\u5e02\u89c4\u5219\u53ca\u516c\u53f8\u7ae0\u7a0b\u4e0b\u6240\u6307\u7684\u72ec\u7acb\u8463\u4e8b,\u53ca\u9999\u6e2f\u4e0a\u5e02\u89c4\u5219\u4e0b\u6240\u6307\u7684\u72ec\u7acb\u975e\u6267\u884c\u8463\u4e8b</td></tr><tr><td>\u57fa\u70b9(Bp,Bps)</td><td>\u5229\u7387\u6216\u6c47\u7387\u6539\u53d8\u91cf\u7684\u8ba1\u91cf\u5355\u4f4d\u30021\u4e2a\u57fa\u70b9\u7b49\u4e8e0.01\u4e2a\u767e\u5206\u70b9</td></tr><tr><td>\u5143</td><td>\u4eba\u6c11\u5e01\u5143</td></tr></table>\n\n# \u91cd\u8981\u63d0\u793a\n\n\u672c\u884c\u8463\u4e8b\u4f1a\u3001\u76d1\u4e8b\u4f1a\u53ca\u8463\u4e8b\u3001\u76d1\u4e8b\u3001\u9ad8\u7ea7\u7ba1\u7406\u4eba\u5458\u4fdd\u8bc1\u5e74\u5ea6\u62a5\u544a\u5185\u5bb9\u7684\u771f\u5b9e\u3001\u51c6\u786e\u3001\u5b8c\u6574\uff0c\u4e0d\u5b58\u5728\u865a\u5047\u8bb0\u8f7d\u3001\u8bef\u5bfc\u6027\u9648\u8ff0\u6216\u91cd\u5927\u9057\u6f0f\uff0c\u5e76\u627f\u62c5\u4e2a\u522b\u548c\u8fde\u5e26\u7684\u6cd5\u5f8b\u8d23\u4efb\u3002\n\n\u672c\u884c\u4e8e 2025 \u5e74 3 \u6708 26 \u65e5\u53ec\u5f00\u8463\u4e8b\u4f1a\u4f1a\u8bae\uff0c\u5ba1\u8bae\u901a\u8fc7\u672c\u884c 2024 \u5e74\u5e74\u5ea6\u62a5\u544a\u53ca\u6458\u8981\u3002\u4f1a\u8bae\u5e94\u51fa\u5e2d\u8463\u4e8b 14 \u540d\uff0c\u4eb2\u81ea\u51fa\u5e2d\u8463\u4e8b 14 \u540d\u300214 \u540d\u8463\u4e8b\u5747\u884c\u4f7f\u8868\u51b3\u6743\u3002\u672c\u884c\u76d1\u4e8b\u53ca\u9ad8\u7ea7\u7ba1\u7406\u4eba\u5458\u5217\u5e2d\u4e86\u672c\u6b21\u4f1a\u8bae\u3002\n\n\u672c\u884c\u6309\u7167\u4e2d\u56fd\u4f01\u4e1a\u4f1a\u8ba1\u51c6\u5219\u548c\u56fd\u9645\u8d22\u52a1\u62a5\u544a\u4f1a\u8ba1\u51c6\u5219\u7f16\u5236\u7684 2024 \u5e74\u5ea6\u8d22\u52a1\u62a5\u544a\u5df2\u7ecf\u5b89\u6c38\u534e\u660e\u4f1a\u8ba1\u5e08\u4e8b\u52a1\u6240\uff08\u7279\u6b8a\u666e\u901a\u5408\u4f19\uff09\u548c\u5b89\u6c38\u4f1a\u8ba1\u5e08\u4e8b\u52a1\u6240\u5206\u522b\u6839\u636e\u4e2d\u56fd\u6ce8\u518c\u4f1a\u8ba1\u5e08\u5ba1\u8ba1\u51c6\u5219\u548c\u56fd\u9645\u5ba1\u8ba1\u51c6\u5219\u5ba1\u8ba1\uff0c\u5e76\u51fa\u5177\u65e0\u4fdd\u7559\u610f\u89c1\u7684\u5ba1\u8ba1\u62a5\u544a\u3002\n\n\u672c\u884c\u6cd5\u5b9a\u4ee3\u8868\u4eba\u3001\u8463\u4e8b\u957f\u845b\u6d77\u86df\uff0c\u884c\u957f\u3001\u4e3b\u7ba1\u8d22\u4f1a\u5de5\u4f5c\u8d1f\u8d23\u4eba\u5f20\u8f89\uff0c\u8d22\u52a1\u7ba1\u7406\u90e8\u603b\u7ecf\u7406\u8463\u5b97\u6797\u4fdd\u8bc1\u672c\u62a5\u544a\u4e2d\u8d22\u52a1\u62a5\u544a\u7684\u771f\u5b9e\u3001\u51c6\u786e\u3001\u5b8c\u6574\u3002\n\n\u672c\u884c\u8463\u4e8b\u4f1a\u5efa\u8bae\u6d3e\u53d1 2024 \u5e74\u5ea6\u672b\u671f\u666e\u901a\u80a1\u80a1\u5229\u6bcf 10 \u80a1\u4eba\u6c11\u5e01 1.216 \u5143\uff08\u7a0e\u524d\uff09\uff0c\u987b\u5f85\u672c\u884c\u80a1\u4e1c\u5927\u4f1a\u6279\u51c6\u540e\u751f\u6548\uff0c\u672c\u6b21\u5206\u914d\u4e0d\u5b9e\u65bd\u8d44\u672c\u516c\u79ef\u91d1\u8f6c\u589e\u80a1\u672c\u3002\u8fde\u540c 2024 \u5e74\u4e2d\u671f\u5df2\u6d3e\u53d1\u73b0\u91d1\u80a1\u5229\u6bcf 10 \u80a1\u4eba\u6c11\u5e01 1.208 \u5143\uff08\u7a0e\u524d\uff09\uff0c2024 \u5e74\u5168\u5e74\u73b0\u91d1\u80a1\u5229\u6bcf 10 \u80a1\u4eba\u6c11\u5e01 2.424 \u5143\uff08\u7a0e\u524d\uff09\u3002\n\n\u62a5\u544a\u671f\u5185\uff0c\u672c\u884c\u4e0d\u5b58\u5728\u63a7\u80a1\u80a1\u4e1c\u53ca\u5176\u4ed6\u5173\u8054\u65b9\u975e\u7ecf\u8425\u6027\u5360\u7528\u8d44\u91d1\u7684\u60c5\u51b5\uff0c\u4e0d\u5b58\u5728\u8fdd\u53cd\u89c4\u5b9a\u51b3\u7b56\u7a0b\u5e8f\u5bf9\u5916\u63d0\u4f9b\u91cd\u5927\u62c5\u4fdd\u7684\u60c5\u51b5\u3002\n\n\u672c\u62a5\u544a\u53ef\u80fd\u5305\u542b\u6d89\u53ca\u98ce\u9669\u548c\u672a\u6765\u8ba1\u5212\u7b49\u7684\u524d\u77bb\u6027\u9648\u8ff0\u3002\u8fd9\u4e9b\u524d\u77bb\u6027\u9648\u8ff0\u7684\u4f9d\u636e\u662f\u672c\u884c\u81ea\u5df1\u7684\u4fe1\u606f\u548c\u672c\u884c\u8ba4\u4e3a\u53ef\u9760\u7684\u5176\u4ed6\u6765\u6e90\u7684\u4fe1\u606f\u3002\u8be5\u7b49\u524d\u77bb\u6027\u9648\u8ff0\u4e0e\u65e5\u540e\u4e8b\u4ef6\u6216\u672c\u884c\u65e5\u540e\u8d22\u52a1\u3001\u4e1a\u52a1\u6216\u5176\u4ed6\u8868\u73b0\u6709\u5173\uff0c\u5e76\u53d7\u82e5\u5e72\u53ef\u80fd\u4f1a\u5bfc\u81f4\u5b9e\u9645\u7ed3\u679c\u51fa\u73b0\u91cd\u5927\u5dee\u5f02\u7684\u4e0d\u786e\u5b9a\u56e0\u7d20\u7684\u5f71\u54cd\uff0c\u5176\u4e2d\u53ef\u80fd\u6d89\u53ca\u7684\u672a\u6765\u8ba1\u5212\u7b49\u4e0d\u6784\u6210\u672c\u884c\u5bf9\u6295\u8d44\u8005\u7684\u5b9e\u8d28\u627f\u8bfa\u3002\u6295\u8d44\u8005\u53ca\u76f8\u5173\u4eba\u58eb\u5747\u5e94\u5bf9\u6b64\u4fdd\u6301\u8db3\u591f\u7684\u98ce\u9669\u8ba4\u8bc6\uff0c\u5e76\u4e14\u5e94\u5f53\u7406\u89e3\u8ba1\u5212\u3001\u9884\u6d4b\u4e0e\u627f\u8bfa\u4e4b\u95f4\u7684\u5dee\u5f02\u3002\n\n\u672c\u884c\u76ee\u524d\u9762\u4e34\u6765\u81ea\u5b8f\u89c2\u7ecf\u6d4e\u5f62\u52bf\u4ee5\u53ca\u4e0d\u540c\u56fd\u5bb6\u548c\u5730\u533a\u653f\u6cbb\u7ecf\u6d4e\u5f62\u52bf\u53d8\u5316\u7684\u98ce\u9669\uff0c\u4ee5\u53ca\u5728\u4e1a\u52a1\u7ecf\u8425\u4e2d\u5b58\u5728\u7684\u76f8\u5173\u98ce\u9669\uff0c\u5305\u62ec\u501f\u6b3e\u4eba\u4fe1\u7528\u72b6\u51b5\u53d8\u5316\u5e26\u6765\u7684\u98ce\u9669\u3001\u5e02\u573a\u4ef7\u683c\u4e0d\u5229\u53d8\u52a8\u5e26\u6765\u7684\u98ce\u9669\u4ee5\u53ca\u64cd\u4f5c\u98ce\u9669\u7b49\uff0c\u540c\u65f6\u9700\u6ee1\u8db3\u76d1\u7ba1\u5404\u9879\u5408\u89c4\u8981\u6c42\u3002\u672c\u884c\u79ef\u6781\u91c7\u53d6\u63aa\u65bd\uff0c\u6709\u6548\u7ba1\u7406\u5404\u7c7b\u98ce\u9669\uff0c\u5177\u4f53\u60c5\u51b5\u8bf7\u53c2\u89c1\u201c\u7ba1\u7406\u5c42\u8ba8\u8bba\u4e0e\u5206\u6790\u2014\u98ce\u9669\u7ba1\u7406\u201d\u90e8\u5206\u3002\n\n# \u8d22\u52a1\u6458\u8981\n\n![](images/507288a5b7eecb99b4e13baa5158c2e2b26ab0dca2d52322c550f9ab3955d0d0.jpg)  \n\u8425\u4e1a\u6536\u5165\n\n![](images/5543e6c42baa3c7dd77a3c70a74a728825465d14e889583c4640098599adc487.jpg)  \n\u8425\u4e1a\u5229\u6da6   \n\u5355\u4f4d\uff1a\u767e\u4e07\u5143\u4eba\u6c11\u5e01\n\n![](images/7a10a8f862516a91ec4f7e9f837fc5b67d5f1dd936f47e5e75e80cf62ee73245.jpg)  \n\u51c0\u5229\u6da6   \n\u5355\u4f4d\uff1a\u767e\u4e07\u5143\u4eba\u6c11\u5e01\n\n![](images/4e514f2155fa536a7409725b64ead45f14d054f925e271f7ad5f2d26976de07a.jpg)  \n\u57fa\u672c\u6bcf\u80a1\u6536\u76ca\n\n![](images/25d2c531d3d48f222b42492ebb4ec0b5ba3384114c95b2c7384895ac10b7fb37.jpg)  \n\u5e73\u5747\u603b\u8d44\u4ea7\u56de\u62a5\u7387\n\n![](images/28c207a65c464e4ceb8f8d7a1d9b1b5836e723a405b1f1fb69e1cee9af1dd39d.jpg)  \n\u51c0\u8d44\u4ea7\u6536\u76ca\u7387\n\n![](images/2af101c3a80616686d89828067eebed0b546b6a8b1ec98adf3d40bac07e7cd8a.jpg)  \n\u51c0\u606f\u5dee\n\n![](images/022fe6b5e58b83faa16481e5fb9add77d9cd0a73b1aa7a4b72faa4bd6c587fbc.jpg)  \n\u6210\u672c\u6536\u5165\u6bd4\n\n![](images/ff1c5fc83f93d04a036f55954b0bd987174fd4e538526d703555824188f8e7c9.jpg)  \n\u975e\u5229\u606f\u6536\u5165\u5360\u6bd4\n\n![](images/29d240bf0d14e94dd42d4c42a29b0a601ae78deef8a967e32ea926d2becc57d0.jpg)  \n\u4fe1\u8d37\u6210\u672c\n\n![](images/4653ee706ec60beacd8972fa2e68c6304db07a22dead213c039c8f26d06771e4.jpg)  \n\u4e0d\u826f\u8d37\u6b3e\u7387\n\n![](images/dd19ed1a6188e3a086980f5e92bcbb42334107d597ed9866b5e3566263e14050.jpg)  \n\u4e0d\u826f\u8d37\u6b3e\u62e8\u5907\u8986\u76d6\u7387\n\n\u6ce8\uff1a\u672c\u62a5\u544a\u6839\u636e\u4e2d\u56fd\u4f01\u4e1a\u4f1a\u8ba1\u51c6\u5219\u7f16\u5236\u3002\u9664\u7279\u522b\u6ce8\u660e\u5916\uff0c\u4e3a\u672c\u96c6\u56e2\u6570\u636e\uff0c\u4ee5\u4eba\u6c11\u5e01\u5217\u793a\u3002\n\n\u5355\u4f4d\uff1a\u767e\u4e07\u5143\u4eba\u6c11\u5e01  \n\n<table><tr><td></td><td>\u6ce8\u91ca</td><td>2024\u5e74</td><td>2023\u5e74</td><td>2022\u5e74(\u91cd\u8ff0\u540e)</td><td>2022\u5e74(\u91cd\u8ff0\u524d)</td></tr><tr><td colspan=\"6\">\u5168\u5e74\u4e1a\u7ee91</td></tr><tr><td>\u5229\u606f\u51c0\u6536\u5165</td><td></td><td>448,934</td><td>466,545</td><td>459,266</td><td>460,678</td></tr><tr><td>\u975e\u5229\u606f\u6536\u5165</td><td>2</td><td>181,156</td><td>156,344</td><td>126,101</td><td>157,331</td></tr><tr><td>\u8425\u4e1a\u6536\u5165</td><td></td><td>630,090</td><td>622,889</td><td>585,367</td><td>618,009</td></tr><tr><td>\u4e1a\u52a1\u53ca\u7ba1\u7406\u8d39</td><td></td><td>(181,262)</td><td>(177,503)</td><td>(169,313)</td><td>(172,311)</td></tr><tr><td>\u8d44\u4ea7\u51cf\u503c\u635f\u5931</td><td>3</td><td>(102,722)</td><td>(106,562)</td><td>(103,959)</td><td>(103,993)</td></tr><tr><td>\u8425\u4e1a\u5229\u6da6</td><td></td><td>292,463</td><td>294,073</td><td>283,778</td><td>284,696</td></tr><tr><td>\u5229\u6da6\u603b\u989d</td><td></td><td>294,954</td><td>295,608</td><td>283,641</td><td>284,595</td></tr><tr><td>\u51c0\u5229\u6da6</td><td></td><td>252,719</td><td>246,371</td><td>236,725</td><td>237,504</td></tr><tr><td>\u5f52\u5c5e\u4e8e\u6bcd\u516c\u53f8\u6240\u6709\u8005\u7684\u51c0\u5229\u6da6</td><td></td><td>237,841</td><td>231,904</td><td>226,522</td><td>227,439</td></tr><tr><td>\u6263\u9664\u975e\u7ecf\u5e38\u6027\u635f\u76ca\u540e\u5f52\u5c5e\u4e8e\u6bcd\u516c\u53f8\u6240\u6709\u8005\u7684\u51c0\u5229\u6da6</td><td>4</td><td>236,789</td><td>230,928</td><td>226,415</td><td>227,312</td></tr><tr><td>\u666e\u901a\u80a1\u80a1\u5229\u603b\u989d</td><td>5</td><td>71,360</td><td>69,593</td><td>68,298</td><td>68,298</td></tr><tr><td colspan=\"6\">\u4e8e\u5e74\u5e95</td></tr><tr><td>\u8d44\u4ea7\u603b\u8ba1</td><td></td><td>35,061,299</td><td>32,432,166</td><td>28,893,548</td><td>28,913,857</td></tr><tr><td>\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u603b\u989d</td><td></td><td>21,594,068</td><td>19,961,779</td><td>17,552,761</td><td>17,554,322</td></tr><tr><td>\u8d37\u6b3e\u51cf\u503c\u51c6\u5907</td><td>6</td><td>(539,177)</td><td>(485,298)</td><td>(437,241)</td><td>(437,241)</td></tr><tr><td>\u91d1\u878d\u6295\u8d44</td><td>7</td><td>8,360,277</td><td>7,158,717</td><td>6,435,244</td><td>6,445,743</td></tr><tr><td>\u8d1f\u503a\u5408\u8ba1</td><td></td><td>32,108,335</td><td>29,675,351</td><td>26,330,247</td><td>26,346,286</td></tr><tr><td>\u5438\u6536\u5b58\u6b3e</td><td></td><td>24,202,588</td><td>22,907,050</td><td>20,201,825</td><td>20,201,825</td></tr><tr><td>\u5f52\u5c5e\u4e8e\u6bcd\u516c\u53f8\u6240\u6709\u8005\u6743\u76ca\u5408\u8ba1</td><td></td><td>2,816,231</td><td>2,629,510</td><td>2,423,973</td><td>2,427,589</td></tr><tr><td>\u80a1\u672c</td><td></td><td>294,388</td><td>294,388</td><td>294,388</td><td>294,388</td></tr><tr><td colspan=\"6\">\u6bcf\u80a1\u8ba1</td></tr><tr><td>\u57fa\u672c\u6bcf\u80a1\u6536\u76ca\uff08\u5143\uff09</td><td></td><td>0.75</td><td>0.74</td><td>0.72</td><td>0.73</td></tr><tr><td>\u6bcf\u80a1\u80a1\u5229\uff08\u7a0e\u524d\uff0c\u5143\uff09</td><td>8</td><td>0.2424</td><td>0.2364</td><td>0.232</td><td>0.232</td></tr><tr><td>\u6bcf\u80a1\u51c0\u8d44\u4ea7\uff08\u5143\uff09</td><td>9</td><td>8.18</td><td>7.58</td><td>6.98</td><td>6.99</td></tr><tr><td colspan=\"6\">\u4e3b\u8981\u8d22\u52a1\u6bd4\u7387</td></tr><tr><td>\u5e73\u5747\u603b\u8d44\u4ea7\u56de\u62a5\u7387(%)</td><td>10</td><td>0.75</td><td>0.80</td><td>0.85</td><td>0.85</td></tr><tr><td>\u51c0\u8d44\u4ea7\u6536\u76ca\u7387(%)</td><td>11</td><td>9.50</td><td>10.12</td><td>10.77</td><td>10.81</td></tr><tr><td>\u51c0\u606f\u5dee(%)</td><td>12</td><td>1.40</td><td>1.59</td><td>1.75</td><td>1.76</td></tr><tr><td>\u975e\u5229\u606f\u6536\u5165\u5360\u6bd4(%)</td><td>13</td><td>28.75</td><td>25.10</td><td>21.54</td><td>25.46</td></tr><tr><td>\u6210\u672c\u6536\u5165\u6bd4\uff08%\uff09</td><td>14</td><td>28.77</td><td>28.50</td><td>28.92</td><td>27.88</td></tr><tr><td colspan=\"6\">\u8d44\u672c\u6307\u680715</td></tr><tr><td>\u6838\u5fc3\u4e00\u7ea7\u8d44\u672c\u51c0\u989d</td><td></td><td>2,344,261</td><td>2,161,825</td><td>1,991,342</td><td>1,991,342</td></tr><tr><td>\u5176\u4ed6\u4e00\u7ea7\u8d44\u672c\u51c0\u989d</td><td></td><td>419,025</td><td>408,447</td><td>381,648</td><td>381,648</td></tr><tr><td>\u4e8c\u7ea7\u8d44\u672c\u51c0\u989d</td><td></td><td>842,286</td><td>727,136</td><td>573,481</td><td>573,481</td></tr><tr><td>\u6838\u5fc3\u4e00\u7ea7\u8d44\u672c\u5145\u8db3\u7387(%)</td><td></td><td>12.20</td><td>11.63</td><td>11.84</td><td>11.84</td></tr><tr><td>\u4e00\u7ea7\u8d44\u672c\u5145\u8db3\u7387(%)</td><td></td><td>14.38</td><td>13.83</td><td>14.11</td><td>14.11</td></tr><tr><td>\u8d44\u672c\u5145\u8db3\u7387(%)</td><td></td><td>18.76</td><td>17.74</td><td>17.52</td><td>17.52</td></tr><tr><td colspan=\"6\">\u8d44\u4ea7\u8d28\u91cf</td></tr><tr><td>\u4e0d\u826f\u8d37\u6b3e\u7387(%)</td><td>16</td><td>1.25</td><td>1.27</td><td>1.32</td><td>1.32</td></tr><tr><td>\u4e0d\u826f\u8d37\u6b3e\u62e8\u5907\u8986\u76d6\u7387(%)</td><td>17</td><td>200.60</td><td>191.66</td><td>188.73</td><td>188.73</td></tr><tr><td>\u4fe1\u8d37\u6210\u672c(%)</td><td>18</td><td>0.58</td><td>0.57</td><td>0.56</td><td>0.56</td></tr><tr><td>\u8d37\u6b3e\u62e8\u5907\u7387(%)</td><td>19</td><td>2.50</td><td>2.44</td><td>2.50</td><td>2.50</td></tr><tr><td colspan=\"6\">\u6c47\u7387</td></tr><tr><td>1\u7f8e\u5143\u5151\u4eba\u6c11\u5e01\u5e74\u672b\u4e2d\u95f4\u4ef7</td><td></td><td>7.1884</td><td>7.0827</td><td>6.9646</td><td>6.9646</td></tr><tr><td>1\u6b27\u5143\u5151\u4eba\u6c11\u5e01\u5e74\u672b\u4e2d\u95f4\u4ef7</td><td></td><td>7.5257</td><td>7.8592</td><td>7.4229</td><td>7.4229</td></tr><tr><td>1\u6e2f\u5e01\u5151\u4eba\u6c11\u5e01\u5e74\u672b\u4e2d\u95f4\u4ef7</td><td></td><td>0.9260</td><td>0.9062</td><td>0.8933</td><td>0.8933</td></tr></table>\n\n# \u6ce8\u91ca\n\n1 \u672c\u96c6\u56e2\u91c7\u7528\u4e86\u8d22\u653f\u90e8\u9881\u5e03\u7684\u300a\u4f01\u4e1a\u4f1a\u8ba1\u51c6\u5219\u7b2c 25\u53f7\u2014\u4fdd\u9669\u5408\u540c\u300b\uff08\u7b80\u79f0\u201c\u4fdd\u9669\u5408\u540c\u51c6\u5219\u201d\uff09\uff0c\u8be5\u51c6\u5219\u7684\u9996\u6b21\u6267\u884c\u65e5\u662f 2023\u5e74 1\u6708 1\u65e5\u3002\u6839\u636e\u4fdd\u9669\u5408\u540c\u51c6\u5219\u7684\u8fc7\u6e21\u8981\u6c42\uff0c\u672c\u96c6\u56e2\u91cd\u8ff0\u4e86\u81ea 2022\u5e741\u67081\u65e5\u8d77\u7684\u76f8\u5173\u6bd4\u8f83\u6570\u636e\uff0c\u672c\u62a5\u544a\u4e2d\u5217\u793a\u7684\u81ea2022\u5e741\u6708 1\u65e5\u8d77\u7684\u76f8\u5173\u6bd4\u8f83\u6570\u636e\uff0c\u5747\u5df2\u76f8\u5e94\u91cd\u8ff0\u3002\u5176\u4ed6\u524d\u671f\u6bd4\u8f83\u6570\u636e\u672a\u91cd\u8ff0\u3002  \n2 \u975e\u5229\u606f\u6536\u5165 $\\underline { { \\underline { { \\mathbf { \\Pi } } } } } =$ \u624b\u7eed\u8d39\u53ca\u4f63\u91d1\u51c0\u6536\u5165 $^ +$ \u6295\u8d44\u6536\u76ca $^ +$ \u516c\u5141\u4ef7\u503c\u53d8\u52a8\u6536\u76ca $^ +$ \u6c47\u5151\u6536\u76ca\uff0b\u5176\u4ed6\u4e1a\u52a1\u6536\u5165\u3002  \n3 \u8d44\u4ea7\u51cf\u503c\u635f\u5931 $=$ \u4fe1\u7528\u51cf\u503c\u635f\u5931 $^ +$ \u5176\u4ed6\u8d44\u4ea7\u51cf\u503c\u635f\u5931\u3002  \n4 \u975e\u7ecf\u5e38\u6027\u635f\u76ca\u6309\u7167\u300a\u516c\u5f00\u53d1\u884c\u8bc1\u5238\u7684\u516c\u53f8\u4fe1\u606f\u62ab\u9732\u89e3\u91ca\u6027\u516c\u544a\u7b2c 1 \u53f7\u2014\u975e\u7ecf\u5e38\u6027\u635f\u76ca(2023 \u5e74\u4fee\u8ba2)\u300b\u7684\u8981\u6c42\u786e\u5b9a\u4e0e\u8ba1\u7b97\u3002  \n5 \u666e\u901a\u80a1\u80a1\u5229\u603b\u989d\u5305\u542b\u4e2d\u671f\u80a1\u5229\u548c\u672b\u671f\u80a1\u5229\uff0c2024\u5e74\u672b\u671f\u80a1\u5229\u5c1a\u5f85\u80a1\u4e1c\u5927\u4f1a\u6279\u51c6\u3002  \n6 \u8d37\u6b3e\u51cf\u503c\u51c6\u5907 $=$ \u4ee5\u644a\u4f59\u6210\u672c\u8ba1\u91cf\u7684\u8d37\u6b3e\u51cf\u503c\u51c6\u5907 $^ +$ \u4ee5\u516c\u5141\u4ef7\u503c\u8ba1\u91cf\u4e14\u5176\u53d8\u52a8\u8ba1\u5165\u5176\u4ed6\u7efc\u5408\u6536\u76ca\u7684\u8d37\u6b3e\u51cf\u503c\u51c6\u5907\u3002  \n7 \u91d1\u878d\u6295\u8d44\u5305\u62ec\u4ee5\u516c\u5141\u4ef7\u503c\u8ba1\u91cf\u4e14\u5176\u53d8\u52a8\u8ba1\u5165\u5f53\u671f\u635f\u76ca\u7684\u91d1\u878d\u8d44\u4ea7\u3001\u4ee5\u516c\u5141\u4ef7\u503c\u8ba1\u91cf\u4e14\u5176\u53d8\u52a8\u8ba1\u5165\u5176\u4ed6\u7efc\u5408\u6536\u76ca\u7684\u91d1\u878d\u8d44\u4ea7\u3001\u4ee5\u644a\u4f59\u6210\u672c\u8ba1\u91cf\u7684\u91d1\u878d\u8d44\u4ea7\u3002  \n8 \u6bcf\u80a1\u80a1\u5229\u4e3a\u672c\u884c\u6d3e\u53d1\u7ed9\u666e\u901a\u80a1\u80a1\u4e1c\u7684\u6bcf\u80a1\u80a1\u5229\uff0c\u5305\u542b\u4e2d\u671f\u80a1\u5229\u548c\u672b\u671f\u80a1\u5229\uff0c2024\u5e74\u672b\u671f\u80a1\u5229\u5c1a\u5f85\u80a1\u4e1c\u5927\u4f1a\u6279\u51c6\u3002  \n9 \u6bcf\u80a1\u51c0\u8d44\u4ea7 $=$ \uff08\u671f\u672b\u5f52\u5c5e\u4e8e\u6bcd\u516c\u53f8\u6240\u6709\u8005\u6743\u76ca\u5408\u8ba1\uff0d\u5176\u4ed6\u6743\u76ca\u5de5\u5177\uff09 $\\div$ \u671f\u672b\u666e\u901a\u80a1\u80a1\u672c\u603b\u6570\u3002  \n10 \u5e73\u5747\u603b\u8d44\u4ea7\u56de\u62a5\u7387 $=$ \u51c0\u5229\u6da6 $\\div$ \u8d44\u4ea7\u5e73\u5747\u4f59\u989d $\\times 1 0 0 \\%$ \u3002\u8d44\u4ea7\u5e73\u5747\u4f59\u989d $=$ \uff08\u671f\u521d\u8d44\u4ea7\u603b\u8ba1 $^ +$ \u671f\u672b\u8d44\u4ea7\u603b\u8ba1\uff09 $\\div 2$ \u3002  \n11 \u51c0\u8d44\u4ea7\u6536\u76ca\u7387 $=$ \u5f52\u5c5e\u4e8e\u6bcd\u516c\u53f8\u6240\u6709\u8005\uff08\u666e\u901a\u80a1\u80a1\u4e1c\uff09\u7684\u51c0\u5229\u6da6 $\\div$ \u5f52\u5c5e\u4e8e\u6bcd\u516c\u53f8\u6240\u6709\u8005\uff08\u666e\u901a\u80a1\u80a1\u4e1c\uff09\u6743\u76ca\u52a0\u6743\u5e73\u5747\u4f59\u989d$\\times 1 0 0 \\%$ \u3002\u6839\u636e\u4e2d\u56fd\u8bc1\u76d1\u4f1a\u300a\u516c\u5f00\u53d1\u884c\u8bc1\u5238\u7684\u516c\u53f8\u4fe1\u606f\u62ab\u9732\u7f16\u62a5\u89c4\u5219\u7b2c9\u53f7\u2014\u51c0\u8d44\u4ea7\u6536\u76ca\u7387\u548c\u6bcf\u80a1\u6536\u76ca\u7684\u8ba1\u7b97\u53ca\u62ab\u9732\uff082010\u5e74\u4fee\u8ba2\uff09\u300b\uff08\u8bc1\u76d1\u4f1a\u516c\u544a[2010]2\u53f7\uff09\u7684\u89c4\u5b9a\u8ba1\u7b97\u3002  \n12 \u51c0\u606f\u5dee $=$ \u5229\u606f\u51c0\u6536\u5165 $\\dot { . }$ \u751f\u606f\u8d44\u4ea7\u5e73\u5747\u4f59\u989d $\\times 1 0 0 \\%$ \u3002\u5e73\u5747\u4f59\u989d\u4e3a\u672c\u96c6\u56e2\u7ba1\u7406\u8d26\u76ee\u672a\u7ecf\u5ba1\u8ba1\u7684\u65e5\u5747\u4f59\u989d\u3002  \n13 \u975e\u5229\u606f\u6536\u5165\u5360\u6bd4 $=$ \u975e\u5229\u606f\u6536\u5165 $\\dot { . }$ \u8425\u4e1a\u6536\u5165 $\\times 1 0 0 \\%$ \u3002  \n14 \u6210\u672c\u6536\u5165\u6bd4\u6839\u636e\u8d22\u653f\u90e8\u300a\u91d1\u878d\u4f01\u4e1a\u7ee9\u6548\u8bc4\u4ef7\u529e\u6cd5\u300b\uff08\u8d22\u91d1[2016]35 \u53f7\uff09\u7684\u89c4\u5b9a\u8ba1\u7b97\u3002  \n15 2024\u5e74\u8d44\u672c\u6307\u6807\u6839\u636e\u300a\u5546\u4e1a\u94f6\u884c\u8d44\u672c\u7ba1\u7406\u529e\u6cd5\u300b\u7b49\u76f8\u5173\u89c4\u5b9a\u8ba1\u7b97\uff0c2023\u5e74\u53ca\u4ee5\u524d\u5e74\u5ea6\u8d44\u672c\u6307\u6807\u6839\u636e\u300a\u5546\u4e1a\u94f6\u884c\u8d44\u672c\u7ba1\u7406\u529e\u6cd5\uff08\u8bd5\u884c\uff09\u300b\u7b49\u76f8\u5173\u89c4\u5b9a\u8ba1\u7b97\u3002  \n16 \u4e0d\u826f\u8d37\u6b3e\u7387 $=$ \u671f\u672b\u4e0d\u826f\u8d37\u6b3e\u4f59\u989d $\\div$ \u671f\u672b\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u603b\u989d $\\times 1 0 0 \\%$ \u3002\u8ba1\u7b97\u4e0d\u826f\u8d37\u6b3e\u7387\u65f6\uff0c\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u4e0d\u542b\u5e94\u8ba1\u5229\u606f\u3002   \n17 \u4e0d\u826f\u8d37\u6b3e\u62e8\u5907\u8986\u76d6\u7387 $=$ \u671f\u672b\u8d37\u6b3e\u51cf\u503c\u51c6\u5907 $\\div$ \u671f\u672b\u4e0d\u826f\u8d37\u6b3e\u4f59\u989d $\\times 1 0 0 \\%$ \u3002\u8ba1\u7b97\u4e0d\u826f\u8d37\u6b3e\u62e8\u5907\u8986\u76d6\u7387\u65f6\uff0c\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u4e0d\u542b\u5e94\u8ba1\u5229\u606f\u3002  \n18 \u4fe1\u8d37\u6210\u672c $=$ \u8d37\u6b3e\u51cf\u503c\u635f\u5931 $\\div$ \u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u5e73\u5747\u4f59\u989d $\\lvert \\times 1 0 0 \\%$ \u3002\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u5e73\u5747\u4f59\u989d $=$ \uff08\u671f\u521d\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u603b\u989d\uff0b\u671f\u672b\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u603b\u989d\uff09 $\\div 2$ \u3002\u8ba1\u7b97\u4fe1\u8d37\u6210\u672c\u65f6\uff0c\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u4e0d\u542b\u5e94\u8ba1\u5229\u606f\u3002  \n19 \u8d37\u6b3e\u62e8\u5907\u7387 $=$ \u671f\u672b\u8d37\u6b3e\u51cf\u503c\u51c6\u5907 $\\div$ \u671f\u672b\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u603b\u989d $\\times 1 0 0 \\%$ \u3002\u8ba1\u7b97\u8d37\u6b3e\u62e8\u5907\u7387\u65f6\uff0c\u53d1\u653e\u8d37\u6b3e\u548c\u57ab\u6b3e\u4e0d\u542b\u5e94\u8ba1\u5229\u606f\u3002\n\n# \u516c\u53f8\u57fa\u672c\u60c5\u51b5\n\n\u6cd5\u5b9a\u4e2d\u6587\u540d\u79f0\n\n\u4e2d\u56fd\u94f6\u884c\u80a1\u4efd\u6709\u9650\u516c\u53f8\uff08\u7b80\u79f0\u201c\u4e2d\u56fd\u94f6\u884c\u201d\uff09\n\n\u6cd5\u5b9a\u82f1\u6587\u540d\u79f0\n\nBANK OF CHINA LIMITED\uff08\u7b80\u79f0\u201cBank ofChina\u201d\uff09\n\n\u6cd5\u5b9a\u4ee3\u8868\u4eba\u3001\u8463\u4e8b\u957f\n\n\u845b\u6d77\u86df\n\n\u526f\u8463\u4e8b\u957f\u3001\u884c\u957f\n\n\u5f20\u8f89\n\n\u8463\u4e8b\u4f1a\u79d8\u4e66\u3001\u516c\u53f8\u79d8\u4e66\n\n\u5353\u6210\u6587\n\n\u5730\u5740\uff1a\u4e2d\u56fd\u5317\u4eac\u5e02\u897f\u57ce\u533a\u590d\u5174\u95e8\u5185\u5927\u8857 1 \u53f7\n\n\u7535\u8bdd\uff1a(86) 10-6659 2638\n\n\u7535\u5b50\u4fe1\u7bb1\uff1air@bankofchina.com\n\n\u8bc1\u5238\u4e8b\u52a1\u4ee3\u8868\n\n\u59dc\u5353\n\n\u5730\u5740\uff1a\u4e2d\u56fd\u5317\u4eac\u5e02\u897f\u57ce\u533a\u590d\u5174\u95e8\u5185\u5927\u8857 1 \u53f7\n\n\u7535\u8bdd\uff1a(86) 10-6659 2638\n\n\u7535\u5b50\u4fe1\u7bb1\uff1air@bankofchina.com\n\n\u6ce8\u518c\u5730\u5740\n\n\u4e2d\u56fd\u5317\u4eac\u5e02\u897f\u57ce\u533a\u590d\u5174\u95e8\u5185\u5927\u8857 1\u53f7\n\n\u529e\u516c\u5730\u5740\n\n\u4e2d\u56fd\u5317\u4eac\u5e02\u897f\u57ce\u533a\u590d\u5174\u95e8\u5185\u5927\u8857 1 \u53f7\n\n\u90ae\u653f\u7f16\u7801\uff1a100818\n\n\u7535\u8bdd\uff1a(86) 10-6659 6688\n\n\u4f20\u771f\uff1a(86) 10-6601 6871\n\n\u56fd\u9645\u4e92\u8054\u7f51\u7f51\u5740\uff1awww.boc.cn\n\n\u5ba2\u670d\u548c\u6295\u8bc9\u7535\u8bdd\uff1a(86) \u533a\u53f7-95566\n\n\u9999\u6e2f\u8425\u4e1a\u5730\u70b9\n\n\u4e2d\u56fd\u9999\u6e2f\u82b1\u56ed\u90531\u53f7\u4e2d\u94f6\u5927\u53a6\n\n\u9009\u5b9a\u7684\u4fe1\u606f\u62ab\u9732\u62a5\u520a\uff08A \u80a1\uff09\n\n\u300a\u4e2d\u56fd\u8bc1\u5238\u62a5\u300b\u300a\u4e0a\u6d77\u8bc1\u5238\u62a5\u300b\n\n\u300a\u8bc1\u5238\u65f6\u62a5\u300b\u300a\u7ecf\u6d4e\u53c2\u8003\u62a5\u300b\n\n\u62ab\u9732\u5e74\u5ea6\u62a5\u544a\u7684\u4e0a\u4ea4\u6240\u7f51\u7ad9\n\nwww.sse.com.cn\n\n\u62ab\u9732\u5e74\u5ea6\u62a5\u544a\u7684\u9999\u6e2f\u4ea4\u6613\u6240\u7f51\u7ad9\n\nwww.hkexnews.hk\n\n\u5e74\u5ea6\u62a5\u544a\u5907\u7f6e\u5730\u70b9\n\n\u4e2d\u56fd\u94f6\u884c\u80a1\u4efd\u6709\u9650\u516c\u53f8\u603b\u884c\n\n\u4e0a\u6d77\u8bc1\u5238\u4ea4\u6613\u6240\n\n\u6cd5\u5f8b\u987e\u95ee\n\n\u91d1\u675c\u5f8b\u5e08\u4e8b\u52a1\u6240\n\n\u5e74\u5229\u8fbe\u5f8b\u5e08\u4e8b\u52a1\u6240\n\n\u5ba1\u8ba1\u5e08\n\n\u56fd\u5185\u4f1a\u8ba1\u5e08\u4e8b\u52a1\u6240\n\n\u5b89\u6c38\u534e\u660e\u4f1a\u8ba1\u5e08\u4e8b\u52a1\u6240\uff08\u7279\u6b8a\u666e\u901a\u5408\u4f19\uff09\n\n\u529e\u516c\u5730\u5740\uff1a\u4e2d\u56fd\u5317\u4eac\u5e02\u4e1c\u57ce\u533a\u4e1c\u957f\u5b89\u8857 1\u53f7\u4e1c\u65b9\u5e7f\u573a\u5b89\u6c38\u5927\u697c 17 \u5c42\n\n\u7b7e\u5b57\u4f1a\u8ba1\u5e08\uff1a\u8bb8\u65ed\u660e\u3001\u5f20\u51e1\n\n\u56fd\u9645\u4f1a\u8ba1\u5e08\u4e8b\u52a1\u6240\n\n\u5b89\u6c38\u4f1a\u8ba1\u5e08\u4e8b\u52a1\u6240\n\n\u529e\u516c\u5730\u5740\uff1a\u4e2d\u56fd\u9999\u6e2f\u9c97\u9c7c\u6d8c\u82f1\u7687\u9053 979 \u53f7\u592a\u53e4\u574a\u4e00\u5ea7 27\u697c\n\n\u7b7e\u5b57\u4f1a\u8ba1\u5e08\uff1a\u6d82\u73ee\u65bd\n\n\u7edf\u4e00\u793e\u4f1a\u4fe1\u7528\u4ee3\u7801\n\n911000001000013428\n\n\u91d1\u878d\u8bb8\u53ef\u8bc1\u673a\u6784\u7f16\u7801\n\nB0003H111000001\n\n\u6ce8\u518c\u8d44\u672c\n\n\u4eba\u6c11\u5e01\u8d30\u4edf\u7396\u4f70\u8086\u62fe\u53c1\u4ebf\u634c\u4edf\u67d2\u4f70\u67d2\u62fe\u7396\n\n\u4e07\u58f9\u4edf\u8d30\u4f70\u8086\u62fe\u58f9\u5143\u6574\n\n\u8bc1\u5238\u4fe1\u606f\n\nA\u80a1\uff1a\u4e0a\u6d77\u8bc1\u5238\u4ea4\u6613\u6240\n\n\u80a1\u7968\u7b80\u79f0\uff1a\u4e2d\u56fd\u94f6\u884c\n\n\u80a1\u7968\u4ee3\u7801\uff1a601988\n\nH\u80a1\uff1a\u9999\u6e2f\u8054\u5408\u4ea4\u6613\u6240\u6709\u9650\u516c\u53f8\n\n\u80a1\u7968\u7b80\u79f0\uff1a\u4e2d\u56fd\u94f6\u884c\n\n\u80a1\u4efd\u4ee3\u53f7\uff1a3988\n\n\u5883\u5185\u4f18\u5148\u80a1\uff1a\u4e0a\u6d77\u8bc1\u5238\u4ea4\u6613\u6240\n\n\u7b2c\u4e09\u671f\n\n\u4f18\u5148\u80a1\u7b80\u79f0\uff1a\u4e2d\u884c\u4f18 3\n\n\u4f18\u5148\u80a1\u4ee3\u7801\uff1a360033\n\n\u7b2c\u56db\u671f\n\n\u4f18\u5148\u80a1\u7b80\u79f0\uff1a\u4e2d\u884c\u4f18 4\n\n\u4f18\u5148\u80a1\u4ee3\u7801\uff1a360035",
+      "coordinate_mappings": [
+        {
+          "page_num": 1,
+          "bbox": [
+            0.2,
+            0.3079667063020214,
+            0.8,
+            0.3555291319857313
+          ],
+          "markdown_offset": 2,
+          "markdown_length": 10,
+          "element_type": "title",
+          "element_id": "43eb5f47-a72b-400f-b1e3-063b1df84228"
+        },
+        {
+          "page_num": 1,
+          "bbox": [
+            0.3865546218487395,
+            0.469678953626635,
+            0.611764705882353,
+            0.49108204518430437
+          ],
+          "markdown_offset": 14,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "7af5c99d-d921-42e9-93c4-c942b29a3b67"
+        },
+        {
+          "page_num": 1,
+          "bbox": [
+            0.38487394957983195,
+            0.6076099881093936,
+            0.611764705882353,
+            0.6313912009512486
+          ],
+          "markdown_offset": 27,
+          "markdown_length": 10,
+          "element_type": "text",
+          "element_id": "ab719bd0-8303-4428-90df-ff5e8f03e88d"
+        },
+        {
+          "page_num": 2,
+          "bbox": [
+            0.09411764705882353,
+            0.08442330558858502,
+            0.31596638655462184,
+            0.11533888228299644
+          ],
+          "markdown_offset": 41,
+          "markdown_length": 6,
+          "element_type": "title",
+          "element_id": "43522502-ae4e-4185-98a5-417d238b10f6"
+        },
+        {
+          "page_num": 2,
+          "bbox": [
+            0.09243697478991597,
+            0.1272294887039239,
+            0.9058823529411765,
+            0.33174791914387636
+          ],
+          "markdown_offset": 49,
+          "markdown_length": 452,
+          "element_type": "text",
+          "element_id": "d979c723-673e-4867-b7ed-73ab05f3ad83"
+        },
+        {
+          "page_num": 2,
+          "bbox": [
+            0.09243697478991597,
+            0.3388822829964328,
+            0.9058823529411765,
+            0.4328180737217598
+          ],
+          "markdown_offset": 503,
+          "markdown_length": 193,
+          "element_type": "text",
+          "element_id": "cf9fd609-db2d-4631-a7ef-68439b76b706"
+        },
+        {
+          "page_num": 2,
+          "bbox": [
+            0.09243697478991597,
+            0.4423305588585018,
+            0.9058823529411765,
+            0.6099881093935791
+          ],
+          "markdown_offset": 698,
+          "markdown_length": 343,
+          "element_type": "text",
+          "element_id": "df22969e-a094-43fe-9ff1-27463031d664"
+        },
+        {
+          "page_num": 3,
+          "bbox": [
+            0.07394957983193277,
+            0.11058263971462545,
+            0.9243697478991597,
+            0.8347205707491082
+          ],
+          "markdown_offset": 1041,
+          "markdown_length": 0,
+          "element_type": "table",
+          "element_id": "ee227626-306a-4976-8cc1-19870825aeeb"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.09411764705882353,
+            0.07015457788347206,
+            0.16974789915966387,
+            0.09988109393579073
+          ],
+          "markdown_offset": 2371,
+          "markdown_length": 2,
+          "element_type": "title",
+          "element_id": "503688f1-a87a-446b-9eee-b43fe6b4ddf4"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.09243697478991597,
+            0.11296076099881094,
+            0.9042016806722689,
+            0.13198573127229488
+          ],
+          "markdown_offset": 2375,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "2993c975-04d2-4876-821c-782bb48868ac"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.13555291319857313,
+            0.9058823529411765,
+            0.15338882282996433
+          ],
+          "markdown_offset": 2385,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "14e71fd6-6855-4564-ac1e-0d66c9d63352"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.15695600475624258,
+            0.9058823529411765,
+            0.17479191438763378
+          ],
+          "markdown_offset": 2393,
+          "markdown_length": 6,
+          "element_type": "text",
+          "element_id": "3c1317c5-aa24-40e6-964b-dc001d4bc1f3"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.178359096313912,
+            0.9058823529411765,
+            0.19738406658739596
+          ],
+          "markdown_offset": 2399,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "90409554-84f6-41dc-b0ea-3611db6ee0ab"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.20095124851367419,
+            0.9058823529411765,
+            0.21878715814506539
+          ],
+          "markdown_offset": 2407,
+          "markdown_length": 7,
+          "element_type": "text",
+          "element_id": "0e8602ba-d6a0-4276-b14e-27ca6616447b"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.2211652794292509,
+            0.9058823529411765,
+            0.2390011890606421
+          ],
+          "markdown_offset": 2425,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "eb575d19-3911-47ed-867a-ae448e90d4e0"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.2437574316290131,
+            0.9058823529411765,
+            0.2615933412604043
+          ],
+          "markdown_offset": 2433,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "3ff7084b-c207-4f68-8539-7a46125f1132"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.26516052318668254,
+            0.9058823529411765,
+            0.28299643281807374
+          ],
+          "markdown_offset": 2442,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "c68e58a3-ffa9-4758-a0d9-56b43b04d096"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.28656361474435194,
+            0.9058823529411765,
+            0.30439952437574314
+          ],
+          "markdown_offset": 2450,
+          "markdown_length": 12,
+          "element_type": "text",
+          "element_id": "32bf3b51-59da-4a63-94a8-776356a1007b"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.3079667063020214,
+            0.9058823529411765,
+            0.3269916765755054
+          ],
+          "markdown_offset": 2462,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "f480f878-0449-4772-9411-b652213cd6ee"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.33055885850178357,
+            0.9058823529411765,
+            0.34720570749108204
+          ],
+          "markdown_offset": 2473,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "a3202781-c877-4284-a7cf-209c982dd131"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.351961950059453,
+            0.9058823529411765,
+            0.3697978596908442
+          ],
+          "markdown_offset": 2482,
+          "markdown_length": 7,
+          "element_type": "text",
+          "element_id": "810d4e51-783d-4ddc-ac13-f4e1adb195f0"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.3733650416171225,
+            0.9058823529411765,
+            0.3912009512485137
+          ],
+          "markdown_offset": 2489,
+          "markdown_length": 7,
+          "element_type": "text",
+          "element_id": "08174cc5-9ab4-4260-893b-57531ba702a3"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.3947681331747919,
+            0.9058823529411765,
+            0.4126040428061831
+          ],
+          "markdown_offset": 2496,
+          "markdown_length": 17,
+          "element_type": "text",
+          "element_id": "53233203-0c8c-4245-97dc-8c84aa99625f"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.4149821640903686,
+            0.9058823529411765,
+            0.4340071343638526
+          ],
+          "markdown_offset": 2513,
+          "markdown_length": 6,
+          "element_type": "text",
+          "element_id": "ebb7ac2c-272c-49b7-a208-535fbb0d6998"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.43757431629013077,
+            0.9058823529411765,
+            0.45659928656361476
+          ],
+          "markdown_offset": 2519,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "6ed47bd3-2917-4a05-812c-9fea86718262"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.4589774078478002,
+            0.9058823529411765,
+            0.4768133174791914
+          ],
+          "markdown_offset": 2530,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "d3cca741-1910-48a5-aa4d-7465c1e6ee84"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.4815695600475624,
+            0.9058823529411765,
+            0.4994054696789536
+          ],
+          "markdown_offset": 2538,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "3ff34d98-954e-4f01-b5e5-ecfbab8db991"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.13277310924369748,
+            0.5029726516052319,
+            0.9058823529411765,
+            0.5208085612366231
+          ],
+          "markdown_offset": 2546,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "55c57eac-cfcc-4562-a10c-5d4d4c64f654"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.5231866825208086,
+            0.9058823529411765,
+            0.5422116527942925
+          ],
+          "markdown_offset": 2554,
+          "markdown_length": 13,
+          "element_type": "text",
+          "element_id": "19ff7d90-9496-4bc0-80d7-b6859802a6ca"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.5457788347205708,
+            0.9058823529411765,
+            0.5648038049940547
+          ],
+          "markdown_offset": 2567,
+          "markdown_length": 16,
+          "element_type": "text",
+          "element_id": "fcc760d1-d675-4daf-b49d-349132cb36e5"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.5671819262782402,
+            0.9058823529411765,
+            0.5850178359096314
+          ],
+          "markdown_offset": 2583,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "fb520e47-594d-4d5b-8b1b-c34ad4d5a844"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.5885850178359097,
+            0.9058823529411765,
+            0.6076099881093936
+          ],
+          "markdown_offset": 2592,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "f42cb414-3e7e-4bf1-bda6-723dbcac820d"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.6099881093935791,
+            0.9058823529411765,
+            0.6278240190249703
+          ],
+          "markdown_offset": 2603,
+          "markdown_length": 10,
+          "element_type": "text",
+          "element_id": "fc5bc969-f779-4f23-9b2f-4c8f00790eb7"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.6325802615933412,
+            0.9058823529411765,
+            0.6504161712247325
+          ],
+          "markdown_offset": 2613,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "3866311b-163f-42c0-ba1a-d0bfcee13025"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.6539833531510107,
+            0.9058823529411765,
+            0.6718192627824019
+          ],
+          "markdown_offset": 2624,
+          "markdown_length": 30,
+          "element_type": "text",
+          "element_id": "a02a588c-a773-4d34-9a3f-f75aac583f76"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.6753864447086801,
+            0.9058823529411765,
+            0.6920332936979786
+          ],
+          "markdown_offset": 2654,
+          "markdown_length": 10,
+          "element_type": "text",
+          "element_id": "aff3d202-7859-4935-a6bb-e0d4d578a7b2"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.6967895362663495,
+            0.9058823529411765,
+            0.7158145065398336
+          ],
+          "markdown_offset": 2664,
+          "markdown_length": 10,
+          "element_type": "text",
+          "element_id": "0473a726-98a9-42b1-bcc2-3a8b701b1c75"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.718192627824019,
+            0.9058823529411765,
+            0.7360285374554102
+          ],
+          "markdown_offset": 2674,
+          "markdown_length": 12,
+          "element_type": "text",
+          "element_id": "3287392d-709a-4c0b-8e02-ad3c7153c232"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.7395957193816884,
+            0.9058823529411765,
+            0.7574316290130797
+          ],
+          "markdown_offset": 2686,
+          "markdown_length": 10,
+          "element_type": "text",
+          "element_id": "da755f1e-adb3-4766-949f-fb0dfafb86cd"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.760998810939358,
+            0.9058823529411765,
+            0.7800237812128419
+          ],
+          "markdown_offset": 2696,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "fba1b1f7-697f-4953-9da6-c6f08f7e05b4"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.8038049940546967,
+            0.9058823529411765,
+            0.8228299643281808
+          ],
+          "markdown_offset": 2707,
+          "markdown_length": 19,
+          "element_type": "text",
+          "element_id": "22d72f22-37a4-4f1c-ab2f-d5aa1989d7c2"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.8263971462544589,
+            0.9058823529411765,
+            0.845422116527943
+          ],
+          "markdown_offset": 2726,
+          "markdown_length": 18,
+          "element_type": "text",
+          "element_id": "9b1f1cc6-6889-4146-952f-7ceaff8bc6d0"
+        },
+        {
+          "page_num": 4,
+          "bbox": [
+            0.0907563025210084,
+            0.8478002378121284,
+            0.9058823529411765,
+            0.8668252080856124
+          ],
+          "markdown_offset": 2744,
+          "markdown_length": 19,
+          "element_type": "text",
+          "element_id": "822d0923-d446-4b54-9b3d-6ba6e5924871"
+        },
+        {
+          "page_num": 5,
+          "bbox": [
+            0.0907563025210084,
+            0.07015457788347206,
+            0.16974789915966387,
+            0.09988109393579073
+          ],
+          "markdown_offset": 2851,
+          "markdown_length": 2,
+          "element_type": "title",
+          "element_id": "7fe19774-d4ae-4d94-abd8-7e2876b2f02a"
+        },
+        {
+          "page_num": 5,
+          "bbox": [
+            0.0907563025210084,
+            0.11296076099881094,
+            0.6067226890756302,
+            0.12960760998810938
+          ],
+          "markdown_offset": 2855,
+          "markdown_length": 26,
+          "element_type": "text",
+          "element_id": "ac9c85bb-ad42-4124-8683-3fe68e2a4c8f"
+        },
+        {
+          "page_num": 5,
+          "bbox": [
+            0.10084033613445378,
+            0.13317479191438764,
+            0.8974789915966387,
+            0.8906064209274673
+          ],
+          "markdown_offset": 2881,
+          "markdown_length": 0,
+          "element_type": "table",
+          "element_id": "fe1ae868-6a17-47a2-90c4-929554ea338b"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.0907563025210084,
+            0.07015457788347206,
+            0.2453781512605042,
+            0.09988109393579073
+          ],
+          "markdown_offset": 5138,
+          "markdown_length": 4,
+          "element_type": "title",
+          "element_id": "ad790904-a5e7-44ad-b14d-bc41e0d795c0"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.08907563025210084,
+            0.11296076099881094,
+            0.8957983193277311,
+            0.15101070154577884
+          ],
+          "markdown_offset": 5144,
+          "markdown_length": 73,
+          "element_type": "text",
+          "element_id": "d397f045-ea01-484e-921c-5d95efb13056"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.08907563025210084,
+            0.1629013079667063,
+            0.8974789915966387,
+            0.21997621878715815
+          ],
+          "markdown_offset": 5219,
+          "markdown_length": 105,
+          "element_type": "text",
+          "element_id": "1cc27da5-1c63-405b-9f98-636d746403ad"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.08907563025210084,
+            0.2318668252080856,
+            0.8974789915966387,
+            0.28894173602853745
+          ],
+          "markdown_offset": 5326,
+          "markdown_length": 106,
+          "element_type": "text",
+          "element_id": "c4577d59-399a-49eb-bdb5-0ddde781bd89"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.08907563025210084,
+            0.30083234244946494,
+            0.8974789915966387,
+            0.3388822829964328
+          ],
+          "markdown_offset": 5434,
+          "markdown_length": 61,
+          "element_type": "text",
+          "element_id": "7c0be50a-2258-40d6-b4cd-76269b35c780"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.08907563025210084,
+            0.34958382877526756,
+            0.8974789915966387,
+            0.4268727705112961
+          ],
+          "markdown_offset": 5497,
+          "markdown_length": 151,
+          "element_type": "text",
+          "element_id": "ff93af8c-67d5-4646-9eb7-2a2435e91dda"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.08907563025210084,
+            0.43876337693222356,
+            0.8974789915966387,
+            0.4756242568370987
+          ],
+          "markdown_offset": 5650,
+          "markdown_length": 55,
+          "element_type": "text",
+          "element_id": "d8b1c1e3-e7ea-438e-9c4f-eda1ed2b49df"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.08907563025210084,
+            0.6908442330558858,
+            0.8974789915966387,
+            0.7895362663495838
+          ],
+          "markdown_offset": 5707,
+          "markdown_length": 186,
+          "element_type": "text",
+          "element_id": "c7c586d3-4edd-4352-a9f1-6a8afd92dab4"
+        },
+        {
+          "page_num": 6,
+          "bbox": [
+            0.08907563025210084,
+            0.8002378121284186,
+            0.8974789915966387,
+            0.8787158145065398
+          ],
+          "markdown_offset": 5895,
+          "markdown_length": 146,
+          "element_type": "text",
+          "element_id": "703e04cc-cf5c-4f97-b231-6c87628c27ec"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.0907563025210084,
+            0.07015457788347206,
+            0.2453781512605042,
+            0.09988109393579073
+          ],
+          "markdown_offset": 6045,
+          "markdown_length": 4,
+          "element_type": "title",
+          "element_id": "6e576de1-303f-4b83-9755-3ef17324f4f5"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.0453781512605042,
+            0.1426872770511296,
+            0.31932773109243695,
+            0.30083234244946494
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "47d2e64e-b249-4ec8-8242-52e1882b7df7"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.3596638655462185,
+            0.16171224732461356,
+            0.6369747899159663,
+            0.30083234244946494
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "1658803b-6ddd-4e68-9c6b-393d14c8b5fb"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.6789915966386555,
+            0.1605231866825208,
+            0.9529411764705882,
+            0.30083234244946494
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "296f4785-3e91-4daa-800a-e184c053bb7c"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.0453781512605042,
+            0.3460166468489893,
+            0.31932773109243695,
+            0.4946492271105826
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "4cf07e27-dd04-437b-a982-9f20b2c2b33d"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.3596638655462185,
+            0.3460166468489893,
+            0.6352941176470588,
+            0.4946492271105826
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "392b2cf1-469a-4937-a6d3-85db07801db1"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.680672268907563,
+            0.3460166468489893,
+            0.9529411764705882,
+            0.4946492271105826
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "ca581cfe-c496-4309-b359-7ce591a7fa87"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.04873949579831933,
+            0.549346016646849,
+            0.31932773109243695,
+            0.6872770511296076
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "00305cd6-df04-42d4-b4fe-22efb0cafee1"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.36134453781512604,
+            0.549346016646849,
+            0.6336134453781512,
+            0.6872770511296076
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "81a47828-5576-4797-bc1e-5b14f826ff49"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.680672268907563,
+            0.549346016646849,
+            0.9546218487394958,
+            0.6872770511296076
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "25a3eedc-3cd0-4223-910b-eba1bcc3df28"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.04873949579831933,
+            0.746730083234245,
+            0.31932773109243695,
+            0.8858501783590963
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "6fba263d-c196-4c64-98c7-60cc624a7551"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.3596638655462185,
+            0.746730083234245,
+            0.6369747899159663,
+            0.8858501783590963
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "20729e62-cf23-463d-b2c3-0131492e8f18"
+        },
+        {
+          "page_num": 7,
+          "bbox": [
+            0.6789915966386555,
+            0.7479191438763377,
+            0.9546218487394958,
+            0.8858501783590963
+          ],
+          "markdown_offset": 6049,
+          "markdown_length": 0,
+          "element_type": "image",
+          "element_id": "394aad98-2fe9-410c-a289-dc7421c3d563"
+        },
+        {
+          "page_num": 8,
+          "bbox": [
+            0.0907563025210084,
+            0.06777645659928656,
+            0.773109243697479,
+            0.08323424494649227
+          ],
+          "markdown_offset": 7161,
+          "markdown_length": 39,
+          "element_type": "text",
+          "element_id": "747ee1d4-d233-471e-b93a-4bba1946ed46"
+        },
+        {
+          "page_num": 8,
+          "bbox": [
+            0.12773109243697478,
+            0.09750297265160524,
+            0.8705882352941177,
+            0.8941736028537456
+          ],
+          "markdown_offset": 7200,
+          "markdown_length": 0,
+          "element_type": "table",
+          "element_id": "479cff20-4a4a-456a-9791-1eae5d88ba85"
+        },
+        {
+          "page_num": 9,
+          "bbox": [
+            0.0907563025210084,
+            0.06658739595719382,
+            0.13109243697478992,
+            0.08204518430439953
+          ],
+          "markdown_offset": 7239,
+          "markdown_length": 2,
+          "element_type": "title",
+          "element_id": "3b57e9d5-2542-4ce8-8ea6-259ba8f7cf32"
+        },
+        {
+          "page_num": 9,
+          "bbox": [
+            0.08907563025210084,
+            0.09869203329369798,
+            0.907563025210084,
+            0.6658739595719382
+          ],
+          "markdown_offset": 7241,
+          "markdown_length": 0,
+          "element_type": "list",
+          "element_id": "6df6eadc-8fcd-4cd1-b638-deda541e482b"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0907563025210084,
+            0.07015457788347206,
+            0.31932773109243695,
+            0.09988109393579073
+          ],
+          "markdown_offset": 13106,
+          "markdown_length": 6,
+          "element_type": "title",
+          "element_id": "eccbcbdf-9776-494a-b96c-d320ab39365b"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.09411764705882353,
+            0.11296076099881094,
+            0.22016806722689075,
+            0.13079667063020214
+          ],
+          "markdown_offset": 13114,
+          "markdown_length": 6,
+          "element_type": "text",
+          "element_id": "a2228e49-b104-44fa-a552-dcef2bb90e84"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.09411764705882353,
+            0.13198573127229488,
+            0.4907563025210084,
+            0.14863258026159334
+          ],
+          "markdown_offset": 13122,
+          "markdown_length": 20,
+          "element_type": "text",
+          "element_id": "21db2585-a7ac-4cfc-9e72-591bf0ecb3e3"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.09411764705882353,
+            0.14982164090368608,
+            0.22016806722689075,
+            0.16765755053507728
+          ],
+          "markdown_offset": 13144,
+          "markdown_length": 6,
+          "element_type": "text",
+          "element_id": "db31be64-36a6-4875-9301-2c3769b51c06"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.09411764705882353,
+            0.16884661117717004,
+            0.46050420168067224,
+            0.20214030915576695
+          ],
+          "markdown_offset": 13152,
+          "markdown_length": 39,
+          "element_type": "text",
+          "element_id": "994eb3e5-6cce-437e-b072-50a02f86e34f"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.09411764705882353,
+            0.2057074910820452,
+            0.280672268907563,
+            0.22235434007134364
+          ],
+          "markdown_offset": 13193,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "f21f6330-c864-4392-b13a-36857d0adb3e"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.22473246135552913,
+            0.15966386554621848,
+            0.24019024970273484
+          ],
+          "markdown_offset": 13204,
+          "markdown_length": 3,
+          "element_type": "text",
+          "element_id": "11704474-6945-4cfa-bce0-683a9e8a72f2"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.24256837098692033,
+            0.23865546218487396,
+            0.25921521997621877
+          ],
+          "markdown_offset": 13209,
+          "markdown_length": 7,
+          "element_type": "text",
+          "element_id": "a6801188-fb41-45f7-afe7-0436e7e89dcb"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.2615933412604043,
+            0.13781512605042018,
+            0.27705112960760997
+          ],
+          "markdown_offset": 13218,
+          "markdown_length": 2,
+          "element_type": "text",
+          "element_id": "f2528122-f7b5-4729-9e88-3749f0d9e72a"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.2794292508917955,
+            0.30084033613445377,
+            0.29607609988109396
+          ],
+          "markdown_offset": 13222,
+          "markdown_length": 10,
+          "element_type": "text",
+          "element_id": "50e46e97-8b47-4192-874c-f9fc57acce97"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.29964328180737215,
+            0.15798319327731092,
+            0.31391200951248516
+          ],
+          "markdown_offset": 13234,
+          "markdown_length": 3,
+          "element_type": "text",
+          "element_id": "1b0320ac-226e-43d6-84b8-b6f0721dd856"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.3162901307966706,
+            0.4789915966386555,
+            0.3329369797859691
+          ],
+          "markdown_offset": 13239,
+          "markdown_length": 21,
+          "element_type": "text",
+          "element_id": "d236421d-82a5-4989-b104-eec070a1507a"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.33531510107015455,
+            0.32941176470588235,
+            0.351961950059453
+          ],
+          "markdown_offset": 13262,
+          "markdown_length": 20,
+          "element_type": "text",
+          "element_id": "153079a0-da96-48f3-b14c-2c39136c894d"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.35434007134363854,
+            0.3815126050420168,
+            0.37098692033293695
+          ],
+          "markdown_offset": 13284,
+          "markdown_length": 23,
+          "element_type": "text",
+          "element_id": "7cdf46a1-accc-462d-8a3e-56e2ac27c154"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.37217598097502974,
+            0.22016806722689075,
+            0.38882282996432815
+          ],
+          "markdown_offset": 13309,
+          "markdown_length": 6,
+          "element_type": "text",
+          "element_id": "dbd687ba-4da6-491a-8570-483a7855ef68"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.3912009512485137,
+            0.13781512605042018,
+            0.40665873959571935
+          ],
+          "markdown_offset": 13317,
+          "markdown_length": 2,
+          "element_type": "text",
+          "element_id": "998ae041-6f0e-4d4c-a2ab-749873d142b4"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.4090368608799049,
+            0.4789915966386555,
+            0.4268727705112961
+          ],
+          "markdown_offset": 13321,
+          "markdown_length": 21,
+          "element_type": "text",
+          "element_id": "11ac4ff1-d8df-427a-9b2b-63d8aa614386"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.4280618311533888,
+            0.32941176470588235,
+            0.44351961950059454
+          ],
+          "markdown_offset": 13344,
+          "markdown_length": 20,
+          "element_type": "text",
+          "element_id": "90b198f9-3641-4ea6-a995-450b279503c4"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.44589774078478,
+            0.3815126050420168,
+            0.4625445897740785
+          ],
+          "markdown_offset": 13366,
+          "markdown_length": 23,
+          "element_type": "text",
+          "element_id": "cb9f2c00-3149-492b-98ea-0d6eca80ecb8"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.464922711058264,
+            0.17983193277310924,
+            0.4815695600475624
+          ],
+          "markdown_offset": 13391,
+          "markdown_length": 4,
+          "element_type": "text",
+          "element_id": "31fd1daf-8571-4c7b-b050-7146eb4832b9"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.4839476813317479,
+            0.4184873949579832,
+            0.5005945303210464
+          ],
+          "markdown_offset": 13397,
+          "markdown_length": 17,
+          "element_type": "text",
+          "element_id": "74540860-0109-4477-9610-6f06348e1742"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.5029726516052319,
+            0.17983193277310924,
+            0.5184304399524375
+          ],
+          "markdown_offset": 13416,
+          "markdown_length": 4,
+          "element_type": "text",
+          "element_id": "87914571-ff70-46b1-9901-81ac5c555208"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.5208085612366231,
+            0.4184873949579832,
+            0.5374554102259215
+          ],
+          "markdown_offset": 13422,
+          "markdown_length": 18,
+          "element_type": "text",
+          "element_id": "5ed0dcc4-3864-4afd-85b0-abcbf2dd5073"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.539833531510107,
+            0.25882352941176473,
+            0.5541022592152199
+          ],
+          "markdown_offset": 13442,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "f881ac3c-63ea-4b26-82f6-97299a2b907e"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.5576694411414982,
+            0.32941176470588235,
+            0.5719381688466112
+          ],
+          "markdown_offset": 13455,
+          "markdown_length": 20,
+          "element_type": "text",
+          "element_id": "74e3a969-b36b-4117-8ba4-73f31a79f498"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.5755053507728894,
+            0.3277310924369748,
+            0.5909631391200951
+          ],
+          "markdown_offset": 13477,
+          "markdown_length": 20,
+          "element_type": "text",
+          "element_id": "c56c61fc-6bed-4b27-b8f5-70970a1008c6"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.5957193816884662,
+            0.3596638655462185,
+            0.6099881093935791
+          ],
+          "markdown_offset": 13499,
+          "markdown_length": 18,
+          "element_type": "text",
+          "element_id": "853dacd0-1c97-408e-89e1-6958336ec96d"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.6123662306777645,
+            0.41008403361344536,
+            0.629013079667063
+          ],
+          "markdown_offset": 13519,
+          "markdown_length": 21,
+          "element_type": "text",
+          "element_id": "0c8c6681-d94e-48ff-a1e3-0c95205c10f6"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.6313912009512486,
+            0.2184873949579832,
+            0.6468489892984542
+          ],
+          "markdown_offset": 13542,
+          "markdown_length": 6,
+          "element_type": "text",
+          "element_id": "ecadb03a-dce6-4dab-8fba-2360fce80264"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.6492271105826397,
+            0.3596638655462185,
+            0.6658739595719382
+          ],
+          "markdown_offset": 13550,
+          "markdown_length": 13,
+          "element_type": "text",
+          "element_id": "175541ee-f9b1-4b1f-bb18-8f3c923f5483"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.6682520808561236,
+            0.346218487394958,
+            0.6848989298454221
+          ],
+          "markdown_offset": 13565,
+          "markdown_length": 14,
+          "element_type": "text",
+          "element_id": "309eb983-4aec-40bb-81f6-76483debc496"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.10588235294117647,
+            0.6860879904875149,
+            0.3596638655462185,
+            0.703923900118906
+          ],
+          "markdown_offset": 13581,
+          "markdown_length": 14,
+          "element_type": "text",
+          "element_id": "2f2d97c4-e008-4264-9a59-037be2e9fbbc"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.10588235294117647,
+            0.7051129607609988,
+            0.33949579831932775,
+            0.7217598097502973
+          ],
+          "markdown_offset": 13597,
+          "markdown_length": 13,
+          "element_type": "text",
+          "element_id": "6d994926-2fa1-4f75-82da-1e27e1362d69"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.72294887039239,
+            0.33949579831932775,
+            0.7407847800237812
+          ],
+          "markdown_offset": 13612,
+          "markdown_length": 12,
+          "element_type": "text",
+          "element_id": "9eea8bf3-02dd-41a0-9f60-afcc47b0fcf4"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.7455410225921522,
+            0.23865546218487396,
+            0.7586206896551724
+          ],
+          "markdown_offset": 13626,
+          "markdown_length": 14,
+          "element_type": "text",
+          "element_id": "a42bfc3b-6390-4de8-8280-9e9fd783a376"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.760998810939358,
+            0.3815126050420168,
+            0.7776456599286563
+          ],
+          "markdown_offset": 13642,
+          "markdown_length": 14,
+          "element_type": "text",
+          "element_id": "4c16f339-461f-420f-a2d9-951a6f3adee5"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.7800237812128419,
+            0.24873949579831933,
+            0.7942925089179548
+          ],
+          "markdown_offset": 13658,
+          "markdown_length": 15,
+          "element_type": "text",
+          "element_id": "7be09efa-1b55-43a5-8791-6a1eceabaffe"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.797859690844233,
+            0.25882352941176473,
+            0.8133174791914387
+          ],
+          "markdown_offset": 13675,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "f1d19031-68c0-4c21-a08a-e38f2a0ed89e"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.816884661117717,
+            0.3378151260504202,
+            0.8335315101070154
+          ],
+          "markdown_offset": 13685,
+          "markdown_length": 12,
+          "element_type": "text",
+          "element_id": "92e4d4f5-bd5a-46da-8f8b-c32a1bd07f2f"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.0957983193277311,
+            0.835909631391201,
+            0.23865546218487396,
+            0.8501783590963139
+          ],
+          "markdown_offset": 13699,
+          "markdown_length": 7,
+          "element_type": "text",
+          "element_id": "4397dad2-9613-453f-a0e4-002bc64b93b7"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5142857142857142,
+            0.11296076099881094,
+            0.5966386554621849,
+            0.12960760998810938
+          ],
+          "markdown_offset": 13708,
+          "markdown_length": 4,
+          "element_type": "text",
+          "element_id": "2ed57122-c60f-4c7c-8071-e6f646adb616"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.13198573127229488,
+            0.6588235294117647,
+            0.14863258026159334
+          ],
+          "markdown_offset": 13714,
+          "markdown_length": 7,
+          "element_type": "text",
+          "element_id": "7000ad02-7ea9-42dd-a231-e6c52ba0d19f"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.14982164090368608,
+            0.6789915966386555,
+            0.16646848989298454
+          ],
+          "markdown_offset": 13723,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "0ce273f7-c1c9-48ab-bcd4-eaf50aa60b41"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.16884661117717004,
+            0.5798319327731093,
+            0.18549346016646848
+          ],
+          "markdown_offset": 13733,
+          "markdown_length": 3,
+          "element_type": "text",
+          "element_id": "f94188f0-7ae6-4270-984f-cd1fef6e252e"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.187871581450654,
+            0.6789915966386555,
+            0.20332936979785968
+          ],
+          "markdown_offset": 13738,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "321e49e6-5363-4f89-89df-9cc3d5e39f9a"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.20689655172413793,
+            0.8705882352941177,
+            0.22235434007134364
+          ],
+          "markdown_offset": 13748,
+          "markdown_length": 18,
+          "element_type": "text",
+          "element_id": "2d69b63a-6086-4ec3-887a-74ed395631a2"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.22473246135552913,
+            0.880672268907563,
+            0.25802615933412604
+          ],
+          "markdown_offset": 13768,
+          "markdown_length": 33,
+          "element_type": "text",
+          "element_id": "9e4e6000-540c-4eeb-bb9b-8c48d2da3fae"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.2615933412604043,
+            0.7596638655462185,
+            0.27705112960760997
+          ],
+          "markdown_offset": 13803,
+          "markdown_length": 12,
+          "element_type": "text",
+          "element_id": "4bc3eb2c-60e4-4a36-952d-db4651c78f01"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.2806183115338882,
+            0.6789915966386555,
+            0.29488703923900117
+          ],
+          "markdown_offset": 13817,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "7a45b9ea-511a-4350-8ef3-2ed7635a29a0"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.2984542211652794,
+            0.6789915966386555,
+            0.31391200951248516
+          ],
+          "markdown_offset": 13827,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "7202a4be-44ca-4af6-8f59-eb1b1e4713c5"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.3162901307966706,
+            0.8789915966386554,
+            0.351961950059453
+          ],
+          "markdown_offset": 13837,
+          "markdown_length": 30,
+          "element_type": "text",
+          "element_id": "65d44bb6-eef3-423a-8738-82496d2f823b"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.35434007134363854,
+            0.6991596638655462,
+            0.37098692033293695
+          ],
+          "markdown_offset": 13869,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "8cfccff9-a128-4787-9ef5-9578113f4842"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.37217598097502974,
+            0.6789915966386555,
+            0.38882282996432815
+          ],
+          "markdown_offset": 13880,
+          "markdown_length": 8,
+          "element_type": "text",
+          "element_id": "905d9672-4c25-4508-85c3-4e2ad8ba8c83"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.3912009512485137,
+            0.6991596638655462,
+            0.40665873959571935
+          ],
+          "markdown_offset": 13890,
+          "markdown_length": 18,
+          "element_type": "text",
+          "element_id": "01203039-9c3d-4280-b108-81e6cc8fe549"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.4090368608799049,
+            0.6991596638655462,
+            0.42568370986920334
+          ],
+          "markdown_offset": 13910,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "f8cf7b85-cfe8-431a-b460-eb795eb1ab0c"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.4280618311533888,
+            0.6672268907563025,
+            0.44351961950059454
+          ],
+          "markdown_offset": 13921,
+          "markdown_length": 15,
+          "element_type": "text",
+          "element_id": "cd49ea89-27f8-4243-81e0-bfc15cc0158d"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.44589774078478,
+            0.5983193277310924,
+            0.4625445897740785
+          ],
+          "markdown_offset": 13938,
+          "markdown_length": 4,
+          "element_type": "text",
+          "element_id": "143a9aca-b936-45fb-861d-68a063209e5b"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.464922711058264,
+            0.880672268907563,
+            0.4815695600475624
+          ],
+          "markdown_offset": 13944,
+          "markdown_length": 18,
+          "element_type": "text",
+          "element_id": "d13cc2d4-b4c5-4811-84aa-6a5cf08d5f88"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.4839476813317479,
+            0.719327731092437,
+            0.4994054696789536
+          ],
+          "markdown_offset": 13964,
+          "markdown_length": 10,
+          "element_type": "text",
+          "element_id": "c15f996c-f3d3-4c52-a942-842783239712"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.5029726516052319,
+            0.5966386554621849,
+            0.5172413793103449
+          ],
+          "markdown_offset": 13976,
+          "markdown_length": 4,
+          "element_type": "text",
+          "element_id": "35a84d2e-cdc2-451f-a763-b0b968872761"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.5208085612366231,
+            0.7126050420168067,
+            0.5362663495838288
+          ],
+          "markdown_offset": 13982,
+          "markdown_length": 10,
+          "element_type": "text",
+          "element_id": "9d39e64c-11a7-4e30-8a3f-b7d3e2e182f4"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5697478991596638,
+            0.539833531510107,
+            0.7529411764705882,
+            0.5552913198573127
+          ],
+          "markdown_offset": 13994,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "2d9f2dc4-e89f-4761-b2fb-67b62b871085"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5714285714285714,
+            0.5576694411414982,
+            0.7344537815126051,
+            0.5719381688466112
+          ],
+          "markdown_offset": 14005,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "210299dc-d859-4143-a3ae-a2dfcfb48927"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.5766944114149821,
+            0.7915966386554621,
+            0.5921521997621879
+          ],
+          "markdown_offset": 14018,
+          "markdown_length": 14,
+          "element_type": "text",
+          "element_id": "a6b9a13d-0bc0-45df-9e0c-ae7415d3c9aa"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5697478991596638,
+            0.5945303210463734,
+            0.7529411764705882,
+            0.6099881093935791
+          ],
+          "markdown_offset": 14034,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "48bb6177-f0f7-41d1-892b-2d871fcef2f2"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5714285714285714,
+            0.6135552913198573,
+            0.7142857142857143,
+            0.6278240190249703
+          ],
+          "markdown_offset": 14045,
+          "markdown_length": 9,
+          "element_type": "text",
+          "element_id": "e275fcb2-352c-4c08-956f-ad774dce8ba0"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5159663865546219,
+            0.6313912009512486,
+            0.7798319327731092,
+            0.6468489892984542
+          ],
+          "markdown_offset": 14056,
+          "markdown_length": 13,
+          "element_type": "text",
+          "element_id": "ff6bd858-7aa4-492c-85d4-fe22d77181eb"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5714285714285714,
+            0.6492271105826397,
+            0.6336134453781512,
+            0.6658739595719382
+          ],
+          "markdown_offset": 14071,
+          "markdown_length": 3,
+          "element_type": "text",
+          "element_id": "993086e3-ffa0-47c2-92ae-0b872a36ddf6"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5714285714285714,
+            0.6682520808561236,
+            0.7697478991596639,
+            0.6848989298454221
+          ],
+          "markdown_offset": 14076,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "5dacd2d8-eafa-46bb-8649-f639ae897f61"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5714285714285714,
+            0.6872770511296076,
+            0.7529411764705882,
+            0.7027348394768134
+          ],
+          "markdown_offset": 14089,
+          "markdown_length": 12,
+          "element_type": "text",
+          "element_id": "7704774c-7098-42ca-b87f-e6c698344087"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5714285714285714,
+            0.7051129607609988,
+            0.6336134453781512,
+            0.7205707491082045
+          ],
+          "markdown_offset": 14103,
+          "markdown_length": 3,
+          "element_type": "text",
+          "element_id": "648f3316-64ba-41bf-800f-359f88b20e4f"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5714285714285714,
+            0.72294887039239,
+            0.7697478991596639,
+            0.7395957193816884
+          ],
+          "markdown_offset": 14108,
+          "markdown_length": 11,
+          "element_type": "text",
+          "element_id": "b931b5f3-97da-4f29-8bc9-f96208c8e519"
+        },
+        {
+          "page_num": 10,
+          "bbox": [
+            0.5714285714285714,
+            0.7419738406658739,
+            0.7529411764705882,
+            0.7586206896551724
+          ],
+          "markdown_offset": 14121,
+          "markdown_length": 12,
+          "element_type": "text",
+          "element_id": "b870c345-9ea3-4475-b4d7-8c9409ec74c4"
+        }
+      ],
+      "json_data": null,
+      "total_pages": 10
+    }
+  }
+}

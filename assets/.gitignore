@@ -1,0 +1,12 @@
+# Assets directory - DO NOT TRACK large files
+
+# These files should be downloaded separately
+# Models can be downloaded from the official sources
+*.pth
+*.pt
+*.onnx
+*.zip
+*.tar.gz
+*.pdf
+
+# Keep this .gitignore file

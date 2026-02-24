@@ -1,0 +1,99 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Large files and assets
+*.pdf
+*.pth
+*.pt
+*.zip
+*.tar.gz
+*.tgz
+*.tar
+*.7z
+
+# Images (keep only essential ones)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+!docs/*.png
+
+# Results and outputs
+results/
+uploads/
+tasks/
+outputs/
+*_output/
+*_output.md
+*_output.json
+*_results.json
+*_cells.json
+*_cells_visualization.png
+rotated_output.pdf
+
+# Test and demo files
+test*.py
+demo*.py
+*_test.py
+*_runner.py
+*_simple.py
+simple_*.py
+*_gradio*.py
+gradio_*.py
+*_app.py
+run_*.sh
+*.bat
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+*.local
+
+# Temporary files
+*.tmp
+tmp/
+temp/
+
+# Node modules (if any)
+node_modules/
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation generated files
+docs/output/
+docs/results/
