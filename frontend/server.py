@@ -649,6 +649,35 @@ def index():
         }), 404
 
 
+@app.route('/images/<path:filename>', methods=['GET'])
+def serve_image(filename):
+    """Serve image files from results directories"""
+    # First, try to find the image in any result folder
+    for task_id, task in task_store.items():
+        if 'results' in task and 'folder' in task['results']:
+            result_folder = task['results']['folder']
+            # Check in images subfolder
+            image_path = os.path.join(result_folder, 'images', filename)
+            if os.path.exists(image_path):
+                return send_file(image_path)
+            # Also check root of result folder
+            image_path = os.path.join(result_folder, filename)
+            if os.path.exists(image_path):
+                return send_file(image_path)
+
+    # Try main results folder
+    main_results = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'results')
+    if os.path.exists(main_results):
+        for task_dir in os.listdir(main_results):
+            task_path = os.path.join(main_results, task_dir)
+            if os.path.isdir(task_path):
+                image_path = os.path.join(task_path, 'images', filename)
+                if os.path.exists(image_path):
+                    return send_file(image_path)
+
+    return jsonify({"error": f"Image not found: {filename}"}), 404
+
+
 @app.route('/<path:filename>', methods=['GET'])
 def serve_static(filename):
     """Serve static files (CSS, JS)"""

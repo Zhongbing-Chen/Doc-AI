@@ -539,7 +539,12 @@
                         );
                         if (imgMatch) {
                             const elementId = mapping ? mapping.element_id : null;
-                            result += `<img src="${imgMatch[1]}" ${elementId ? `data-element-id="${elementId}"` : ''} class="markdown-element" data-type="image" style="max-width:100%;height:auto;display:block;margin:1rem auto;">`;
+                            // Convert relative image path to absolute API path
+                            let imgSrc = imgMatch[1];
+                            if (imgSrc.startsWith('images/')) {
+                                imgSrc = `${API_BASE.replace('/api', '')}/images/${imgSrc.substring(7)}`;
+                            }
+                            result += `<img src="${imgSrc}" ${elementId ? `data-element-id="${elementId}"` : ''} class="markdown-element" data-type="image" style="max-width:100%;height:auto;display:block;margin:1rem auto;">`;
                         }
                     }
                 } else {
