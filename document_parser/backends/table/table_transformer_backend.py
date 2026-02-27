@@ -34,31 +34,28 @@ class TableTransformerBackend(TableParserBackend):
         Args:
             config: Configuration dictionary with keys:
                 - device: 'cpu' or 'cuda'
-                - model_source: 'huggingface' or local path
-                - model_path: Optional custom model path
-                - table_cls_model: Table classification model type
+                - model_source: 'huggingface', 'modelscope', or 'local'
+                - model_path: Optional custom model path for local
         """
         from module.table.table_parser import TableExtractor
 
         device = config.get('device', 'cpu')
         model_source = config.get('model_source', 'huggingface')
         model_path = config.get('model_path')
-        table_cls_model = config.get('table_cls_model', 'x')
 
         self.device = device
 
         # Use existing TableExtractor implementation
-        extractor = TableExtractor(
-            model_source=model_source,
-            device=device,
-            table_cls_model=table_cls_model
-        )
+        if model_source == "local" and model_path:
+            extractor = TableExtractor(model_source=model_path, device=device)
+        else:
+            extractor = TableExtractor(model_source=model_source, device=device)
 
         # Extract internal components
         self.pipe = extractor.pipe
         self.table_cls = extractor.table_cls
         self.wired_engine = extractor.wired_engine
-        self.lineless_engine = extractor.lineless_engine
+        self.lineless_engine = getattr(extractor, 'lineless_engine', None)
 
         print(f"Table Transformer initialized on {device}")
 

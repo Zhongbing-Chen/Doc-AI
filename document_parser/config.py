@@ -100,7 +100,6 @@ class TableConfig:
     backend: str = TableBackend.TABLE_TRANSFORMER.value
     model_source: str = "huggingface"
     model_path: Optional[str] = None
-    table_cls_model: str = "x"  # Table classification model
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary"""
@@ -108,8 +107,7 @@ class TableConfig:
             'enabled': self.enabled,
             'backend': self.backend,
             'model_source': self.model_source,
-            'model_path': self.model_path,
-            'table_cls_model': self.table_cls_model
+            'model_path': self.model_path
         }
 
 

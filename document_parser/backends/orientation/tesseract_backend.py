@@ -45,7 +45,7 @@ class TesseractOrientationBackend(OrientationDetectorBackend):
         from module.rotation.orientation_corrector import OrientationCorrector
 
         # Use existing OrientationCorrector
-        img_rotated, rotated_angle = OrientationCorrector.correct_orientation(image, pdf_page)
+        img_rotated, rotated_angle = OrientationCorrector.rotate_through_tesseract(image, pdf_page)
 
         return img_rotated, rotated_angle
 
